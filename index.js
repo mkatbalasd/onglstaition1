@@ -2,6 +2,7 @@ const express = require('express');
 const mariadb = require('mariadb');
 const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +11,7 @@ app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layout');
 app.use('/nagl', express.static('public'));
+app.use('/nagl', express.static(path.join(__dirname, 'frontend/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const pool = mariadb.createPool({
@@ -479,6 +481,12 @@ router.post('/api/license-types', async (req, res) => {
   );
   const LicenseTypeID = result.insertId;
   res.json({ LicenseTypeID, LicenseTypeNameAR, LicenseTypeNameEN });
+});
+
+// Serve the Vue SPA for any route under /nagl/app using a named wildcard
+// Use Express 5 compatible wildcard syntax matching optional segments
+app.get('/nagl/app{/*path}', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
 app.use('/nagl', router);
