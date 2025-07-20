@@ -493,6 +493,12 @@ app.get('/nagl/app{/*path}', (req, res) => {
 app.use('/nagl', router);
 
 const port = process.env.PORT || 3002;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+app.pool = pool;
+module.exports = app;
