@@ -483,9 +483,9 @@ router.post('/api/license-types', async (req, res) => {
   res.json({ LicenseTypeID, LicenseTypeNameAR, LicenseTypeNameEN });
 });
 
-// Serve the Vue SPA for any route under /nagl/app using a named wildcard
-// Use Express 5 compatible wildcard syntax matching optional segments
-app.get('/nagl/app{/*path}', (req, res) => {
+// Serve the Vue SPA for any route under /nagl/app
+// Express 5 uses the colon-based path-to-regexp wildcard syntax
+app.get('/nagl/app/:path(*)', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
