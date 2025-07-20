@@ -24,7 +24,7 @@ router.use('/', require('./routes/cards'));
 router.use('/', require('./routes/api'));
 
 // Serve Vue SPA
-app.get('/nagl/app{/*path}', (req, res) => {
+app.get('/nagl/app/*path', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
