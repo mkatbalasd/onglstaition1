@@ -11,7 +11,8 @@ app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layout');
 app.use('/nagl', express.static('public'));
-app.use('/nagl', express.static(path.join(__dirname, 'frontend/dist')));
+// Serve the compiled Vue app under /nagl/app
+app.use('/nagl/app', express.static(path.join(__dirname, 'frontend/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 const pool = mariadb.createPool({
@@ -483,13 +484,9 @@ router.post('/api/license-types', async (req, res) => {
   res.json({ LicenseTypeID, LicenseTypeNameAR, LicenseTypeNameEN });
 });
 
-// Serve the Vue SPA for any route under /nagl/app
-// Express 5 wildcard syntax supports a colon-based form, but the router still
-// expects the asterisk prefix internally. Convert the notation to avoid
-// path-to-regexp errors while keeping the readable "path(*)" style.
-const spaRoute = '/nagl/app/:path(*)'.replace(':path(*)', '*path');
-app.get(spaRoute, (req, res) => {
-
+// Serve the Vue SPA for any route under /nagl/app using a named wildcard
+// Use Express 5 compatible wildcard syntax matching optional segments
+app.get('/nagl/app{/*path}', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
