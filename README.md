@@ -39,6 +39,11 @@
 
 تستخدم النماذج التاريخ الهجري عبر مكتبة [bootstrap-hijri-datepicker](https://github.com/balbarak/bootstrap-hijri-datepicker.git).
 
+## التعامل مع JSON
+
+تعتمد مسارات الـ`/api` على استقبال البيانات بصيغة JSON. تأكد من إرسال الطلبات مع ترويسة
+`Content-Type: application/json` حتى تتم معالجتها بشكل صحيح داخل الخادم.
+
 ## تشغيل واجهة Vue
 
 1. الدخول إلى مجلد `frontend/`:
