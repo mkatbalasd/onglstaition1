@@ -484,14 +484,24 @@ router.post('/api/license-types', async (req, res) => {
 });
 
 // Serve the Vue SPA for any route under /nagl/app
-// Express 5 uses the colon-based path-to-regexp wildcard syntax
-app.get('/nagl/app/:path(*)', (req, res) => {
+// Express 5 wildcard syntax supports a colon-based form, but the router still
+// expects the asterisk prefix internally. Convert the notation to avoid
+// path-to-regexp errors while keeping the readable "path(*)" style.
+const spaRoute = '/nagl/app/:path(*)'.replace(':path(*)', '*path');
+app.get(spaRoute, (req, res) => {
+
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
 app.use('/nagl', router);
 
 const port = process.env.PORT || 3002;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+app.pool = pool;
+module.exports = app;

@@ -68,3 +68,11 @@ location /nagl/ {
     proxy_cache_bypass $http_upgrade;
 }
 ```
+
+## تشغيل الاختبارات
+
+بعد تثبيت الحزم يمكنك تشغيل مجموعة الاختبارات البسيطة عبر الأمر:
+
+```bash
+npm test
+```
