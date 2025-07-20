@@ -483,7 +483,8 @@ router.post('/api/license-types', async (req, res) => {
   res.json({ LicenseTypeID, LicenseTypeNameAR, LicenseTypeNameEN });
 });
 
-app.get('/nagl/app/*', (req, res) => {
+// Serve the Vue SPA for any route under /nagl/app using a named wildcard
+app.get('/nagl/app/*path', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
