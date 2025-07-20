@@ -489,6 +489,7 @@ router.post('/api/license-types', async (req, res) => {
 // path-to-regexp errors while keeping the readable "path(*)" style.
 const spaRoute = '/nagl/app/:path(*)'.replace(':path(*)', '*path');
 app.get(spaRoute, (req, res) => {
+
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
