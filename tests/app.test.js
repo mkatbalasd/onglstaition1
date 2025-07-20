@@ -8,6 +8,3 @@ describe('GET /nagl/', () => {
   });
 });
 
-afterAll(async () => {
-  await app.pool.end();
-});
