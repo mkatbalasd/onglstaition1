@@ -13,6 +13,7 @@ app.set('layout', 'layout');
 app.use('/nagl', express.static('public'));
 app.use('/nagl/app', express.static(path.join(__dirname, 'frontend/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Mount route modules
 router.use('/', require('./routes/home'));
