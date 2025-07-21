@@ -15,14 +15,16 @@
 import { ref, onMounted } from 'vue'
 import Card from '@/components/Card.vue'
 import { IdCard } from 'lucide-vue-next'
+import { useDataStore } from '@/stores/data'
+import { storeToRefs } from 'pinia'
 
-const cards = ref([])
+const store = useDataStore()
+const { driverCards: cards } = storeToRefs(store)
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/nagl/api/driver-cards')
-    cards.value = await res.json()
+    await store.fetchDriverCards()
   } finally {
     loading.value = false
   }

@@ -28,14 +28,16 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useDataStore } from '@/stores/data'
+import { storeToRefs } from 'pinia'
 
-const facilities = ref([])
+const store = useDataStore()
+const { facilities } = storeToRefs(store)
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/nagl/api/facilities')
-    facilities.value = await res.json()
+    await store.fetchFacilities()
   } finally {
     loading.value = false
   }

@@ -1,10 +1,9 @@
 import './styles/tailwind.css'
 
 import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createPinia } from 'pinia'
 import App from './App.vue'
-import Home from './views/Home.vue'
-import CardsManagement from './views/CardsManagement.vue'
+import router from './router'
 
 function applyTheme() {
   const stored = localStorage.getItem('theme')
@@ -35,14 +34,7 @@ window.toggleDir = () => {
 applyTheme()
 applyDir()
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL || '/'),
-  routes: [
-    { path: '/', component: Home },
-    { path: '/cards', component: CardsManagement }
-  ]
-})
-
 createApp(App)
+  .use(createPinia())
   .use(router)
   .mount('#app')
