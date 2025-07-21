@@ -21,7 +21,7 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/api/vehicles')
+    const res = await fetch('/nagl/api/vehicles')
     vehicles.value = await res.json()
   } finally {
     loading.value = false

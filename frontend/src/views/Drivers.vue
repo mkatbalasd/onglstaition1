@@ -21,7 +21,7 @@ const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/api/drivers')
+    const res = await fetch('/nagl/api/drivers')
     drivers.value = await res.json()
   } finally {
     loading.value = false

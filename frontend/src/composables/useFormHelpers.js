@@ -1,8 +1,8 @@
 import { ref, onMounted, watch } from 'vue'
 
 export function useFormHelpers() {
-  const issueDate = ref('')
-  const expirationDate = ref('')
+  const issueDate = ref({ date: '', type: 'hijri' })
+  const expirationDate = ref({ date: '', type: 'hijri' })
   const drivers = ref([])
   const vehicles = ref([])
 
@@ -15,8 +15,8 @@ export function useFormHelpers() {
   }
 
   function setExpiration() {
-    if (issueDate.value) {
-      expirationDate.value = addYear(issueDate.value)
+    if (issueDate.value.date) {
+      expirationDate.value = { ...expirationDate.value, date: addYear(issueDate.value.date) }
     }
   }
 
@@ -28,13 +28,13 @@ export function useFormHelpers() {
     vehicles.value = await vRes.json()
   }
 
-  watch(issueDate, setExpiration)
+  watch(() => issueDate.value.date, setExpiration)
   watch(facilityId, loadFacilityOptions, { immediate: true })
 
   onMounted(() => {
-    if (!issueDate.value) {
+    if (!issueDate.value.date) {
       const today = new Date().toISOString().slice(0,10)
-      issueDate.value = today
+      issueDate.value.date = today
     }
     setExpiration()
   })
