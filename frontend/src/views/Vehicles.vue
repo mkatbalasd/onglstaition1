@@ -15,14 +15,16 @@
 import { ref, onMounted } from 'vue'
 import Card from '@/components/Card.vue'
 import { Truck } from 'lucide-vue-next'
+import { useDataStore } from '@/stores/data'
+import { storeToRefs } from 'pinia'
 
-const vehicles = ref([])
+const store = useDataStore()
+const { vehicles } = storeToRefs(store)
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/nagl/api/vehicles')
-    vehicles.value = await res.json()
+    await store.fetchVehicles()
   } finally {
     loading.value = false
   }

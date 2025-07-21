@@ -46,16 +46,18 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import CardForm from './CardForm.vue'
+import { useDataStore } from '@/stores/data'
+import { storeToRefs } from 'pinia'
 
-const cards = ref([])
+const store = useDataStore()
+const { cards } = storeToRefs(store)
 const loading = ref(true)
 const showForm = ref(false)
 const current = ref(null)
 
 async function loadCards() {
   loading.value = true
-  const res = await fetch('/nagl/api/cards')
-  cards.value = await res.json()
+  await store.fetchCards()
   loading.value = false
 }
 
