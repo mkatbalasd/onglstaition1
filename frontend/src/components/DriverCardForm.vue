@@ -9,24 +9,8 @@
               <label class="block text-sm font-medium mb-1">Card Type</label>
               <input v-model="cardType" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" required />
             </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Facility</label>
-              <select v-model="facilityId" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" required>
-                <option value="">Select...</option>
-                <option v-for="f in facilities" :key="f.FacilityID" :value="f.FacilityID">
-                  {{ f.Name }} - {{ f.IdentityNumber }}
-                </option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Driver</label>
-              <select v-model="driverId" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" required>
-                <option value="">Select...</option>
-                <option v-for="d in drivers" :key="d.DriverID" :value="d.DriverID">
-                  {{ d.FirstName }} {{ d.LastName }} - {{ d.IdentityNumber }}
-                </option>
-              </select>
-            </div>
+            <HeadlessSelect v-model="facilityId" :options="facilityOptions" label="Facility" />
+            <HeadlessSelect v-model="driverId" :options="driverOptions" label="Driver" />
             <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <label class="block text-sm font-medium mb-1">Issue Date</label>
@@ -37,13 +21,7 @@
                 <DatePicker v-model="expirationDate" :initial-type="'hijri'" language="ar" />
               </div>
             </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Supplier</label>
-              <select v-model="supplier" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-                <option value="">Select...</option>
-                <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ s.name }}</option>
-              </select>
-            </div>
+            <HeadlessSelect v-model="supplier" :options="supplierOptions" label="Supplier" />
             <div class="text-end">
               <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
             </div>
@@ -55,10 +33,11 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
+import HeadlessSelect from '@/components/HeadlessSelect.vue'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -76,6 +55,10 @@ const supplier = ref('')
 const facilities = ref([])
 const drivers = ref([])
 const suppliers = ref([])
+
+const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.FacilityID, label: `${f.Name} - ${f.IdentityNumber}` })))
+const driverOptions = computed(() => drivers.value.map(d => ({ value: d.DriverID, label: `${d.FirstName} ${d.LastName} - ${d.IdentityNumber}` })))
+const supplierOptions = computed(() => suppliers.value.map(s => ({ value: s.id, label: s.name })))
 
 function close() {
   emit('update:modelValue', false)
