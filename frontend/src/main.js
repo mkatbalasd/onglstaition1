@@ -1,4 +1,5 @@
 import './styles/tailwind.css'
+import 'vue3-table-lite/src/css/app.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

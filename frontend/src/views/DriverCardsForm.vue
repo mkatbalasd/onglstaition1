@@ -11,43 +11,20 @@
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expiration Date</label>
         <DatePicker v-model="expirationDate" :initial-type="'hijri'" language="ar" />
       </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Facility</label>
-        <select v-model="facilityId" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-          <option value="">اختر...</option>
-          <option v-for="f in facilities" :key="f.FacilityID" :value="f.FacilityID">
-            {{ f.Name }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Driver</label>
-        <select v-model="selectedDriver" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-          <option value="">اختر...</option>
-          <option v-for="d in drivers" :key="d.DriverID" :value="d.DriverID">
-            {{ d.FirstName }} {{ d.LastName }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Vehicle</label>
-        <select v-model="selectedVehicle" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-          <option value="">اختر...</option>
-          <option v-for="v in vehicles" :key="v.ID" :value="v.ID">
-            {{ v.PlateNumber || v.SerialNumber }}
-          </option>
-        </select>
-      </div>
+      <HeadlessSelect v-model="facilityId" :options="facilityOptions" label="Facility" />
+      <HeadlessSelect v-model="selectedDriver" :options="driverOptions" label="Driver" />
+      <HeadlessSelect v-model="selectedVehicle" :options="vehicleOptions" label="Vehicle" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useFormHelpers } from '@/composables/useFormHelpers'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import SkeletonForm from '@/components/SkeletonForm.vue'
+import HeadlessSelect from '@/components/HeadlessSelect.vue'
 
 const facilities = ref([])
 const selectedDriver = ref('')
@@ -64,4 +41,8 @@ onMounted(async () => {
 })
 
 watch(facilityId, (val) => loadFacilityOptions(val))
+
+const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.FacilityID, label: f.Name })))
+const driverOptions = computed(() => drivers.value.map(d => ({ value: d.DriverID, label: `${d.FirstName} ${d.LastName}` })))
+const vehicleOptions = computed(() => vehicles.value.map(v => ({ value: v.ID, label: v.PlateNumber || v.SerialNumber })))
 </script>
