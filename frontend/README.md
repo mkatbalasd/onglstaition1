@@ -43,10 +43,10 @@ The backend expects a `.env` file in the repository root. Copy `.env.example`
 and provide your database credentials and desired port:
 
 ```sh
-DB_HOST=your_db_host
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
+DB_HOST=localhost
+DB_USER=myuser
+DB_PASSWORD=mypassword
+DB_NAME=mydatabase
 PORT=3002
 VITE_BASE_PATH=/nagl/app/
 ```

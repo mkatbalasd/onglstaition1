@@ -19,8 +19,8 @@
    ```bash
    cp .env.example .env
    ```
-   بعد النسخ قم بتحرير ملف `.env` واستبدل القيم الافتراضية مثل `your_db_host`,
-   `your_db_user` و`your_db_password` بمعلومات الاتصال الخاصة بك.
+   بعد النسخ قم بتحرير ملف `.env` واستبدل القيم الافتراضية مثل `localhost`,
+   `myuser` و`mypassword` بمعلومات الاتصال الخاصة بك.
 3. تعديل بيانات الاتصال في `.env` إذا لزم، وتشمل المتغيرات التالية:
    - `DB_HOST`: عنوان خادم قاعدة البيانات.
    - `DB_USER`: اسم المستخدم.
@@ -30,6 +30,16 @@
 ## متغيرات البيئة
 
 يتم تحميل الإعدادات من الملف `.env` بواسطة مكتبة **dotenv** عند تشغيل الخادم. قم بإنشاء هذا الملف اعتمادًا على `.env.example` وتحديث القيم بما يناسب بيئتك.
+يمكن أن يبدو الملف كالتالي:
+
+```bash
+DB_HOST=localhost
+DB_USER=myuser
+DB_PASSWORD=mypassword
+DB_NAME=mydatabase
+PORT=3002
+VITE_BASE_PATH=/nagl/app/
+```
 5. تشغيل الخادم:
    ```bash
    npm start
