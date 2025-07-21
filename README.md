@@ -93,3 +93,7 @@ npm --prefix frontend run build
 npm test
 ```
 يتم تعريف هذا الأمر في ملف `package.json` لتشغيل أداة Jest تلقائيًا.
+
+## الرخصة
+
+هذا المشروع مرخص بموجب رخصة MIT. يمكنك الاطلاع على النص الكامل للرخصة في ملف [LICENSE](LICENSE).
