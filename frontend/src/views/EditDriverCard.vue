@@ -97,14 +97,14 @@ const supplier = ref('')
 onMounted(async () => {
   try {
     const [facRes, drvRes] = await Promise.all([
-      fetch('/api/facilities'),
-      fetch('/api/drivers')
+      fetch('/nagl/api/facilities'),
+      fetch('/nagl/api/drivers')
     ])
     facilities.value = await facRes.json()
     drivers.value = await drvRes.json()
 
     if (cardId) {
-      const res = await fetch(`/api/driver-cards/${cardId}`)
+      const res = await fetch(`/nagl/api/driver-cards/${cardId}`)
       if (res.ok) {
         const c = await res.json()
         cardType.value = c.CardType || ''
@@ -122,7 +122,7 @@ onMounted(async () => {
 
 watch(facilityId, async (val) => {
   if (!val) return
-  const res = await fetch(`/api/drivers?facilityId=${val}`)
+  const res = await fetch(`/nagl/api/drivers?facilityId=${val}`)
   drivers.value = await res.json()
 })
 
@@ -140,13 +140,13 @@ async function submit() {
   }
 
   if (cardId) {
-    await fetch(`/api/driver-cards/${cardId}`, {
+    await fetch(`/nagl/api/driver-cards/${cardId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
   } else {
-    await fetch('/api/driver-cards', {
+    await fetch('/nagl/api/driver-cards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
