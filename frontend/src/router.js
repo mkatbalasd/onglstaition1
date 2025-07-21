@@ -2,24 +2,28 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/',
+    component: () => import('./views/HomeView.vue')
+  },
+  {
     path: '/driver-cards',
-    component: () => import('./pages/DriverCardsPage.vue')
+    component: () => import('./views/DriverCardsView.vue')
   },
   {
     path: '/cards',
-    component: () => import('./pages/CardsPage.vue')
+    component: () => import('./views/Cards.vue')
   },
   {
     path: '/facilities',
-    component: () => import('./pages/Facilities.vue')
+    component: () => import('./views/Facilities.vue')
   },
   {
     path: '/drivers',
-    component: () => import('./pages/Drivers.vue')
+    component: () => import('./views/Drivers.vue')
   },
   {
     path: '/vehicles',
-    component: () => import('./pages/Vehicles.vue')
+    component: () => import('./views/Vehicles.vue')
   }
 ]
 
