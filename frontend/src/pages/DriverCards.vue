@@ -42,8 +42,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import DriverCardForm from '@/components/DriverCardForm.vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
+const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCardForm.vue'))
 import SkeletonTable from '@/components/SkeletonTable.vue'
 
 const cards = ref([])

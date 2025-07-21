@@ -44,8 +44,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import CardForm from './CardForm.vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
+const CardForm = defineAsyncComponent(() => import('./CardForm.vue'))
 import { useDataStore } from '@/stores/data'
 import { storeToRefs } from 'pinia'
 

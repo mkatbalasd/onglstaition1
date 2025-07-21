@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import SkeletonTable from '@/components/SkeletonTable.vue'
-import DriverForm from '@/components/DriverForm.vue'
+const DriverForm = defineAsyncComponent(() => import('@/components/DriverForm.vue'))
 
 const drivers = ref([])
 const loading = ref(true)
