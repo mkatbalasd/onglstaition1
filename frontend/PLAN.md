@@ -17,8 +17,8 @@ This document tracks progress on migrating the driver card management interfaces
 - ~~Create reusable UI components (`<Sidebar />`, `<Header />`, `<Card />`, etc.) following the minimal gray/blue theme.~~ ✅
 - ~~Implement RTL support and dark mode styling in all components.~~ ✅
 - ~~Replace jQuery or Bootstrap usage with Vue and Headless UI or Shadcn/UI components.~~ ✅
-- Connect pages to the existing API endpoints for data fetch and submission.
-- Add skeleton loading states while fetching data.
+- ~~Connect pages to the existing API endpoints for data fetch and submission.~~ ✅
+- ~~Add skeleton loading states while fetching data.~~ ✅
 - Optimize performance with lazy loading and minimal bundle size.
 - Update documentation and examples as features are completed.
 
