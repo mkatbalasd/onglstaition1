@@ -4,12 +4,7 @@
   >
     <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ title }}</h1>
     <nav class="flex space-x-4 rtl:space-x-reverse">
-      <button
-        class="p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400"
-        @click="toggleDark"
-      >
-        <component :is="dark ? Sun : Moon" class="w-5 h-5" />
-      </button>
+      <ThemeToggle />
       <button
         class="p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400"
         @click="toggleDir"
@@ -65,20 +60,16 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { Bell, User, Sun, Moon } from 'lucide-vue-next'
+import { Bell, User } from 'lucide-vue-next'
+import ThemeToggle from './ThemeToggle.vue'
 import { Menu, MenuButton, MenuItems, MenuItem, TransitionRoot } from '@headlessui/vue'
 
-const dark = ref(false)
 const dir = ref('ltr')
 
 const props = defineProps({
   title: { type: String, default: 'My App' }
 })
 
-function toggleDark() {
-  window.toggleDark()
-  dark.value = document.documentElement.classList.contains('dark')
-}
 
 function toggleDir() {
   window.toggleDir()
@@ -86,7 +77,6 @@ function toggleDir() {
 }
 
 onMounted(() => {
-  dark.value = document.documentElement.classList.contains('dark')
   dir.value = document.documentElement.getAttribute('dir') || 'ltr'
 })
 </script>
