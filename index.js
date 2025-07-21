@@ -168,7 +168,9 @@ router.get('/api/suppliers', async (req, res) => {
   }
 });
 
-// Serve Vue SPA
+// Serve Vue SPA for any route under /nagl/app
+// Express 5 uses path-to-regexp v6 which accepts the `{*param}` syntax
+// for wildcards, so `/nagl/app{/*path}` correctly matches subroutes.
 app.get('/nagl/app{/*path}', (req, res) =>
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'))
 );
