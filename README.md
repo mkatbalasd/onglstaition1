@@ -105,8 +105,10 @@ location /nagl/ {
 
 ```bash
 npm --prefix frontend install
-npm --prefix frontend run build
+npm run build:frontend
 ```
+
+يختصر الأمر `build:frontend` تنفيذ `npm --prefix frontend run build` مما يضمن تضمين ملفات الواجهة المجمعة في أي عملية نشر.
 
 بعد البناء يتم تقديم الملفات المجمعة من المسار `/nagl/app` كما في الخطوات السابقة.
 
