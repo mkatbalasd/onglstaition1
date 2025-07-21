@@ -12,7 +12,7 @@ This document tracks progress on migrating the driver card management interfaces
 
 ## Remaining tasks
 
-- Convert each EJS view under `views/` into Vue components and pages.
+- ~~Convert each EJS view under `views/` into Vue components and pages.~~ ✅
 - Introduce Vue Router and create routes that mirror the existing server pages.
 - Create reusable UI components (`<Sidebar />`, `<Header />`, `<Card />`, etc.) following the minimal gray/blue theme.
 - Implement RTL support and dark mode styling in all components.
