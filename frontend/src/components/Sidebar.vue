@@ -13,7 +13,7 @@
         class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
       >
         <IdCard class="w-4 h-4 text-blue-600 dark:text-blue-400" />
-        <span class="text-gray-700 dark:text-gray-100">Driver Cards</span>
+        <span class="text-gray-700 dark:text-gray-100">Driver Card List</span>
       </RouterLink>
       <RouterLink
         to="/operating-cards"
