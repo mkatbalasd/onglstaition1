@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 text-gray-800 dark:text-gray-100 ltr:text-left rtl:text-right">
     <Card v-for="c in cards" :key="c.ID" :icon="IdCard">
       <h3 class="font-semibold">{{ c.CardNumber }}</h3>
       <p class="text-sm text-gray-500">{{ c.FirstName }} - {{ c.Name }}</p>

@@ -1,9 +1,9 @@
 <template>
   <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
-    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right text-xs sm:text-sm">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right">
       <thead class="bg-gray-50 dark:bg-gray-800">
         <tr>
-          <th v-for="col in columns" :key="col.key" @click="sortBy(col.key)" class="px-2 py-1 sm:px-3 sm:py-2 cursor-pointer select-none">
+          <th v-for="col in columns" :key="col.key" @click="sortBy(col.key)" class="px-2 py-1 sm:px-3 sm:py-2 cursor-pointer select-none ltr:text-left rtl:text-right">
             {{ col.label }}
             <span v-if="sort.key === col.key">{{ sort.asc ? '▲' : '▼' }}</span>
           </th>
@@ -11,7 +11,7 @@
       </thead>
       <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
         <tr v-for="(item, idx) in sortedItems" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-900">
-          <td v-for="col in columns" :key="col.key" class="px-2 py-1 sm:px-3 sm:py-2">{{ item[col.key] }}</td>
+          <td v-for="col in columns" :key="col.key" class="px-2 py-1 sm:px-3 sm:py-2 ltr:text-left rtl:text-right">{{ item[col.key] }}</td>
         </tr>
       </tbody>
     </table>

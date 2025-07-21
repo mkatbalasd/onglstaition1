@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 text-gray-800 dark:text-gray-100 ltr:text-left rtl:text-right">
     <Card v-for="driver in drivers" :key="driver.DriverID" :icon="User">
       <h3 class="font-semibold">{{ driver.FirstName }} {{ driver.LastName }}</h3>
       <p class="text-sm text-gray-500">{{ driver.IdentityNumber }}</p>
