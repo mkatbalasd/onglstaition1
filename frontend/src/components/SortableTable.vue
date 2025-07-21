@@ -1,0 +1,50 @@
+<template>
+  <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right text-xs sm:text-sm">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+        <tr>
+          <th v-for="col in columns" :key="col.key" @click="sortBy(col.key)" class="px-2 py-1 sm:px-3 sm:py-2 cursor-pointer select-none">
+            {{ col.label }}
+            <span v-if="sort.key === col.key">{{ sort.asc ? '▲' : '▼' }}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+        <tr v-for="(item, idx) in sortedItems" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-900">
+          <td v-for="col in columns" :key="col.key" class="px-2 py-1 sm:px-3 sm:py-2">{{ item[col.key] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+const props = defineProps({
+  items: { type: Array, default: () => [] },
+  columns: { type: Array, default: () => [] }
+})
+
+const sort = ref({ key: '', asc: true })
+
+function sortBy(key) {
+  if (sort.value.key === key) {
+    sort.value.asc = !sort.value.asc
+  } else {
+    sort.value.key = key
+    sort.value.asc = true
+  }
+}
+
+const sortedItems = computed(() => {
+  if (!sort.value.key) return props.items
+  return [...props.items].sort((a, b) => {
+    const av = a[sort.value.key]
+    const bv = b[sort.value.key]
+    if (av === bv) return 0
+    if (sort.value.asc) return av > bv ? 1 : -1
+    return av < bv ? 1 : -1
+  })
+})
+</script>
