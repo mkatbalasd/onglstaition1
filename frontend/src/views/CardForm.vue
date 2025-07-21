@@ -4,7 +4,8 @@
       <div class="flex items-center justify-center min-h-screen p-4">
         <DialogPanel class="bg-white dark:bg-gray-900 rounded shadow p-6 w-full max-w-lg">
           <DialogTitle class="text-lg font-medium mb-4">{{ card ? 'Edit Card' : 'New Card' }}</DialogTitle>
-          <form @submit.prevent="submit" class="space-y-4">
+          <SkeletonForm v-if="loading" :fields="7" />
+          <form v-else @submit.prevent="submit" class="space-y-4">
             <HeadlessSelect v-model="facilityId" :options="facilityOptions" label="Facility" />
             <div>
               <HeadlessSelect v-model="vehicleId" :options="vehicleOptions" label="Vehicle" />
@@ -40,6 +41,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vu
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
+import SkeletonForm from '@/components/SkeletonForm.vue'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -57,6 +59,7 @@ const supplier = ref('')
 const facilities = ref([])
 const vehicles = ref([])
 const suppliers = ref([])
+const loading = ref(true)
 
 const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.FacilityID, label: `${f.Name} - ${f.IdentityNumber}` })))
 const vehicleOptions = computed(() => vehicles.value.map(v => ({ value: v.ID, label: v.PlateNumber || v.SerialNumber })))
@@ -89,6 +92,7 @@ watch(
 )
 
 onMounted(async () => {
+  loading.value = true
   const [facRes, vehRes, supRes] = await Promise.all([
     fetch('/nagl/api/facilities'),
     fetch('/nagl/api/vehicles'),
@@ -97,6 +101,7 @@ onMounted(async () => {
   facilities.value = await facRes.json()
   vehicles.value = await vehRes.json()
   if (supRes.ok) suppliers.value = await supRes.json()
+  loading.value = false
 })
 
 async function submit() {

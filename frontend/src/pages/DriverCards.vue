@@ -4,10 +4,7 @@
       <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">Driver Cards</h1>
       <button @click="openNew" class="px-4 py-2 bg-blue-600 text-white rounded">New</button>
     </div>
-    <div v-if="loading" class="space-y-2 animate-pulse">
-      <div class="h-4 bg-gray-200 rounded"></div>
-      <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-    </div>
+    <SkeletonTable v-if="loading" :columns="columns.length" />
     <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right">
         <thead class="bg-gray-50 dark:bg-gray-800">
@@ -47,11 +44,23 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import DriverCardForm from '@/components/DriverCardForm.vue'
+import SkeletonTable from '@/components/SkeletonTable.vue'
 
 const cards = ref([])
 const loading = ref(true)
 const showForm = ref(false)
 const current = ref(null)
+const columns = [
+  '#',
+  'Card Number',
+  'Card Type',
+  'Driver',
+  'Facility',
+  'Issue Date',
+  'Expiration Date',
+  'Supplier',
+  'Actions'
+]
 
 async function loadCards() {
   loading.value = true

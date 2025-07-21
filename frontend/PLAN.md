@@ -19,6 +19,7 @@ This document tracks progress on migrating the driver card management interfaces
 - ~~Replace jQuery or Bootstrap usage with Vue and Headless UI or Shadcn/UI components.~~ ✅
 - ~~Connect pages to the existing API endpoints for data fetch and submission.~~ ✅
 - ~~Add skeleton loading states while fetching data.~~ ✅
+- Added `SkeletonForm` component and integrated it into forms that load options asynchronously.
 - Optimize performance with lazy loading and minimal bundle size.
 - Update documentation and examples as features are completed.
 
