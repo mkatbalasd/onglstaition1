@@ -52,7 +52,13 @@
 
 - `GET /nagl/api/facilities` يعيد قائمة المنشآت.
 - `GET /nagl/api/driver-cards` يعيد بطاقات السائقين.
+- `POST /nagl/api/driver-cards` لإضافة بطاقة سائق.
+- `PUT /nagl/api/driver-cards/:id` لتعديل بطاقة.
+- `DELETE /nagl/api/driver-cards/:id` لحذف بطاقة.
 - `GET /nagl/api/cards` يعيد كروت التشغيل.
+- `POST /nagl/api/cards` لإضافة كرت تشغيل.
+- `PUT /nagl/api/cards/:id` لتعديل كرت تشغيل.
+- `DELETE /nagl/api/cards/:id` لحذف كرت.
 
 ## تشغيل واجهة Vue
 
