@@ -40,7 +40,7 @@ router.get('/api/facilities', async (req, res) => {
 router.get('/api/driver-cards', async (req, res) => {
   try {
     const rows = await pool.query(
-      'SELECT d.ID, d.CardNumber, d.CardType, drv.FirstName, f.Name, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
+      'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, f.Name, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
         'FROM OPC_DriverCard d ' +
         'LEFT JOIN OPC_Driver drv ON d.DriverID = drv.DriverID ' +
         'LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ' +
@@ -105,8 +105,7 @@ router.get('/api/cards', async (req, res) => {
         'FROM OPC_Card c ' +
         'LEFT JOIN OPC_Vehicle v ON c.VehicleID = v.ID ' +
         'LEFT JOIN OPC_Facility f ON c.FacilityID = f.FacilityID ' +
-        'LEFT JOIN Supplier s ON c.Supplier = s.id ' +
-        'ORDER BY c.ID DESC'
+        'LEFT JOIN Supplier s ON c.Supplier = s.id'
     );
     res.json(rows);
   } catch (err) {
