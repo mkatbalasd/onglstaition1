@@ -10,6 +10,26 @@ const routes = [
     component: () => import('./pages/DriverCards.vue')
   },
   {
+    path: '/driver-cards/new',
+    component: () => import('./views/DriverCardsNew.vue')
+  },
+  {
+    path: '/driver-cards/new/:facilityId/driver',
+    component: () => import('./views/DriverCardsDriver.vue')
+  },
+  {
+    path: '/driver-cards/new/:facilityId/driver/:driverId',
+    component: () => import('./views/DriverCardsForm.vue')
+  },
+  {
+    path: '/driver-cards/:id/edit',
+    component: () => import('./views/EditDriverCard.vue')
+  },
+  {
+    path: '/driver-cards/print/:token',
+    component: () => import('./views/DriverCardsPrint.vue')
+  },
+  {
     path: '/cards',
     component: () => import('./views/Cards.vue')
   },
