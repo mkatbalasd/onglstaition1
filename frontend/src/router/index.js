@@ -7,29 +7,29 @@ const routes = [
     component: () => import('../views/HomeView.vue')
   },
   {
-    path: '/drivers',
-    name: 'Drivers',
-    component: () => import('../views/Drivers.vue')
-  },
-  {
     path: '/driver-cards',
     name: 'DriverCards',
-    component: () => import('../views/DriverCardsView.vue')
-  },
-  {
-    path: '/facilities',
-    name: 'Facilities',
-    component: () => import('../views/Facilities.vue')
-  },
-  {
-    path: '/vehicles',
-    name: 'Vehicles',
-    component: () => import('../views/Vehicles.vue')
+    component: () => import('../pages/DriverCardsPage.vue')
   },
   {
     path: '/cards',
     name: 'Cards',
-    component: () => import('../views/Cards.vue')
+    component: () => import('../pages/CardsPage.vue')
+  },
+  {
+    path: '/facilities',
+    name: 'Facilities',
+    component: () => import('../pages/FacilitiesPage.vue')
+  },
+  {
+    path: '/drivers',
+    name: 'Drivers',
+    component: () => import('../pages/DriversPage.vue')
+  },
+  {
+    path: '/vehicles',
+    name: 'Vehicles',
+    component: () => import('../pages/VehiclesPage.vue')
   }
 ]
 
