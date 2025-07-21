@@ -1,6 +1,8 @@
 <template>
-  <div class="bg-white dark:bg-gray-900 rounded shadow p-4 flex items-start space-x-3">
-    <component v-if="icon" :is="icon" class="w-5 h-5 text-gray-500" />
+  <div
+    class="bg-white dark:bg-gray-900 rounded shadow p-4 flex items-start space-x-3 rtl:space-x-reverse"
+  >
+    <component v-if="icon" :is="icon" class="w-5 h-5 text-gray-500 dark:text-gray-400" />
     <div class="flex-1">
       <slot />
     </div>
