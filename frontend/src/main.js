@@ -1,9 +1,7 @@
 import './styles/tailwind.css'
 
 import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import router from './router.js'
+import MainLayout from './layouts/MainLayout.vue'
 
-const app = createApp(App)
-app.use(router)
-app.mount('#app')
+createApp(MainLayout).use(router).mount('#app')
