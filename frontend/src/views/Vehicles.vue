@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-4 text-gray-800 dark:text-gray-100 ltr:text-left rtl:text-right">
     <Card v-for="v in vehicles" :key="v.ID" :icon="Truck">
       <h3 class="font-semibold">{{ v.PlateNumber }}</h3>
       <p class="text-sm text-gray-500">{{ v.SerialNumber }}</p>

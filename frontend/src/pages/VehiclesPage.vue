@@ -33,8 +33,8 @@ function refresh() {
 </script>
 
 <template>
-  <div class="space-y-4">
-    <button @click="showForm = true" class="px-4 py-2 bg-blue-600 text-white rounded">Add Vehicle</button>
+  <div class="space-y-4 text-gray-800 dark:text-gray-100 ltr:text-left rtl:text-right">
+    <button @click="showForm = true" class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded">Add Vehicle</button>
     <SkeletonTable v-if="loading" :columns="columns.length" />
     <DataTable v-else :items="vehicles" :columns="columns" />
     <VehicleForm v-model="showForm" @saved="refresh" />
