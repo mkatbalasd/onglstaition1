@@ -21,3 +21,11 @@ describe('GET /nagl/app/', () => {
     expect(res.statusCode).toBe(200);
   });
 });
+
+describe('GET /nagl/app/sub/route', () => {
+  it('serves index.html for SPA routes', async () => {
+    const res = await request(app).get('/nagl/app/sub/route');
+    expect(res.statusCode).toBe(200);
+    expect(res.text).toContain('test');
+  });
+});
