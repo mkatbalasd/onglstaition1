@@ -2,8 +2,8 @@ import './styles/tailwind.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import App from './App.vue'
-import router from './router.js'
+import MainLayout from './layouts/MainLayout.vue'
+import router from './router'
 
 function applyTheme() {
   const stored = localStorage.getItem('theme')
@@ -34,7 +34,7 @@ window.toggleDir = () => {
 applyTheme()
 applyDir()
 
-createApp(App)
+createApp(MainLayout)
   .use(createPinia())
   .use(router)
   .mount('#app')
