@@ -19,11 +19,11 @@ const routes = [
   },
   {
     path: '/driver-cards/new/:facilityId/driver/:driverId',
-    component: () => import('./views/DriverCardsForm.vue')
+    component: () => import('./pages/DriverCardFormPage.vue')
   },
   {
     path: '/driver-cards/:id/edit',
-    component: () => import('./views/EditDriverCard.vue')
+    component: () => import('./pages/DriverCardFormPage.vue')
   },
   {
     path: '/driver-cards/print/:token',
@@ -34,12 +34,12 @@ const routes = [
     component: () => import('./views/Cards.vue')
   },
   {
-    path: "/cards/new",
-    component: () => import("./views/OperatingCardsNew.vue")
+    path: '/cards/new',
+    component: () => import('./pages/CardFormPage.vue')
   },
   {
-    path: "/cards/:id/edit",
-    component: () => import("./views/OperatingCardsNew.vue")
+    path: '/cards/:id/edit',
+    component: () => import('./pages/CardFormPage.vue')
   },
   {
     path: '/facilities',
