@@ -20,7 +20,7 @@ This document tracks progress on migrating the driver card management interfaces
 - ~~Connect pages to the existing API endpoints for data fetch and submission.~~ ✅
 - ~~Add skeleton loading states while fetching data.~~ ✅
 - Added `SkeletonForm` component and integrated it into forms that load options asynchronously.
-- Optimize performance with lazy loading and minimal bundle size.
+- ~~Optimize performance with lazy loading and minimal bundle size.~~ ✅
 - Update documentation and examples as features are completed.
 
 This checklist will help track progress as the frontend is migrated to Vue.

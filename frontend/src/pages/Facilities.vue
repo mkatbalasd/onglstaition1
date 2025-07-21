@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import SkeletonTable from '@/components/SkeletonTable.vue'
-import FacilityForm from '@/components/FacilityForm.vue'
+const FacilityForm = defineAsyncComponent(() => import('@/components/FacilityForm.vue'))
 
 const facilities = ref([])
 const loading = ref(true)
