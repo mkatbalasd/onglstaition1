@@ -4,7 +4,8 @@
       <div class="flex items-center justify-center min-h-screen p-4">
         <DialogPanel class="bg-white dark:bg-gray-900 rounded shadow p-6 w-full max-w-lg">
           <DialogTitle class="text-lg font-medium mb-4">{{ card ? 'Edit Driver Card' : 'New Driver Card' }}</DialogTitle>
-          <form @submit.prevent="submit" class="space-y-4">
+          <SkeletonForm v-if="loading" :fields="6" />
+          <form v-else @submit.prevent="submit" class="space-y-4">
             <div>
               <label class="block text-sm font-medium mb-1">Card Type</label>
               <input v-model="cardType" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" required />
@@ -38,6 +39,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vu
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
+import SkeletonForm from '@/components/SkeletonForm.vue'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -55,6 +57,7 @@ const supplier = ref('')
 const facilities = ref([])
 const drivers = ref([])
 const suppliers = ref([])
+const loading = ref(true)
 
 const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.FacilityID, label: `${f.Name} - ${f.IdentityNumber}` })))
 const driverOptions = computed(() => drivers.value.map(d => ({ value: d.DriverID, label: `${d.FirstName} ${d.LastName} - ${d.IdentityNumber}` })))
@@ -83,6 +86,7 @@ watch(() => props.card, (val) => {
 }, { immediate: true })
 
 onMounted(async () => {
+  loading.value = true
   const [facRes, drvRes, supRes] = await Promise.all([
     fetch('/nagl/api/facilities'),
     fetch('/nagl/api/drivers'),
@@ -91,6 +95,7 @@ onMounted(async () => {
   facilities.value = await facRes.json()
   drivers.value = await drvRes.json()
   suppliers.value = await supRes.json()
+  loading.value = false
 })
 
 async function submit() {
