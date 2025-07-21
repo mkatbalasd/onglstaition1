@@ -1,5 +1,5 @@
 <template>
-  <aside class="bg-gray-50 dark:bg-gray-800 h-full p-4">
+  <TransitionRoot :show="open" as="aside" class="bg-gray-50 dark:bg-gray-800 h-full p-4 font-sans">
     <nav class="space-y-2">
       <RouterLink
         to="/"
@@ -44,12 +44,17 @@
         <span class="text-gray-700 dark:text-gray-100">Vehicles</span>
       </RouterLink>
     </nav>
-  </aside>
+  </TransitionRoot>
 </template>
 
 <script setup>
 import { Home, IdCard, SquareKanban, Building2, Users, Truck } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
+import { TransitionRoot } from '@headlessui/vue'
+
+const props = defineProps({
+  open: { type: Boolean, default: true }
+})
 </script>
 
 <style scoped>
