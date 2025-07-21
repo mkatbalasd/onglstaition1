@@ -11,13 +11,7 @@
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Identity Number</label>
           <input v-model="identity" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">License Type</label>
-          <select v-model="licenseType" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700">
-            <option value="">اختر...</option>
-            <option v-for="t in licenseTypes" :key="t.LicenseTypeNameAR" :value="t.LicenseTypeNameAR">{{ t.LicenseTypeNameAR }}</option>
-          </select>
-        </div>
+        <HeadlessSelect v-model="licenseType" :options="licenseOptions" label="License Type" />
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Issue Date</label>
           <DatePicker v-model="issueDate" :initial-type="'hijri'" language="ar" />
@@ -33,9 +27,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
+import HeadlessSelect from '@/components/HeadlessSelect.vue'
 
 const name = ref('')
 const identity = ref('')
@@ -43,6 +38,10 @@ const licenseType = ref('')
 const issueDate = ref({ date: '', type: 'hijri' })
 const expirationDate = ref({ date: '', type: 'hijri' })
 const licenseTypes = ref([])
+
+const licenseOptions = computed(() =>
+  licenseTypes.value.map(t => ({ value: t.LicenseTypeNameAR, label: t.LicenseTypeNameAR }))
+)
 
 onMounted(async () => {
   const res = await fetch('/nagl/api/license-types')

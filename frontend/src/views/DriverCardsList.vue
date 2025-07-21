@@ -5,53 +5,59 @@
       <div class="h-4 bg-gray-200 rounded"></div>
       <div class="h-4 bg-gray-200 rounded w-5/6"></div>
     </div>
-    <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right">
-        <thead class="bg-gray-50 dark:bg-gray-800">
-          <tr>
-            <th class="px-3 py-2">#</th>
-            <th class="px-3 py-2">Card Number</th>
-            <th class="px-3 py-2">Card Type</th>
-            <th class="px-3 py-2">Driver</th>
-            <th class="px-3 py-2">Facility</th>
-            <th class="px-3 py-2">Issue Date</th>
-            <th class="px-3 py-2">Expiration Date</th>
-            <th class="px-3 py-2">Supplier</th>
-            <th class="px-3 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-          <tr v-for="c in cards" :key="c.ID" class="hover:bg-gray-50 dark:hover:bg-gray-900">
-            <td class="px-3 py-2">{{ c.ID }}</td>
-            <td class="px-3 py-2">{{ c.CardNumber }}</td>
-            <td class="px-3 py-2">{{ c.CardType }}</td>
-            <td class="px-3 py-2">{{ c.FirstName }}</td>
-            <td class="px-3 py-2">{{ c.Name }}</td>
-            <td class="px-3 py-2">{{ c.IssueDate }}</td>
-            <td class="px-3 py-2">{{ c.ExpirationDate }}</td>
-            <td class="px-3 py-2">{{ c.SupplierName }}</td>
-            <td class="px-3 py-2 text-left space-x-2 rtl:space-x-reverse">
-              <RouterLink :to="`/driver-cards/${c.ID}/edit`" class="text-blue-600 hover:underline">Edit</RouterLink>
-              <RouterLink :to="`/driver-cards/${c.ID}/delete`" class="text-red-600 hover:underline">Delete</RouterLink>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-else class="space-y-4">
+      <input v-model="search" type="text" placeholder="Search" class="border rounded px-2 py-1" />
+      <VueTableLite
+        :columns="table.columns"
+        :rows="filteredRows"
+        :total="filteredRows.length"
+        :page-size="5"
+        :is-static-mode="true"
+        :is-slot-mode="true"
+      >
+        <template #actions="{ value }">
+          <RouterLink :to="`/driver-cards/${value.ID}/edit`" class="text-blue-600 hover:underline mr-2">Edit</RouterLink>
+          <RouterLink :to="`/driver-cards/${value.ID}/delete`" class="text-red-600 hover:underline">Delete</RouterLink>
+        </template>
+      </VueTableLite>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import { RouterLink } from 'vue-router'
+import VueTableLite from 'vue3-table-lite'
 
-const cards = ref([])
+const table = reactive({
+  columns: [
+    { label: '#', field: 'ID', width: '5%', sortable: true, isKey: true },
+    { label: 'Card Number', field: 'CardNumber', sortable: true },
+    { label: 'Card Type', field: 'CardType' },
+    { label: 'Driver', field: 'FirstName' },
+    { label: 'Facility', field: 'Name' },
+    { label: 'Issue Date', field: 'IssueDate' },
+    { label: 'Expiration Date', field: 'ExpirationDate' },
+    { label: 'Supplier', field: 'SupplierName' },
+    { label: 'Actions', field: 'actions' }
+  ],
+  rows: []
+})
 const loading = ref(true)
+const search = ref('')
+
+const filteredRows = computed(() => {
+  if (!search.value) return table.rows
+  const term = search.value.toLowerCase()
+  return table.rows.filter(r =>
+    Object.values(r).some(v => String(v).toLowerCase().includes(term))
+  )
+})
 
 async function loadCards() {
   loading.value = true
   const res = await fetch('/nagl/api/driver-cards')
-  cards.value = await res.json()
+  table.rows = await res.json()
   loading.value = false
 }
 
