@@ -11,15 +11,15 @@ const routes = [
   },
   {
     path: '/facilities',
-    component: () => import('./pages/FacilitiesPage.vue')
+    component: () => import('./pages/Facilities.vue')
   },
   {
     path: '/drivers',
-    component: () => import('./pages/DriversPage.vue')
+    component: () => import('./pages/Drivers.vue')
   },
   {
     path: '/vehicles',
-    component: () => import('./pages/VehiclesPage.vue')
+    component: () => import('./pages/Vehicles.vue')
   }
 ]
 
