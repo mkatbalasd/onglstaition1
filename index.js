@@ -169,9 +169,9 @@ router.get('/api/suppliers', async (req, res) => {
 });
 
 // Serve Vue SPA
-app.get('/nagl/app/*path', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
-});
+app.get('/nagl/app{/*path}', (req, res) =>
+  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'))
+);
 
 app.use('/nagl', router);
 
