@@ -1,3 +1,5 @@
+const rtl = require('tailwindcss-rtl')
+
 module.exports = {
   darkMode: 'class',
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -6,5 +8,5 @@ module.exports = {
       fontFamily: { sans: ['Segoe UI', 'Tahoma', 'sans-serif'] },
     },
   },
-  plugins: [],
+  plugins: [rtl()],
 };

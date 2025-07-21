@@ -10,7 +10,16 @@ module.exports = [
     files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
-      sourceType: 'module'
+      sourceType: 'module',
+      globals: {
+        fetch: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        process: 'readonly',
+        module: 'writable',
+        require: 'readonly'
+      }
     },
     ...js.configs.recommended
   },
@@ -21,6 +30,15 @@ module.exports = [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module'
+      },
+      globals: {
+        fetch: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        process: 'readonly',
+        module: 'writable',
+        require: 'readonly'
       }
     },
     plugins: {
