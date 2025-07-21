@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">Edit Driver Card</h1>
-    <SkeletonForm v-if="loading" :fields="5" />
+    <Skeleton v-if="loading" variant="form" :fields="5" />
     <div v-else class="grid gap-4 md:grid-cols-2">
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Issue Date</label>
@@ -23,7 +23,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useFormHelpers } from '@/composables/useFormHelpers'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
-import SkeletonForm from '@/components/SkeletonForm.vue'
+import Skeleton from '@/components/Skeleton.vue'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
 
 const facilities = ref([])

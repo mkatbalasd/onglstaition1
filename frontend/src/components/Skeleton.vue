@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+  <div v-if="variant === 'table'" class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right">
       <thead class="bg-gray-50 dark:bg-gray-800">
         <tr>
@@ -17,11 +17,20 @@
       </tbody>
     </table>
   </div>
+  <div v-else-if="variant === 'form'" class="space-y-4 animate-pulse">
+    <div v-for="n in fields" :key="n" class="space-y-2">
+      <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+      <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+    </div>
+    <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-24 ml-auto"></div>
+  </div>
 </template>
 
 <script setup>
 const props = defineProps({
+  variant: { type: String, default: 'table' },
   columns: { type: Number, default: 3 },
-  rows: { type: Number, default: 5 }
+  rows: { type: Number, default: 5 },
+  fields: { type: Number, default: 4 }
 })
 </script>

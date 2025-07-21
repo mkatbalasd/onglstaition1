@@ -4,7 +4,7 @@
       <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">Driver Cards</h1>
       <button @click="openNew" class="px-4 py-2 bg-blue-600 text-white rounded">New</button>
     </div>
-    <SkeletonTable v-if="loading" :columns="columns.length" />
+    <Skeleton v-if="loading" :columns="columns.length" />
     <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right">
         <thead class="bg-gray-50 dark:bg-gray-800">
@@ -44,7 +44,7 @@
 <script setup>
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCardForm.vue'))
-import SkeletonTable from '@/components/SkeletonTable.vue'
+import Skeleton from '@/components/Skeleton.vue'
 
 const cards = ref([])
 const loading = ref(true)

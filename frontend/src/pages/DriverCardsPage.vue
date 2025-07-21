@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import DataTable from '@/components/DataTable.vue'
-import SkeletonTable from '@/components/SkeletonTable.vue'
+import Skeleton from '@/components/Skeleton.vue'
 
 const cards = ref([])
 const loading = ref(true)
@@ -24,7 +24,7 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-4 text-gray-800 dark:text-gray-100 ltr:text-left rtl:text-right">
-    <SkeletonTable v-if="loading" :columns="columns.length" />
+    <Skeleton v-if="loading" :columns="columns.length" />
     <DataTable v-else :items="cards" :columns="columns" />
   </div>
 </template>

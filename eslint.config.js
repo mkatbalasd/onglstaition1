@@ -8,7 +8,19 @@ module.exports = [
     files: ["**/*.js"],
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "commonjs"
+      sourceType: "commonjs",
+      globals: {
+        console: true,
+        process: true,
+        __dirname: true,
+        describe: true,
+        it: true,
+        expect: true,
+        beforeEach: true,
+        beforeAll: true,
+        afterAll: true,
+        jest: true
+      }
     },
     ...js.configs.recommended
   }

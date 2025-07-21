@@ -4,7 +4,7 @@
       <div class="flex items-center justify-center min-h-screen p-4">
         <DialogPanel class="bg-white dark:bg-gray-900 rounded shadow p-6 w-full max-w-lg">
           <DialogTitle class="text-lg font-medium mb-4">{{ card ? 'Edit Card' : 'New Card' }}</DialogTitle>
-          <SkeletonForm v-if="loading" :fields="7" />
+          <Skeleton v-if="loading" variant="form" :fields="7" />
           <form v-else @submit.prevent="submit" class="space-y-4">
             <HeadlessSelect v-model="facilityId" :options="facilityOptions" label="Facility" />
             <div>
@@ -41,7 +41,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vu
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
-import SkeletonForm from '@/components/SkeletonForm.vue'
+import Skeleton from '@/components/Skeleton.vue'
 
 const props = defineProps({
   modelValue: Boolean,
