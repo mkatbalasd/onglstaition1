@@ -34,17 +34,37 @@ const routes = [
     component: () => import('./views/Cards.vue')
   },
   {
+    path: "/cards/new",
+    component: () => import("./views/OperatingCardsNew.vue")
+  },
+  {
+    path: "/cards/:id/edit",
+    component: () => import("./views/OperatingCardsNew.vue")
+  },
+  {
     path: '/facilities',
     component: () => import('./views/Facilities.vue')
+  },
+  {
+    path: "/facilities/new",
+    component: () => import("./views/FacilitiesNew.vue")
   },
   {
     path: '/drivers',
     component: () => import('./views/Drivers.vue')
   },
   {
+    path: "/drivers/new",
+    component: () => import("./views/DriversNew.vue")
+  },
+  {
     path: '/vehicles',
     component: () => import('./views/Vehicles.vue')
-  }
+  },
+  {
+    path: "/vehicles/new",
+    component: () => import("./views/VehiclesNew.vue")
+  },
 ]
 
 const router = createRouter({
