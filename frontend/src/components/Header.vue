@@ -25,7 +25,7 @@
         <MenuButton class="p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400">
           <User class="w-5 h-5" />
         </MenuButton>
-        <Transition
+        <TransitionRoot
           enter="transition ease-out duration-100"
           enter-from="transform opacity-0 scale-95"
           enter-to="transform opacity-100 scale-100"
@@ -57,7 +57,7 @@
               </a>
             </MenuItem>
           </MenuItems>
-        </Transition>
+        </TransitionRoot>
       </Menu>
     </nav>
   </header>
@@ -66,7 +66,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Bell, User, Sun, Moon } from 'lucide-vue-next'
-import { Menu, MenuButton, MenuItems, MenuItem, Transition } from '@headlessui/vue'
+import { Menu, MenuButton, MenuItems, MenuItem, TransitionRoot } from '@headlessui/vue'
 
 const dark = ref(false)
 const dir = ref('ltr')
