@@ -7,7 +7,7 @@ const routes = [
   },
   {
     path: '/driver-cards',
-    component: () => import('./views/DriverCardsView.vue')
+    component: () => import('./pages/DriverCards.vue')
   },
   {
     path: '/cards',
