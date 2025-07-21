@@ -31,6 +31,12 @@ npm run build
 The generated files will be placed in `dist/` and can be accessed via the
 Express backend at `/nagl/app/`.
 
+When working from the repository root you can run the same build using:
+
+```sh
+npm run build:frontend
+```
+
 ### Environment variables
 
 The backend expects a `.env` file in the repository root. Copy `.env.example`
@@ -42,6 +48,8 @@ DB_USER=your_db_user
 DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
 PORT=3002
+VITE_BASE_PATH=/nagl/app/
 ```
 
-No additional variables are required for the front‑end itself.
+`VITE_BASE_PATH` controls the subdirectory where the compiled assets are
+served. It defaults to `/nagl/app/` which matches the Express configuration.
