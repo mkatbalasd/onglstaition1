@@ -24,6 +24,28 @@ router.use('/', require('./routes/driverCards'));
 router.use('/', require('./routes/cards'));
 router.use('/', require('./routes/api'));
 
+// Lightweight API routes
+router.get('/api/facilities', async (req, res) => {
+  const rows = await pool.query(
+    'SELECT FacilityID, Name, IdentityNumber, LicenseType FROM OPC_Facility ORDER BY FacilityID DESC'
+  );
+  res.json(rows);
+});
+
+router.get('/api/driver-cards', async (req, res) => {
+  const rows = await pool.query(
+    'SELECT ID, CardNumber, DriverID, FacilityID, IssueDate, ExpirationDate FROM OPC_DriverCard ORDER BY ID DESC'
+  );
+  res.json(rows);
+});
+
+router.get('/api/cards', async (req, res) => {
+  const rows = await pool.query(
+    'SELECT ID, CardNumber, VehicleID, FacilityID, IssueDate, ExpirationDate FROM OPC_Card ORDER BY ID DESC'
+  );
+  res.json(rows);
+});
+
 // Serve Vue SPA
 app.get('/nagl/app/*path', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
