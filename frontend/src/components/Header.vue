@@ -6,6 +6,12 @@
     <nav class="flex space-x-4 rtl:space-x-reverse">
       <button
         class="p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400"
+        @click="toggleDark"
+      >
+        <component :is="dark ? Sun : Moon" class="w-5 h-5" />
+      </button>
+      <button
+        class="p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400"
       >
         <Bell class="w-5 h-5" />
       </button>
@@ -19,7 +25,24 @@
 </template>
 
 <script setup>
-import { Bell, User } from 'lucide-vue-next'
+import { ref, onMounted } from 'vue'
+import { Bell, User, Sun, Moon } from 'lucide-vue-next'
+
+const dark = ref(false)
+
+function toggleDark() {
+  dark.value = !dark.value
+  const html = document.documentElement
+  if (dark.value) {
+    html.classList.add('dark')
+  } else {
+    html.classList.remove('dark')
+  }
+}
+
+onMounted(() => {
+  dark.value = document.documentElement.classList.contains('dark')
+})
 </script>
 
 <style scoped>

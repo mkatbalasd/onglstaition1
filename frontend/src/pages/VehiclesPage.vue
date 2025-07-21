@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import DataTable from '@/components/DataTable.vue'
+import SkeletonTable from '@/components/SkeletonTable.vue'
 import VehicleForm from '@/components/VehicleForm.vue'
 
 const vehicles = ref([])
@@ -34,10 +35,7 @@ function refresh() {
 <template>
   <div class="space-y-4">
     <button @click="showForm = true" class="px-4 py-2 bg-blue-600 text-white rounded">Add Vehicle</button>
-    <div v-if="loading" class="space-y-2 animate-pulse">
-      <div class="h-4 bg-gray-200 rounded"></div>
-      <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-    </div>
+    <SkeletonTable v-if="loading" :columns="columns.length" />
     <DataTable v-else :items="vehicles" :columns="columns" />
     <VehicleForm v-model="showForm" @saved="refresh" />
   </div>
