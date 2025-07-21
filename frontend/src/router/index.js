@@ -2,39 +2,34 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    name: 'Dashboard',
-    component: () => import('../views/Dashboard.vue')
-  },
-  {
-    path: '/driver-cards',
+    path: '/nagl/driver-cards',
     name: 'DriverCards',
-    component: () => import('../views/DriverCards.vue')
+    component: () => import('../pages/DriverCardsPage.vue')
   },
   {
-    path: '/cards',
+    path: '/nagl/cards',
     name: 'Cards',
-    component: () => import('../views/OperatingCards.vue')
+    component: () => import('../pages/CardsPage.vue')
   },
   {
-    path: '/facilities',
+    path: '/nagl/facilities',
     name: 'Facilities',
-    component: () => import('../views/Facilities.vue')
+    component: () => import('../pages/FacilitiesPage.vue')
   },
   {
-    path: '/drivers',
+    path: '/nagl/drivers',
     name: 'Drivers',
-    component: () => import('../views/Drivers.vue')
+    component: () => import('../pages/DriversPage.vue')
   },
   {
-    path: '/vehicles',
+    path: '/nagl/vehicles',
     name: 'Vehicles',
-    component: () => import('../views/Vehicles.vue')
+    component: () => import('../pages/VehiclesPage.vue')
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory('/nagl/app/'),
+  history: createWebHistory(),
   routes
 })
 
