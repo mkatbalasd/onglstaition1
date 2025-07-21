@@ -3,42 +3,42 @@
     <nav class="space-y-2">
       <RouterLink
         to="/"
-        class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
+        :class="linkClasses('/')"
       >
         <Home class="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span class="text-gray-700 dark:text-gray-100">Dashboard</span>
       </RouterLink>
       <RouterLink
         to="/driver-cards"
-        class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
+        :class="linkClasses('/driver-cards')"
       >
         <IdCard class="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span class="text-gray-700 dark:text-gray-100">Driver Card List</span>
       </RouterLink>
       <RouterLink
         to="/operating-cards"
-        class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
+        :class="linkClasses('/operating-cards')"
       >
         <SquareKanban class="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span class="text-gray-700 dark:text-gray-100">Operating Cards</span>
       </RouterLink>
       <RouterLink
         to="/facilities"
-        class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
+        :class="linkClasses('/facilities')"
       >
         <Building2 class="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span class="text-gray-700 dark:text-gray-100">Facilities</span>
       </RouterLink>
       <RouterLink
         to="/drivers"
-        class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
+        :class="linkClasses('/drivers')"
       >
         <Users class="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span class="text-gray-700 dark:text-gray-100">Drivers</span>
       </RouterLink>
       <RouterLink
         to="/vehicles"
-        class="flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700"
+        :class="linkClasses('/vehicles')"
       >
         <Truck class="w-4 h-4 text-blue-600 dark:text-blue-400" />
         <span class="text-gray-700 dark:text-gray-100">Vehicles</span>
@@ -49,12 +49,20 @@
 
 <script setup>
 import { Home, IdCard, SquareKanban, Building2, Users, Truck } from 'lucide-vue-next'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRoute } from 'vue-router'
 import { TransitionRoot } from '@headlessui/vue'
 
 const props = defineProps({
   open: { type: Boolean, default: true }
 })
+
+const route = useRoute()
+
+function linkClasses(path) {
+  const base = 'flex items-center space-x-2 rtl:space-x-reverse p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700'
+  const active = route.path === path ? 'bg-blue-100 dark:bg-gray-700' : ''
+  return `${base} ${active}`
+}
 </script>
 
 <style scoped>
