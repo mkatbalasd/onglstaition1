@@ -1,29 +1,47 @@
-# frontend
+# Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This directory contains the Vue 3 single page application built with Vite and
+Tailwind CSS. The production build is served by the Express server from the
+`/nagl/app` base path.
 
-## Recommended IDE Setup
+## Project setup
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
+Install the project dependencies:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Run a development server
+
+Start the dev server with hot reload:
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Build for production
+
+Create an optimized build:
 
 ```sh
 npm run build
 ```
+
+The generated files will be placed in `dist/` and can be accessed via the
+Express backend at `/nagl/app/`.
+
+### Environment variables
+
+The backend expects a `.env` file in the repository root. Copy `.env.example`
+and provide your database credentials and desired port:
+
+```sh
+DB_HOST=your_db_host
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
+PORT=3002
+```
+
+No additional variables are required for the front‑end itself.
