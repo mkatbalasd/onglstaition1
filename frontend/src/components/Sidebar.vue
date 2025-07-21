@@ -13,12 +13,24 @@
         <SquareKanban class="w-4 h-4" />
         <span>Operating Cards</span>
       </RouterLink>
+      <RouterLink to="/facilities" class="flex items-center space-x-2">
+        <Building2 class="w-4 h-4" />
+        <span>Facilities</span>
+      </RouterLink>
+      <RouterLink to="/drivers" class="flex items-center space-x-2">
+        <Users class="w-4 h-4" />
+        <span>Drivers</span>
+      </RouterLink>
+      <RouterLink to="/vehicles" class="flex items-center space-x-2">
+        <Truck class="w-4 h-4" />
+        <span>Vehicles</span>
+      </RouterLink>
     </nav>
   </aside>
 </template>
 
 <script setup>
-import { Home, IdCard, SquareKanban } from 'lucide-vue-next'
+import { Home, IdCard, SquareKanban, Building2, Users, Truck } from 'lucide-vue-next'
 import { RouterLink } from 'vue-router'
 </script>
 
