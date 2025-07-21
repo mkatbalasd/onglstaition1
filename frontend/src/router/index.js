@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/driver-cards',
     name: 'DriverCards',
-    component: () => import('../views/DriverCards.vue')
+    component: () => import('../views/DriverCardsView.vue')
   },
   {
     path: '/facilities',
