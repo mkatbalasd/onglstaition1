@@ -4,11 +4,11 @@
     <div class="grid gap-4 md:grid-cols-2">
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Issue Date</label>
-        <input type="date" v-model="issueDate" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
+        <DatePicker v-model="issueDate" :initial-type="'hijri'" language="ar" />
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Expiration Date</label>
-        <input type="date" v-model="expirationDate" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
+        <DatePicker v-model="expirationDate" :initial-type="'hijri'" language="ar" />
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Facility</label>
@@ -44,6 +44,8 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useFormHelpers } from '@/composables/useFormHelpers'
+import DatePicker from 'vue3-hijri-gregorian-datepicker'
+import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 
 const facilities = ref([])
 const selectedDriver = ref('')
@@ -51,8 +53,9 @@ const selectedVehicle = ref('')
 
 const { issueDate, expirationDate, facilityId, drivers, vehicles, loadFacilityOptions } = useFormHelpers()
 
-onMounted(() => {
-  // facilities would normally be loaded from an API
+onMounted(async () => {
+  const res = await fetch('/nagl/api/facilities')
+  facilities.value = await res.json()
 })
 
 watch(facilityId, (val) => loadFacilityOptions(val))
