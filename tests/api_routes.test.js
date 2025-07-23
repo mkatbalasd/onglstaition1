@@ -1,0 +1,81 @@
+const request = require('supertest');
+
+jest.mock('../db', () => ({
+  pool: {
+    query: jest.fn(),
+    end: jest.fn()
+  },
+  generateCardNumber: jest.fn()
+}));
+
+const { pool } = require('../db');
+const app = require('../index');
+
+beforeEach(() => {
+  pool.query.mockReset();
+});
+
+describe('GET /nagl/api/drivers', () => {
+  it('returns list of drivers', async () => {
+    const data = [
+      { DriverID: 1, FirstName: 'A', LastName: 'B', IdentityNumber: '1' }
+    ];
+    pool.query.mockResolvedValueOnce(data);
+    const res = await request(app)
+      .get('/nagl/api/drivers')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual(data);
+  });
+
+  it('handles database errors', async () => {
+    pool.query.mockRejectedValueOnce(new Error('db fail'));
+    const res = await request(app)
+      .get('/nagl/api/drivers')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toEqual({ error: 'db fail' });
+  });
+});
+
+describe('POST /nagl/api/drivers', () => {
+  it('creates a driver', async () => {
+    pool.query.mockResolvedValueOnce({ insertId: 42 });
+    const payload = { FacilityID: 1, FirstName: 'Foo', LastName: 'Bar' };
+    const res = await request(app)
+      .post('/nagl/api/drivers')
+      .send(payload)
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      DriverID: 42,
+      FirstName: 'Foo',
+      LastName: 'Bar',
+      IdentityNumber: null
+    });
+  });
+});
+
+describe('GET /nagl/api/driver-cards', () => {
+  it('returns driver cards', async () => {
+    const rows = [{ ID: 1 }];
+    pool.query.mockResolvedValueOnce(rows);
+    const res = await request(app)
+      .get('/nagl/api/driver-cards')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual(rows);
+  });
+});
+
+describe('GET /nagl/api/cards error handling', () => {
+  it('returns 500 on db failure', async () => {
+    pool.query.mockRejectedValueOnce(new Error('boom'));
+    const res = await request(app)
+      .get('/nagl/api/cards')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toEqual({ error: 'boom' });
+  });
+});
