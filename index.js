@@ -52,6 +52,69 @@ router.get(
 router.get(
   '/api/driver-cards',
   asyncHandler(async (req, res) => {
+    const pageSize = 10;
+    const {
+      name,
+      identity,
+      facility,
+      supplier,
+      issueFrom,
+      issueTo,
+      expFrom,
+      expTo,
+      page
+    } = req.query;
+
+    const conditions = [];
+    const params = [];
+    if (name) {
+      conditions.push('drv.FirstName LIKE ?');
+      params.push(`%${name}%`);
+    }
+    if (identity) {
+      conditions.push('drv.IdentityNumber LIKE ?');
+      params.push(`%${identity}%`);
+    }
+    if (facility) {
+      conditions.push('f.Name LIKE ?');
+      params.push(`%${facility}%`);
+    }
+    if (supplier) {
+      conditions.push('s.name LIKE ?');
+      params.push(`%${supplier}%`);
+    }
+    if (issueFrom) {
+      conditions.push('d.IssueDate >= ?');
+      params.push(issueFrom);
+    }
+    if (issueTo) {
+      conditions.push('d.IssueDate <= ?');
+      params.push(issueTo);
+    }
+    if (expFrom) {
+      conditions.push('d.ExpirationDate >= ?');
+      params.push(expFrom);
+    }
+    if (expTo) {
+      conditions.push('d.ExpirationDate <= ?');
+      params.push(expTo);
+    }
+
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const pageNum = parseInt(page, 10) || 1;
+    const offset = (pageNum - 1) * pageSize;
+
+    const [countRow] = await pool.query(
+      'SELECT COUNT(*) AS count ' +
+        'FROM OPC_DriverCard d ' +
+        'LEFT JOIN OPC_Driver drv ON d.DriverID = drv.DriverID ' +
+        'LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ' +
+        'LEFT JOIN Supplier s ON d.Supplier = s.id ' +
+        where,
+      params
+    );
+    const count = countRow ? countRow.count : 0;
+
     const rows = await pool.query(
       'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, drv.IdentityNumber AS DriverIdentity, ' +
         'f.Name, f.IdentityNumber AS FacilityIdentity, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
@@ -59,9 +122,12 @@ router.get(
         'LEFT JOIN OPC_Driver drv ON d.DriverID = drv.DriverID ' +
         'LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ' +
         'LEFT JOIN Supplier s ON d.Supplier = s.id ' +
-        'ORDER BY d.ID DESC'
+        where +
+        ' ORDER BY d.ID DESC LIMIT ? OFFSET ?',
+      [...params, pageSize, offset]
     );
-    res.json(rows);
+
+    res.json({ items: rows, pageCount: Math.ceil(count / pageSize) });
   })
 );
 
