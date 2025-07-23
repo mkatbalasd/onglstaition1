@@ -74,6 +74,8 @@ import { getDrivers } from '@/api/drivers'
 import { createDriverCard, updateDriverCard } from '@/api/driverCards'
 import api from '@/services/axios'
 
+const STORAGE_KEY = 'draftDriverCard'
+
 const props = defineProps({
   modelValue: Boolean,
   card: { type: Object, default: null }
@@ -151,8 +153,24 @@ const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.Fac
 const driverOptions = computed(() => drivers.value.map(d => ({ value: d.DriverID, label: `${d.FirstName} ${d.LastName} - ${d.IdentityNumber}` })))
 const supplierOptions = computed(() => suppliers.value.map(s => ({ value: s.id, label: s.name })))
 
+watch(
+  () => ({
+    cardType: cardType.value,
+    facilityId: facilityId.value,
+    driverId: driverId.value,
+    issueDate: issueDate.value,
+    expirationDate: expirationDate.value,
+    supplier: supplier.value
+  }),
+  val => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
+  },
+  { deep: true }
+)
+
 function close() {
   emit('update:modelValue', false)
+  localStorage.removeItem(STORAGE_KEY)
 }
 
 watch(() => props.card, (val) => {
@@ -192,6 +210,21 @@ onMounted(async () => {
   drivers.value = drv || []
   suppliers.value = supData
   loading.value = false
+
+  if (!props.card) {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      try {
+        const d = JSON.parse(stored)
+        cardType.value = d.cardType || ''
+        facilityId.value = d.facilityId || ''
+        driverId.value = d.driverId || ''
+        issueDate.value = d.issueDate || { date: '', type: 'hijri' }
+        expirationDate.value = d.expirationDate || { date: '', type: 'hijri' }
+        supplier.value = d.supplier || ''
+      } catch {}
+    }
+  }
 })
 
 async function submit() {
@@ -216,6 +249,7 @@ async function submit() {
   } else {
     await createDriverCard(payload)
   }
+  localStorage.removeItem(STORAGE_KEY)
   emit('saved')
   close()
 }
