@@ -8,7 +8,7 @@
           <option value="<%= f.FacilityID %>" <%= card && card.FacilityID === f.FacilityID ? 'selected' : '' %>><%= f.Name %> - <%= f.IdentityNumber %> - <%= f.LicenseType || '' %></option>
         <% }) %>
       </select>
-      <a href="/nagl/facilities/new" target="_blank" id="addFacilityBtn" class="px-3 py-1 border rounded text-gray-700"><i class="bi bi-plus"></i></a>
+      <a href="/nagl/facilities/new" target="_blank" id="addFacilityBtn" class="px-3 py-1 border rounded text-gray-700">+</a>
     </div>
   </div>
   <div class="mb-3">
@@ -19,7 +19,7 @@
           <option value="<%= v.ID %>" <%= card && card.VehicleID === v.ID ? 'selected' : '' %>><%= v.PlateNumber || v.SerialNumber %></option>
         <% }) %>
       </select>
-      <a href="#" target="_blank" id="addVehicleBtn" class="px-3 py-1 border rounded text-gray-700"><i class="bi bi-plus"></i></a>
+      <a href="#" target="_blank" id="addVehicleBtn" class="px-3 py-1 border rounded text-gray-700">+</a>
     </div>
   </div>
   <div class="mb-3">
