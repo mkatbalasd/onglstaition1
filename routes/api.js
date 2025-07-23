@@ -105,4 +105,17 @@ router.post(
   })
 );
 
+router.get(
+  '/api/driver-cards/by-driver/:driverId',
+  asyncHandler(async (req, res) => {
+    const { driverId } = req.params;
+    const rows = await pool.query(
+      'SELECT ID FROM OPC_DriverCard WHERE DriverID = ? ORDER BY ID DESC LIMIT 1',
+      [driverId]
+    );
+    const card = rows[0] || null;
+    res.json(card);
+  })
+);
+
 module.exports = router;
