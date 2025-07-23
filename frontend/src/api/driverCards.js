@@ -1,8 +1,8 @@
 import api from '@/services/axios'
 
-export async function getDriverCards() {
+export async function getDriverCards(params = {}) {
   try {
-    const { data } = await api.get('/driver-cards')
+    const { data } = await api.get('/driver-cards', { params })
     return data
   } catch (error) {
     console.error('Failed to fetch driver cards', error)
