@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { pool, generateCardNumber } = require('../db');
+const { asyncHandler } = require('../middleware/errorHandler');
 
-router.get('/driver-cards', async (req, res) => {
-  try {
+router.get(
+  '/driver-cards',
+  asyncHandler(async (req, res) => {
     const cards = await pool.query(
       'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, f.Name, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
         'FROM OPC_DriverCard d ' +
@@ -17,11 +19,8 @@ router.get('/driver-cards', async (req, res) => {
       title: 'بطاقات السائقين',
       header: 'إدارة بطاقات السائقين'
     });
-  } catch (err) {
-    console.error('Error fetching driver cards:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
 router.get('/driver-cards/new', (req, res) => {
   res.render('drivercards/new', {
@@ -30,8 +29,9 @@ router.get('/driver-cards/new', (req, res) => {
   });
 });
 
-router.post('/driver-cards/new', async (req, res) => {
-  try {
+router.post(
+  '/driver-cards/new',
+  asyncHandler(async (req, res) => {
     const { IdentityNumber } = req.body;
     const rows = await pool.query(
       'SELECT FacilityID FROM OPC_Facility WHERE IdentityNumber = ?',
@@ -47,14 +47,12 @@ router.post('/driver-cards/new', async (req, res) => {
       title: 'إضافة منشأة',
       header: 'إضافة منشأة'
     });
-  } catch (err) {
-    console.error('Error processing facility identity:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.get('/driver-cards/new/:facilityId/driver', async (req, res) => {
-  try {
+router.get(
+  '/driver-cards/new/:facilityId/driver',
+  asyncHandler(async (req, res) => {
     const { facilityId } = req.params;
     const [facilityRow] = await pool.query(
       'SELECT Name FROM OPC_Facility WHERE FacilityID = ?',
@@ -66,14 +64,12 @@ router.get('/driver-cards/new/:facilityId/driver', async (req, res) => {
       title: 'إضافة بطاقة سائق',
       header: 'إدخال هوية السائق'
     });
-  } catch (err) {
-    console.error('Error fetching facility for driver:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.post('/driver-cards/new/:facilityId/driver', async (req, res) => {
-  try {
+router.post(
+  '/driver-cards/new/:facilityId/driver',
+  asyncHandler(async (req, res) => {
     const { facilityId } = req.params;
     const { IdentityNumber } = req.body;
     const rows = await pool.query(
@@ -98,14 +94,12 @@ router.post('/driver-cards/new/:facilityId/driver', async (req, res) => {
       title: 'إضافة سائق',
       header: 'إضافة سائق'
     });
-  } catch (err) {
-    console.error('Error processing driver identity:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.get('/driver-cards/new/:facilityId/driver/:driverId', async (req, res) => {
-  try {
+router.get(
+  '/driver-cards/new/:facilityId/driver/:driverId',
+  asyncHandler(async (req, res) => {
     const { facilityId, driverId } = req.params;
     const facilities = await pool.query(
       'SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility WHERE FacilityID = ?',
@@ -134,14 +128,12 @@ router.get('/driver-cards/new/:facilityId/driver/:driverId', async (req, res) =>
       title: 'إضافة بطاقة سائق',
       header: 'إضافة بطاقة سائق'
     });
-  } catch (err) {
-    console.error('Error preparing driver card form:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.post('/driver-cards', async (req, res) => {
-  try {
+router.post(
+  '/driver-cards',
+  asyncHandler(async (req, res) => {
     const {
       CardType,
       FacilityID,
@@ -157,14 +149,12 @@ router.post('/driver-cards', async (req, res) => {
       [CardNumber, CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier, today, today]
     );
     res.redirect('/nagl/driver-cards');
-  } catch (err) {
-    console.error('Error creating driver card:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.get('/driver-cards/:id/edit', async (req, res) => {
-  try {
+router.get(
+  '/driver-cards/:id/edit',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     const cardRows = await pool.query('SELECT * FROM OPC_DriverCard WHERE ID = ?', [id]);
     const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
@@ -186,14 +176,12 @@ router.get('/driver-cards/:id/edit', async (req, res) => {
       title: 'تعديل بطاقة سائق',
       header: 'تعديل بطاقة سائق'
     });
-  } catch (err) {
-    console.error('Error loading driver card for edit:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.post('/driver-cards/:id', async (req, res) => {
-  try {
+router.post(
+  '/driver-cards/:id',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier } = req.body;
     const today = new Date().toISOString().slice(0, 10);
@@ -202,21 +190,16 @@ router.post('/driver-cards/:id', async (req, res) => {
       [CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier, today, id]
     );
     res.redirect('/nagl/driver-cards');
-  } catch (err) {
-    console.error('Error updating driver card:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
-router.post('/driver-cards/:id/delete', async (req, res) => {
-  try {
+router.post(
+  '/driver-cards/:id/delete',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     await pool.query('DELETE FROM OPC_DriverCard WHERE ID = ?', [id]);
     res.redirect('/nagl/driver-cards');
-  } catch (err) {
-    console.error('Error deleting driver card:', err);
-    res.status(500).render('error', { message: 'Database error' });
-  }
-});
+  })
+);
 
 module.exports = router;
