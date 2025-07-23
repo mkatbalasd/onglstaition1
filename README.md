@@ -69,6 +69,7 @@ VITE_BASE_PATH=/nagl/app/
 
 - `GET /nagl/api/facilities` يعيد قائمة المنشآت.
 - `GET /nagl/api/driver-cards` يعيد بطاقات السائقين.
+- `GET /nagl/api/driver-cards/:id` يعيد بيانات بطاقة معينة.
 - `POST /nagl/api/driver-cards` لإضافة بطاقة سائق.
 - `PUT /nagl/api/driver-cards/:id` لتعديل بطاقة.
 - `DELETE /nagl/api/driver-cards/:id` لحذف بطاقة.

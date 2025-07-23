@@ -69,6 +69,26 @@ describe('GET /nagl/api/driver-cards', () => {
   });
 });
 
+describe('GET /nagl/api/driver-cards/:id', () => {
+  it('returns a single card', async () => {
+    const row = { ID: 5 };
+    pool.query.mockResolvedValueOnce([row]);
+    const res = await request(app)
+      .get('/nagl/api/driver-cards/5')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual(row);
+  });
+
+  it('returns 404 when missing', async () => {
+    pool.query.mockResolvedValueOnce([]);
+    const res = await request(app)
+      .get('/nagl/api/driver-cards/99')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(404);
+  });
+});
+
 describe('GET /nagl/api/cards error handling', () => {
   it('returns 500 on db failure', async () => {
     pool.query.mockRejectedValueOnce(new Error('boom'));
