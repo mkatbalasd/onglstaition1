@@ -7,11 +7,17 @@ const { pool, generateCardNumber } = require('./db');
 const app = express();
 const router = express.Router();
 
+// Base path used by the Vite build. It should match the `base` option in
+// `frontend/vite.config.js` so that static assets resolve correctly when the
+// app is deployed under a subpath. Default to `/nagl/app/`.
+const viteBasePath = process.env.VITE_BASE_PATH || '/nagl/app/';
+const basePath = viteBasePath.replace(/\/$/, '');
+
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layout');
 app.use('/nagl', express.static('public'));
-app.use('/nagl/app', express.static(path.join(__dirname, 'frontend/dist')));
+app.use(basePath, express.static(path.join(__dirname, 'frontend/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
@@ -168,10 +174,10 @@ router.get('/api/suppliers', async (req, res) => {
   }
 });
 
-// Serve Vue SPA for any route under /nagl/app
+// Serve Vue SPA for any route under the configured base path.
 // Express 5 uses path-to-regexp v6 which accepts the `{*param}` syntax
-// for wildcards, so `/nagl/app{/*path}` correctly matches subroutes.
-app.get('/nagl/app{/*path}', (req, res) =>
+// for wildcards, so `${basePath}{/*path}` correctly matches subroutes.
+app.get(`${basePath}{/*path}`, (req, res) =>
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'))
 );
 
