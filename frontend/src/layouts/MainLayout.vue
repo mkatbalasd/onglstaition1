@@ -6,6 +6,7 @@
       <main class="flex-1 p-4 overflow-auto">
         <RouterView />
       </main>
+      <Toast />
     </div>
   </div>
 </template>
@@ -13,6 +14,7 @@
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import Header from '@/components/Header.vue'
+import Toast from '@/components/Toast.vue'
 import { RouterView } from 'vue-router'
 </script>
 

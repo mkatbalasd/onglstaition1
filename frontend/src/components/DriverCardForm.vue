@@ -73,6 +73,7 @@ import { getFacilities } from '@/api/facilities'
 import { getDrivers } from '@/api/drivers'
 import { createDriverCard, updateDriverCard } from '@/api/driverCards'
 import api from '@/services/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
 const STORAGE_KEY = 'draftDriverCard'
 
@@ -90,6 +91,7 @@ const expirationDate = ref({ date: '', type: 'hijri' })
 const supplier = ref('')
 
 const formStore = useDriverCardFormStore()
+const notificationStore = useNotificationStore()
 
 const hasPrev = computed(() => formStore.index > 0)
 const hasNext = computed(() => formStore.index < formStore.cards.length - 1)
@@ -234,7 +236,10 @@ async function submit() {
   touched.value.issueDate = true
   touched.value.expirationDate = true
   validate()
-  if (!isValid.value) return
+  if (!isValid.value) {
+    notificationStore.pushError('❌ يوجد أخطاء في النموذج')
+    return
+  }
 
   const payload = {
     CardType: cardType.value,
@@ -244,14 +249,20 @@ async function submit() {
     ExpirationDate: expirationDate.value.date,
     Supplier: supplier.value || null
   }
+  let result
   if (props.card) {
-    await updateDriverCard(props.card.ID, payload)
+    result = await updateDriverCard(props.card.ID, payload)
   } else {
-    await createDriverCard(payload)
+    result = await createDriverCard(payload)
   }
-  localStorage.removeItem(STORAGE_KEY)
-  emit('saved')
-  close()
+  if (result) {
+    localStorage.removeItem(STORAGE_KEY)
+    emit('saved')
+    notificationStore.pushSuccess('✅ تم الحفظ')
+    close()
+  } else {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+  }
 }
 </script>
 
