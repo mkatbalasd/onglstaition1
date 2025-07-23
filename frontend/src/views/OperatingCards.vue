@@ -28,14 +28,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import api from '@/services/axios'
 
 const cards = ref([])
 const loading = ref(true)
 
 onMounted(async () => {
   try {
-    const res = await fetch('/nagl/api/cards')
-    cards.value = await res.json()
+    const { data } = await api.get('/cards')
+    cards.value = data
   } finally {
     loading.value = false
   }

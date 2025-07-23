@@ -14,13 +14,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getFacilities } from '@/api/facilities'
 
 const identity = ref('')
 const router = useRouter()
 
 async function next() {
-  const res = await fetch('/nagl/api/facilities')
-  const facilities = await res.json()
+  const facilities = await getFacilities()
   const facility = facilities.find(f => f.IdentityNumber === identity.value)
   if (facility) {
     router.push(`/driver-cards/new/${facility.FacilityID}/driver`)

@@ -15,6 +15,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { getFacilities } from '@/api/facilities'
+import { getDrivers } from '@/api/drivers'
+import { getDriverCardByDriver } from '@/api/driverCards'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,24 +26,19 @@ const identity = ref('')
 const facilityName = ref('')
 
 onMounted(async () => {
-  const res = await fetch('/nagl/api/facilities')
-  const facilities = await res.json()
-  const facility = facilities.find(f => String(f.FacilityID) === facilityId)
+  const facilities = await getFacilities()
+  const facility = (facilities || []).find(f => String(f.FacilityID) === facilityId)
   facilityName.value = facility ? facility.Name : ''
 })
 
 async function next() {
-  const res = await fetch(`/nagl/api/drivers?facilityId=${facilityId}`)
-  const drivers = await res.json()
+  const drivers = await getDrivers(`?facilityId=${facilityId}`) || []
   const driver = drivers.find(d => d.IdentityNumber === identity.value)
   if (driver) {
-    const cardRes = await fetch(`/nagl/api/driver-cards/by-driver/${driver.DriverID}`)
-    if (cardRes.ok) {
-      const card = await cardRes.json()
-      if (card) {
-        router.push(`/driver-cards/${card.ID}/edit`)
-        return
-      }
+    const card = await getDriverCardByDriver(driver.DriverID)
+    if (card) {
+      router.push(`/driver-cards/${card.ID}/edit`)
+      return
     }
     router.push(`/driver-cards/new/${facilityId}/driver/${driver.DriverID}`)
   } else {

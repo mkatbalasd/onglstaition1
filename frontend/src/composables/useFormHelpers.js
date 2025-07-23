@@ -1,5 +1,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { getExpiration } from './dateHelpers.js'
+import { getDrivers } from '@/api/drivers'
+import { getVehicles } from '@/api/vehicles'
 
 export function useFormHelpers() {
   const issueDate = ref({ date: '', type: 'hijri' })
@@ -20,10 +22,12 @@ export function useFormHelpers() {
 
   async function loadFacilityOptions(fid) {
     if (!fid) return
-    const dRes = await fetch(`/nagl/api/drivers?facilityId=${fid}`)
-    drivers.value = await dRes.json()
-    const vRes = await fetch(`/nagl/api/vehicles?facilityId=${fid}`)
-    vehicles.value = await vRes.json()
+    const [d, v] = await Promise.all([
+      getDrivers(`?facilityId=${fid}`),
+      getVehicles(`?facilityId=${fid}`)
+    ])
+    if (d) drivers.value = d
+    if (v) vehicles.value = v
   }
 
   watch(() => issueDate.value.date, setExpiration)

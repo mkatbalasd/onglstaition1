@@ -25,6 +25,7 @@ import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import Skeleton from '@/components/Skeleton.vue'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
+import { getFacilities } from '@/api/facilities'
 
 const facilities = ref([])
 const selectedDriver = ref('')
@@ -35,8 +36,8 @@ const { issueDate, expirationDate, facilityId, drivers, vehicles, loadFacilityOp
 
 onMounted(async () => {
   loading.value = true
-  const res = await fetch('/nagl/api/facilities')
-  facilities.value = await res.json()
+  const data = await getFacilities()
+  if (data) facilities.value = data
   loading.value = false
 })
 

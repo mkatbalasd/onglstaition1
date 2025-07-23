@@ -34,6 +34,8 @@ import { useRoute, useRouter } from 'vue-router'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
+import { createFacility } from '@/api/facilities'
+import api from '@/services/axios'
 
 const route = useRoute()
 const router = useRouter()
@@ -68,8 +70,8 @@ const licenseOptions = computed(() =>
 )
 
 onMounted(async () => {
-  const res = await fetch('/nagl/api/license-types')
-  licenseTypes.value = await res.json()
+  const { data } = await api.get('/license-types')
+  licenseTypes.value = data
 })
 
 async function submit() {
@@ -78,18 +80,13 @@ async function submit() {
   validate()
   if (!isValid.value) return
 
-  const res = await fetch('/nagl/api/facilities', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      Name: name.value,
-      IdentityNumber: identity.value,
-      LicenseType: licenseType.value,
-      LicenseIssueDate: issueDate.value.date,
-      LicenseExpirationDate: expirationDate.value.date
-    })
+  const data = await createFacility({
+    Name: name.value,
+    IdentityNumber: identity.value,
+    LicenseType: licenseType.value,
+    LicenseIssueDate: issueDate.value.date,
+    LicenseExpirationDate: expirationDate.value.date
   })
-  const data = await res.json()
   const id = data.FacilityID
   if (route.query.next) {
     router.push(`${route.query.next}/${id}/driver`)

@@ -47,6 +47,7 @@
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 const CardForm = defineAsyncComponent(() => import('./CardForm.vue'))
 import { useDataStore } from '@/stores/data'
+import api from '@/services/axios'
 import { storeToRefs } from 'pinia'
 
 const store = useDataStore()
@@ -73,7 +74,7 @@ function openEdit(card) {
 
 async function remove(card) {
   if (confirm('حذف؟')) {
-    await fetch(`/nagl/api/cards/${card.ID}`, { method: 'DELETE' })
+    await api.delete(`/cards/${card.ID}`)
     loadCards()
   }
 }

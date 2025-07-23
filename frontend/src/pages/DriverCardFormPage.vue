@@ -11,6 +11,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DriverCardForm from '@/components/DriverCardForm.vue'
+import { getDriverCard } from '@/api/driverCards'
 
 const route = useRoute()
 const router = useRouter()
@@ -20,9 +21,9 @@ const card = ref(null)
 
 onMounted(async () => {
   if (route.params.id) {
-    const res = await fetch(`/nagl/api/driver-cards/${route.params.id}`)
-    if (res.ok) {
-      card.value = await res.json()
+    const data = await getDriverCard(route.params.id)
+    if (data) {
+      card.value = data
     }
   } else {
     card.value = {

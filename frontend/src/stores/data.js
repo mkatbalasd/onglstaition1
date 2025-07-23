@@ -1,4 +1,9 @@
 import { defineStore } from 'pinia'
+import api from '@/services/axios'
+import { getFacilities } from '@/api/facilities'
+import { getDrivers } from '@/api/drivers'
+import { getVehicles } from '@/api/vehicles'
+import { getDriverCards } from '@/api/driverCards'
 
 export const useDataStore = defineStore('data', {
   state: () => ({
@@ -10,19 +15,24 @@ export const useDataStore = defineStore('data', {
   }),
   actions: {
     async fetchFacilities() {
-      this.facilities = await fetch('/nagl/api/facilities').then(r => r.json())
+      const data = await getFacilities()
+      if (data) this.facilities = data
     },
     async fetchDrivers() {
-      this.drivers = await fetch('/nagl/api/drivers').then(r => r.json())
+      const data = await getDrivers()
+      if (data) this.drivers = data
     },
     async fetchVehicles() {
-      this.vehicles = await fetch('/nagl/api/vehicles').then(r => r.json())
+      const data = await getVehicles()
+      if (data) this.vehicles = data
     },
     async fetchDriverCards() {
-      this.driverCards = await fetch('/nagl/api/driver-cards').then(r => r.json())
+      const data = await getDriverCards()
+      if (data) this.driverCards = data
     },
     async fetchCards() {
-      this.cards = await fetch('/nagl/api/cards').then(r => r.json())
+      const { data } = await api.get('/cards')
+      this.cards = data
     }
   }
 })

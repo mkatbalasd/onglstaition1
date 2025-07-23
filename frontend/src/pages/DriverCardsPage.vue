@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
+import { getDriverCards } from '@/api/driverCards'
 
 const cards = ref([])
 const loading = ref(true)
@@ -14,8 +15,8 @@ const columns = [
 
 onMounted(async () => {
   try {
-    const res = await fetch('/nagl/api/driver-cards')
-    cards.value = await res.json()
+    const data = await getDriverCards()
+    if (data) cards.value = data
   } finally {
     loading.value = false
   }

@@ -64,6 +64,7 @@
 import { ref, reactive, onMounted, computed, watch, defineAsyncComponent } from 'vue'
 const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCardForm.vue'))
 import Skeleton from '@/components/Skeleton.vue'
+import { getDriverCards } from '@/api/driverCards'
 
 const cards = ref([])
 const loading = ref(true)
@@ -97,8 +98,8 @@ const pageSize = 10
 
 async function loadCards() {
   loading.value = true
-  const res = await fetch('/nagl/api/driver-cards')
-  cards.value = await res.json()
+  const data = await getDriverCards()
+  if (data) cards.value = data
   loading.value = false
 }
 

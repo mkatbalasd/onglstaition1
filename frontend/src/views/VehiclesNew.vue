@@ -23,20 +23,17 @@
 
 <script setup>
 import { ref } from 'vue'
+import { createVehicle } from '@/api/vehicles'
 
 const facilityId = ref('')
 const plate = ref('')
 const serial = ref('')
 
 async function submit() {
-  await fetch('/nagl/api/vehicles', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      FacilityID: facilityId.value || null,
-      PlateNumber: plate.value,
-      SerialNumber: serial.value
-    })
+  await createVehicle({
+    FacilityID: facilityId.value || null,
+    PlateNumber: plate.value,
+    SerialNumber: serial.value
   })
   facilityId.value = ''
   plate.value = ''

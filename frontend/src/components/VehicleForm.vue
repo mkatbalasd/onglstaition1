@@ -30,6 +30,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
+import { createVehicle } from '@/api/vehicles'
 
 const props = defineProps({
   modelValue: Boolean
@@ -45,14 +46,10 @@ function close() {
 }
 
 async function submit() {
-  await fetch('/nagl/api/vehicles', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      FacilityID: facilityId.value || null,
-      PlateNumber: plate.value,
-      SerialNumber: serial.value
-    })
+  await createVehicle({
+    FacilityID: facilityId.value || null,
+    PlateNumber: plate.value,
+    SerialNumber: serial.value
   })
   facilityId.value = ''
   plate.value = ''

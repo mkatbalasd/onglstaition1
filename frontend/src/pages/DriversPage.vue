@@ -2,6 +2,7 @@
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
+import { getDrivers } from '@/api/drivers'
 const DriverForm = defineAsyncComponent(() => import('@/components/DriverForm.vue'))
 
 const drivers = ref([])
@@ -16,8 +17,8 @@ const columns = [
 ]
 
 async function load() {
-  const res = await fetch('/nagl/api/drivers')
-  drivers.value = await res.json()
+  const data = await getDrivers()
+  if (data) drivers.value = data
 }
 
 onMounted(async () => {

@@ -51,6 +51,10 @@ import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
 import Skeleton from '@/components/Skeleton.vue'
+import { getFacilities } from '@/api/facilities'
+import { getDrivers } from '@/api/drivers'
+import { createDriverCard, updateDriverCard } from '@/api/driverCards'
+import api from '@/services/axios'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -148,14 +152,14 @@ watch(() => props.card, (val) => {
 
 onMounted(async () => {
   loading.value = true
-  const [facRes, drvRes, supRes] = await Promise.all([
-    fetch('/nagl/api/facilities'),
-    fetch('/nagl/api/drivers'),
-    fetch('/nagl/api/suppliers')
+  const [fac, drv] = await Promise.all([
+    getFacilities(),
+    getDrivers()
   ])
-  facilities.value = await facRes.json()
-  drivers.value = await drvRes.json()
-  suppliers.value = await supRes.json()
+  const { data: supData } = await api.get('/suppliers')
+  facilities.value = fac || []
+  drivers.value = drv || []
+  suppliers.value = supData
   loading.value = false
 })
 
@@ -177,17 +181,9 @@ async function submit() {
     Supplier: supplier.value || null
   }
   if (props.card) {
-    await fetch(`/nagl/api/driver-cards/${props.card.ID}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
+    await updateDriverCard(props.card.ID, payload)
   } else {
-    await fetch('/nagl/api/driver-cards', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
+    await createDriverCard(payload)
   }
   emit('saved')
   close()

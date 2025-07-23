@@ -31,6 +31,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { createDriver } from '@/api/drivers'
 
 const route = useRoute()
 const router = useRouter()
@@ -61,17 +62,12 @@ async function submit() {
   validate()
   if (!isValid.value) return
 
-  const res = await fetch('/nagl/api/drivers', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      FacilityID: facilityId.value || null,
-      IdentityNumber: identity.value,
-      FirstName: firstName.value,
-      LastName: lastName.value
-    })
+  const data = await createDriver({
+    FacilityID: facilityId.value || null,
+    IdentityNumber: identity.value,
+    FirstName: firstName.value,
+    LastName: lastName.value
   })
-  const data = await res.json()
   const id = data.DriverID
   if (route.query.next) {
     router.push(`${route.query.next}/${id}`)
