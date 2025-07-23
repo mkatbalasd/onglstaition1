@@ -23,13 +23,13 @@
           <DatePicker v-model="expirationDate" :initial-type="'hijri'" language="ar" />
         </div>
       </div>
-      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+      <button type="submit" :disabled="!isValid" class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50">Save</button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
@@ -45,6 +45,23 @@ const issueDate = ref({ date: '', type: 'hijri' })
 const expirationDate = ref({ date: '', type: 'hijri' })
 const licenseTypes = ref([])
 const errors = ref({})
+const touched = ref({ name: false, identity: false })
+
+function validate() {
+  errors.value.name = touched.value.name && !name.value ? 'Name required' : ''
+  errors.value.identity = touched.value.identity && !identity.value ? 'Identity required' : ''
+}
+
+watch(name, (v, o) => {
+  if (o !== undefined) touched.value.name = true
+  validate()
+})
+watch(identity, (v, o) => {
+  if (o !== undefined) touched.value.identity = true
+  validate()
+})
+
+const isValid = computed(() => name.value && identity.value && Object.values(errors.value).every(e => !e))
 
 const licenseOptions = computed(() =>
   licenseTypes.value.map(t => ({ value: t.LicenseTypeNameAR, label: t.LicenseTypeNameAR }))
@@ -56,10 +73,10 @@ onMounted(async () => {
 })
 
 async function submit() {
-  errors.value = {}
-  if (!name.value) errors.value.name = 'Name required'
-  if (!identity.value) errors.value.identity = 'Identity required'
-  if (Object.keys(errors.value).length) return
+  touched.value.name = true
+  touched.value.identity = true
+  validate()
+  if (!isValid.value) return
 
   const res = await fetch('/nagl/api/facilities', {
     method: 'POST',

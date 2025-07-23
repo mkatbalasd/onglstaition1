@@ -23,13 +23,13 @@
           <p v-if="errors.lastName" class="text-red-600 text-sm">{{ errors.lastName }}</p>
         </div>
       </div>
-      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+      <button type="submit" :disabled="!isValid" class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50">Save</button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -40,13 +40,26 @@ const identity = ref(route.query.identity || '')
 const firstName = ref('')
 const lastName = ref('')
 const errors = ref({})
+const touched = ref({ identity: false, firstName: false, lastName: false })
+
+function validate() {
+  errors.value.identity = touched.value.identity && !identity.value ? 'Identity required' : ''
+  errors.value.firstName = touched.value.firstName && !firstName.value ? 'First name required' : ''
+  errors.value.lastName = touched.value.lastName && !lastName.value ? 'Last name required' : ''
+}
+
+watch(identity, (v, o) => { if (o !== undefined) touched.value.identity = true; validate() })
+watch(firstName, (v, o) => { if (o !== undefined) touched.value.firstName = true; validate() })
+watch(lastName, (v, o) => { if (o !== undefined) touched.value.lastName = true; validate() })
+
+const isValid = computed(() => identity.value && firstName.value && lastName.value && Object.values(errors.value).every(e => !e))
 
 async function submit() {
-  errors.value = {}
-  if (!identity.value) errors.value.identity = 'Identity required'
-  if (!firstName.value) errors.value.firstName = 'First name required'
-  if (!lastName.value) errors.value.lastName = 'Last name required'
-  if (Object.keys(errors.value).length) return
+  touched.value.identity = true
+  touched.value.firstName = true
+  touched.value.lastName = true
+  validate()
+  if (!isValid.value) return
 
   const res = await fetch('/nagl/api/drivers', {
     method: 'POST',
@@ -63,6 +76,7 @@ async function submit() {
   if (route.query.next) {
     router.push(`${route.query.next}/${id}`)
   } else {
+    touched.value = { identity: false, firstName: false, lastName: false }
     facilityId.value = ''
     identity.value = ''
     firstName.value = ''

@@ -16,8 +16,8 @@
       <input v-model="filters.expTo" type="date" class="border rounded px-2 py-1 w-full" />
     </div>
 
-    <Skeleton v-if="loading" :columns="columns.length" />
-    <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+    <Skeleton v-if="loading" :columns="columns.length" v-show="!showForm" />
+    <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg" v-show="!showForm">
       <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right">
         <thead class="bg-gray-50 dark:bg-gray-800">
           <tr>
