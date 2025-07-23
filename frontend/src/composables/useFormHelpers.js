@@ -10,7 +10,7 @@ export function useFormHelpers() {
   const facilityId = ref('')
 
   function setExpiration() {
-    if (issueDate.value.date) {
+    if (issueDate.value.date && !expirationDate.value.date) {
       expirationDate.value = {
         ...expirationDate.value,
         date: getExpiration(issueDate.value.date, expirationDate.value.date)
