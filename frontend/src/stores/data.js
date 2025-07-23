@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import api from '@/services/axios'
 import { getFacilities } from '@/api/facilities'
 import { getDrivers } from '@/api/drivers'
 import { getVehicles } from '@/api/vehicles'
 import { getDriverCards } from '@/api/driverCards'
+import { getCards } from '@/api/cards'
 
 export const useDataStore = defineStore('data', {
   state: () => ({
@@ -11,28 +11,61 @@ export const useDataStore = defineStore('data', {
     drivers: [],
     vehicles: [],
     driverCards: [],
-    cards: []
+    cards: [],
+    error: null
   }),
+  getters: {
+    facilitiesCount: state => state.facilities.length,
+    driversCount: state => state.drivers.length,
+    vehiclesCount: state => state.vehicles.length,
+    driverCardsCount: state => state.driverCards.length,
+    cardsCount: state => state.cards.length
+  },
   actions: {
     async fetchFacilities() {
-      const data = await getFacilities()
-      if (data) this.facilities = data
+      try {
+        const data = await getFacilities()
+        if (data) this.facilities = data
+        this.error = null
+      } catch (err) {
+        this.error = err
+      }
     },
     async fetchDrivers() {
-      const data = await getDrivers()
-      if (data) this.drivers = data
+      try {
+        const data = await getDrivers()
+        if (data) this.drivers = data
+        this.error = null
+      } catch (err) {
+        this.error = err
+      }
     },
     async fetchVehicles() {
-      const data = await getVehicles()
-      if (data) this.vehicles = data
+      try {
+        const data = await getVehicles()
+        if (data) this.vehicles = data
+        this.error = null
+      } catch (err) {
+        this.error = err
+      }
     },
     async fetchDriverCards() {
-      const data = await getDriverCards()
-      if (data) this.driverCards = data
+      try {
+        const data = await getDriverCards()
+        if (data) this.driverCards = data
+        this.error = null
+      } catch (err) {
+        this.error = err
+      }
     },
     async fetchCards() {
-      const { data } = await api.get('/cards')
-      this.cards = data
+      try {
+        const data = await getCards()
+        if (data) this.cards = data
+        this.error = null
+      } catch (err) {
+        this.error = err
+      }
     }
   }
 })
