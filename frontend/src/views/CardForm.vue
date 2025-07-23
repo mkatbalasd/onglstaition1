@@ -46,6 +46,8 @@ import { getFacilities } from '@/api/facilities'
 import { getVehicles } from '@/api/vehicles'
 import api from '@/services/axios'
 
+const STORAGE_KEY = 'draftCard'
+
 const props = defineProps({
   modelValue: Boolean,
   card: { type: Object, default: null }
@@ -68,8 +70,24 @@ const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.Fac
 const vehicleOptions = computed(() => vehicles.value.map(v => ({ value: v.ID, label: v.PlateNumber || v.SerialNumber })))
 const supplierOptions = computed(() => suppliers.value.map(s => ({ value: s.id, label: s.name })))
 
+watch(
+  () => ({
+    facilityId: facilityId.value,
+    vehicleId: vehicleId.value,
+    issueDate: issueDate.value,
+    expirationDate: expirationDate.value,
+    renewalDate: renewalDate.value,
+    supplier: supplier.value
+  }),
+  val => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
+  },
+  { deep: true }
+)
+
 function close() {
   emit('update:modelValue', false)
+  localStorage.removeItem(STORAGE_KEY)
 }
 
 watch(
@@ -105,6 +123,21 @@ onMounted(async () => {
   vehicles.value = veh || []
   suppliers.value = supData
   loading.value = false
+
+  if (!props.card) {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      try {
+        const d = JSON.parse(stored)
+        facilityId.value = d.facilityId || ''
+        vehicleId.value = d.vehicleId || ''
+        issueDate.value = d.issueDate || { date: '', type: 'hijri' }
+        expirationDate.value = d.expirationDate || { date: '', type: 'hijri' }
+        renewalDate.value = d.renewalDate || { date: '', type: 'hijri' }
+        supplier.value = d.supplier || ''
+      } catch {}
+    }
+  }
 })
 
 async function submit() {
@@ -121,6 +154,7 @@ async function submit() {
   } else {
     await api.post('/cards', payload)
   }
+  localStorage.removeItem(STORAGE_KEY)
   emit('saved')
   close()
 }
