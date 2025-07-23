@@ -27,14 +27,18 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-const facilityId = ref('')
-const identity = ref('')
+const route = useRoute()
+const router = useRouter()
+
+const facilityId = ref(route.query.facilityId || '')
+const identity = ref(route.query.identity || '')
 const firstName = ref('')
 const lastName = ref('')
 
 async function submit() {
-  await fetch('/nagl/api/drivers', {
+  const res = await fetch('/nagl/api/drivers', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -44,9 +48,15 @@ async function submit() {
       LastName: lastName.value
     })
   })
-  facilityId.value = ''
-  identity.value = ''
-  firstName.value = ''
-  lastName.value = ''
+  const data = await res.json()
+  const id = data.DriverID
+  if (route.query.next) {
+    router.push(`${route.query.next}/${id}`)
+  } else {
+    facilityId.value = ''
+    identity.value = ''
+    firstName.value = ''
+    lastName.value = ''
+  }
 }
 </script>
