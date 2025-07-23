@@ -9,27 +9,27 @@ const routes = [
   {
     path: '/driver-cards',
     name: 'DriverCards',
-    component: () => import('../pages/DriverCardsPage.vue')
+    component: () => import('../views/DriverCardsPage.vue')
   },
   {
     path: '/cards',
     name: 'Cards',
-    component: () => import('../pages/CardsPage.vue')
+    component: () => import('../views/CardsPage.vue')
   },
   {
     path: '/facilities',
     name: 'Facilities',
-    component: () => import('../pages/FacilitiesPage.vue')
+    component: () => import('../views/FacilitiesPage.vue')
   },
   {
     path: '/drivers',
     name: 'Drivers',
-    component: () => import('../pages/DriversPage.vue')
+    component: () => import('../views/DriversPage.vue')
   },
   {
     path: '/vehicles',
     name: 'Vehicles',
-    component: () => import('../pages/VehiclesPage.vue')
+    component: () => import('../views/VehiclesPage.vue')
   }
 ]
 

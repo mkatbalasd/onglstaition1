@@ -1,45 +1,44 @@
-<template>
-  <div class="space-y-4">
-    <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">Facilities</h1>
-    <div v-if="loading" class="space-y-2 animate-pulse">
-      <div class="h-4 bg-gray-200 rounded"></div>
-      <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-    </div>
-    <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right">
-        <thead class="bg-gray-50 dark:bg-gray-800">
-          <tr>
-            <th class="px-3 py-2">Name</th>
-            <th class="px-3 py-2">Identity</th>
-            <th class="px-3 py-2">License</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-          <tr v-for="f in facilities" :key="f.FacilityID" class="hover:bg-gray-50 dark:hover:bg-gray-900">
-            <td class="px-3 py-2">{{ f.Name }}</td>
-            <td class="px-3 py-2">{{ f.IdentityNumber }}</td>
-            <td class="px-3 py-2">{{ f.LicenseType }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useDataStore } from '@/stores/data'
-import { storeToRefs } from 'pinia'
+import { ref, onMounted, defineAsyncComponent } from 'vue'
+import DataTable from '@/components/DataTable.vue'
+import Skeleton from '@/components/Skeleton.vue'
+import { getFacilities } from '@/api/facilities'
+const FacilityForm = defineAsyncComponent(() => import('@/components/FacilityForm.vue'))
 
-const store = useDataStore()
-const { facilities } = storeToRefs(store)
+const facilities = ref([])
 const loading = ref(true)
+const showForm = ref(false)
+
+const columns = [
+  { key: 'FacilityID', label: '#' },
+  { key: 'Name', label: 'Name' },
+  { key: 'IdentityNumber', label: 'Identity' },
+  { key: 'LicenseType', label: 'License' }
+]
+
+async function load() {
+  const data = await getFacilities()
+  if (data) facilities.value = data
+}
 
 onMounted(async () => {
   try {
-    await store.fetchFacilities()
+    await load()
   } finally {
     loading.value = false
   }
 })
+
+function refresh() {
+  load()
+}
 </script>
+
+<template>
+  <div class="space-y-4 text-gray-800 dark:text-gray-100 ltr:text-left rtl:text-right">
+    <button @click="showForm = true" class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded">Add Facility</button>
+    <Skeleton v-if="loading" :columns="columns.length" />
+    <DataTable v-else :items="facilities" :columns="columns" />
+    <FacilityForm v-model="showForm" @saved="refresh" />
+  </div>
+</template>
