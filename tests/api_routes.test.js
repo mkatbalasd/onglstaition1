@@ -65,12 +65,26 @@ describe('POST /nagl/api/drivers', () => {
 describe('GET /nagl/api/driver-cards', () => {
   it('returns driver cards', async () => {
     const rows = [{ ID: 1 }];
-    pool.query.mockResolvedValueOnce(rows);
+    pool.query
+      .mockResolvedValueOnce([{ count: 1 }])
+      .mockResolvedValueOnce(rows);
     const res = await request(app)
       .get('/nagl/api/driver-cards')
       .set('Accept', 'application/json');
     expect(res.statusCode).toBe(200);
-    expect(res.body).toEqual(rows);
+    expect(res.body).toEqual({ items: rows, pageCount: 1 });
+  });
+
+  it('supports pagination and filtering', async () => {
+    const rows = [{ ID: 2 }];
+    pool.query
+      .mockResolvedValueOnce([{ count: 12 }])
+      .mockResolvedValueOnce(rows);
+    const res = await request(app)
+      .get('/nagl/api/driver-cards?page=2&name=a')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({ items: rows, pageCount: 2 });
   });
 });
 
