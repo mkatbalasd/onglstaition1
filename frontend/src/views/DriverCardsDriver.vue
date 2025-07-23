@@ -34,6 +34,14 @@ async function next() {
   const drivers = await res.json()
   const driver = drivers.find(d => d.IdentityNumber === identity.value)
   if (driver) {
+    const cardRes = await fetch(`/nagl/api/driver-cards/by-driver/${driver.DriverID}`)
+    if (cardRes.ok) {
+      const card = await cardRes.json()
+      if (card) {
+        router.push(`/driver-cards/${card.ID}/edit`)
+        return
+      }
+    }
     router.push(`/driver-cards/new/${facilityId}/driver/${driver.DriverID}`)
   } else {
     router.push({ path: '/drivers/new', query: { facilityId, identity: identity.value, next: `/driver-cards/new/${facilityId}/driver` } })
