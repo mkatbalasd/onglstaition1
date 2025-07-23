@@ -6,10 +6,12 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
           <input v-model="name" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
+          <p v-if="errors.name" class="text-red-600 text-sm">{{ errors.name }}</p>
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Identity Number</label>
           <input v-model="identity" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
+          <p v-if="errors.identity" class="text-red-600 text-sm">{{ errors.identity }}</p>
         </div>
         <HeadlessSelect v-model="licenseType" :options="licenseOptions" label="License Type" />
         <div>
@@ -42,6 +44,7 @@ const licenseType = ref('')
 const issueDate = ref({ date: '', type: 'hijri' })
 const expirationDate = ref({ date: '', type: 'hijri' })
 const licenseTypes = ref([])
+const errors = ref({})
 
 const licenseOptions = computed(() =>
   licenseTypes.value.map(t => ({ value: t.LicenseTypeNameAR, label: t.LicenseTypeNameAR }))
@@ -53,6 +56,11 @@ onMounted(async () => {
 })
 
 async function submit() {
+  errors.value = {}
+  if (!name.value) errors.value.name = 'Name required'
+  if (!identity.value) errors.value.identity = 'Identity required'
+  if (Object.keys(errors.value).length) return
+
   const res = await fetch('/nagl/api/facilities', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

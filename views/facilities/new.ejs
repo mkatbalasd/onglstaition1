@@ -1,13 +1,15 @@
 <div class="card card-form">
-<form method="POST" action="/nagl/facilities">
+<form id="facilityForm" method="POST" action="/nagl/facilities">
   <input type="hidden" name="next" value="<%= next %>">
   <div class="mb-3">
     <label class="form-label">رقم الهوية</label>
-    <input type="text" name="IdentityNumber" class="border rounded p-2 w-full" value="<%= identity || '' %>" required>
+    <input type="text" name="IdentityNumber" class="border rounded p-2 w-full" value="<%= identity || '' %>">
+    <span class="error-message"></span>
   </div>
   <div class="mb-3">
     <label class="form-label">اسم المنشأة</label>
-    <input type="text" name="Name" class="border rounded p-2 w-full" required>
+    <input type="text" name="Name" class="border rounded p-2 w-full">
+    <span class="error-message"></span>
   </div>
   <div class="mb-3">
     <label class="form-label">الاسم بالإنجليزية</label>
@@ -16,3 +18,22 @@
   <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded">متابعة</button>
 </form>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('facilityForm');
+  form.addEventListener('submit', e => {
+    let valid = true;
+    const fields = ['IdentityNumber', 'Name'];
+    fields.forEach(name => {
+      const input = form.elements[name];
+      const error = input.parentElement.querySelector('.error-message');
+      if (error) error.textContent = '';
+      if (!input.value.trim()) {
+        if (error) error.textContent = 'هذا الحقل مطلوب';
+        valid = false;
+      }
+    });
+    if (!valid) e.preventDefault();
+  });
+});
+</script>
