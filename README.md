@@ -152,6 +152,17 @@ npm test
 npm run lint                 # فحص ملفات الخادم
 npm --prefix frontend run lint  # فحص الواجهة الأمامية
 ```
+## تشغيل بواسطة Docker
+
+لتشغيل الخادم مع قاعدة بيانات MariaDB عبر Docker استخدم الأمر التالي بعد بناء الصور:
+
+```bash
+docker compose up --build
+```
+
+سيقوم MariaDB بتهيئة الجداول تلقائيًا باستخدام الملفات داخل مجلد `migrations/`.
+بعد بدء الخدمات يمكن الوصول إلى التطبيق على `http://localhost:3002/nagl/`.
+
 
 ## الرخصة
 
