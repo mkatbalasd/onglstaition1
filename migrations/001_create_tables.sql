@@ -7,6 +7,19 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+-- ------------------------------------------------------------------
+-- Helper function used by triggers to generate a unique token
+-- ------------------------------------------------------------------
+DELIMITER $$
+CREATE FUNCTION `generate_custom_uuid`()
+RETURNS varchar(31)
+    DETERMINISTIC
+BEGIN
+    -- Returns a 31 character UUID without dashes
+    RETURN SUBSTR(REPLACE(UUID(), '-', ''), 1, 31);
+END$$
+DELIMITER ;
+
 -- Database: `lmbolwmy_leave`
 
 -- --------------------------------------------------------
