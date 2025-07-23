@@ -28,12 +28,16 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
 
+const route = useRoute()
+const router = useRouter()
+
 const name = ref('')
-const identity = ref('')
+const identity = ref(route.query.identity || '')
 const licenseType = ref('')
 const issueDate = ref({ date: '', type: 'hijri' })
 const expirationDate = ref({ date: '', type: 'hijri' })
@@ -49,7 +53,7 @@ onMounted(async () => {
 })
 
 async function submit() {
-  await fetch('/nagl/api/facilities', {
+  const res = await fetch('/nagl/api/facilities', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -60,10 +64,16 @@ async function submit() {
       LicenseExpirationDate: expirationDate.value.date
     })
   })
-  name.value = ''
-  identity.value = ''
-  licenseType.value = ''
-  issueDate.value = { date: '', type: 'hijri' }
-  expirationDate.value = { date: '', type: 'hijri' }
+  const data = await res.json()
+  const id = data.FacilityID
+  if (route.query.next) {
+    router.push(`${route.query.next}/${id}/driver`)
+  } else {
+    name.value = ''
+    identity.value = ''
+    licenseType.value = ''
+    issueDate.value = { date: '', type: 'hijri' }
+    expirationDate.value = { date: '', type: 'hijri' }
+  }
 }
 </script>
