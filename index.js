@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 const { pool, generateCardNumber } = require('./db');
+const { asyncHandler, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 const router = express.Router();
@@ -31,20 +32,19 @@ router.use('/', require('./routes/cards'));
 router.use('/', require('./routes/api'));
 
 // Lightweight API routes
-router.get('/api/facilities', async (req, res) => {
-  try {
+router.get(
+  '/api/facilities',
+  asyncHandler(async (req, res) => {
     const rows = await pool.query(
       'SELECT FacilityID, Name, IdentityNumber, LicenseType FROM OPC_Facility ORDER BY FacilityID DESC'
     );
     res.json(rows);
-  } catch (err) {
-    console.error('Error fetching facilities:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.get('/api/driver-cards', async (req, res) => {
-  try {
+router.get(
+  '/api/driver-cards',
+  asyncHandler(async (req, res) => {
     const rows = await pool.query(
       'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, f.Name, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
         'FROM OPC_DriverCard d ' +
@@ -54,14 +54,12 @@ router.get('/api/driver-cards', async (req, res) => {
         'ORDER BY d.ID DESC'
     );
     res.json(rows);
-  } catch (err) {
-    console.error('Error fetching driver cards:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.post('/api/driver-cards', async (req, res) => {
-  try {
+router.post(
+  '/api/driver-cards',
+  asyncHandler(async (req, res) => {
     const { CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier } = req.body;
     const CardNumber = await generateCardNumber('OPC_DriverCard', FacilityID);
     const today = new Date().toISOString().slice(0, 10);
@@ -71,14 +69,12 @@ router.post('/api/driver-cards', async (req, res) => {
     );
     const ID = result.insertId;
     res.json({ ID, CardNumber, CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier });
-  } catch (err) {
-    console.error('Error creating driver card:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.put('/api/driver-cards/:id', async (req, res) => {
-  try {
+router.put(
+  '/api/driver-cards/:id',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier } = req.body;
     const today = new Date().toISOString().slice(0, 10);
@@ -87,25 +83,21 @@ router.put('/api/driver-cards/:id', async (req, res) => {
       [CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier, today, id]
     );
     res.json({ ID: Number(id), CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier });
-  } catch (err) {
-    console.error('Error updating driver card:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.delete('/api/driver-cards/:id', async (req, res) => {
-  try {
+router.delete(
+  '/api/driver-cards/:id',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     await pool.query('DELETE FROM OPC_DriverCard WHERE ID = ?', [id]);
     res.json({ success: true });
-  } catch (err) {
-    console.error('Error deleting driver card:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.get('/api/cards', async (req, res) => {
-  try {
+router.get(
+  '/api/cards',
+  asyncHandler(async (req, res) => {
     const rows = await pool.query(
       'SELECT c.ID, c.CardNumber, v.PlateNumber, f.Name, c.IssueDate, c.ExpirationDate, s.name AS SupplierName ' +
         'FROM OPC_Card c ' +
@@ -114,14 +106,12 @@ router.get('/api/cards', async (req, res) => {
         'LEFT JOIN Supplier s ON c.Supplier = s.id'
     );
     res.json(rows);
-  } catch (err) {
-    console.error('Error fetching cards:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.post('/api/cards', async (req, res) => {
-  try {
+router.post(
+  '/api/cards',
+  asyncHandler(async (req, res) => {
     const { FacilityID, VehicleID, IssueDate, ExpirationDate, RenewalDate, Supplier } = req.body;
     const CardNumber = await generateCardNumber('OPC_Card', FacilityID);
     const today = new Date().toISOString().slice(0, 10);
@@ -131,14 +121,12 @@ router.post('/api/cards', async (req, res) => {
     );
     const ID = result.insertId;
     res.json({ ID, CardNumber, FacilityID, VehicleID, IssueDate, ExpirationDate, RenewalDate: RenewalDate || null, Supplier });
-  } catch (err) {
-    console.error('Error creating card:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.put('/api/cards/:id', async (req, res) => {
-  try {
+router.put(
+  '/api/cards/:id',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { FacilityID, VehicleID, IssueDate, ExpirationDate, RenewalDate, Supplier } = req.body;
     const today = new Date().toISOString().slice(0, 10);
@@ -147,32 +135,25 @@ router.put('/api/cards/:id', async (req, res) => {
       [FacilityID, VehicleID, IssueDate, ExpirationDate, RenewalDate || null, Supplier, today, id]
     );
     res.json({ ID: Number(id), FacilityID, VehicleID, IssueDate, ExpirationDate, RenewalDate: RenewalDate || null, Supplier });
-  } catch (err) {
-    console.error('Error updating card:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.delete('/api/cards/:id', async (req, res) => {
-  try {
+router.delete(
+  '/api/cards/:id',
+  asyncHandler(async (req, res) => {
     const { id } = req.params;
     await pool.query('DELETE FROM OPC_Card WHERE ID = ?', [id]);
     res.json({ success: true });
-  } catch (err) {
-    console.error('Error deleting card:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
-router.get('/api/suppliers', async (req, res) => {
-  try {
+router.get(
+  '/api/suppliers',
+  asyncHandler(async (req, res) => {
     const rows = await pool.query('SELECT id, name FROM Supplier');
     res.json(rows);
-  } catch (err) {
-    console.error('Error fetching suppliers:', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
+  })
+);
 
 // Serve Vue SPA for any route under the configured base path.
 // Express 5 uses path-to-regexp v6 which accepts the `{*param}` syntax
@@ -182,6 +163,7 @@ app.get(`${basePath}{/*path}`, (req, res) =>
 );
 
 app.use('/nagl', router);
+app.use(errorHandler);
 
 const port = process.env.PORT || 3002;
 

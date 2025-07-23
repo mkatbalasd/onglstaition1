@@ -22,6 +22,9 @@ module.exports = [
         jest: true
       }
     },
-    ...js.configs.recommended
+    ...js.configs.recommended,
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }]
+    }
   }
 ];
