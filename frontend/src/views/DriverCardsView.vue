@@ -17,14 +17,18 @@ import Card from '@/components/Card.vue'
 import { IdCard } from 'lucide-vue-next'
 import { useDataStore } from '@/stores/data'
 import { storeToRefs } from 'pinia'
+import { useNotificationStore } from '@/stores/notifications'
 
 const store = useDataStore()
 const { driverCards: cards } = storeToRefs(store)
 const loading = ref(true)
+const notificationStore = useNotificationStore()
 
 onMounted(async () => {
   try {
     await store.fetchDriverCards()
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   } finally {
     loading.value = false
   }

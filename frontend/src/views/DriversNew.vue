@@ -32,9 +32,11 @@
 import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { createDriver } from '@/api/drivers'
+import { useNotificationStore } from '@/stores/notifications'
 
 const route = useRoute()
 const router = useRouter()
+const notificationStore = useNotificationStore()
 
 const facilityId = ref(route.query.facilityId || '')
 const identity = ref(route.query.identity || '')
@@ -62,21 +64,25 @@ async function submit() {
   validate()
   if (!isValid.value) return
 
-  const data = await createDriver({
-    FacilityID: facilityId.value || null,
-    IdentityNumber: identity.value,
-    FirstName: firstName.value,
-    LastName: lastName.value
-  })
-  const id = data.DriverID
-  if (route.query.next) {
-    router.push(`${route.query.next}/${id}`)
-  } else {
-    touched.value = { identity: false, firstName: false, lastName: false }
-    facilityId.value = ''
-    identity.value = ''
-    firstName.value = ''
-    lastName.value = ''
+  try {
+    const data = await createDriver({
+      FacilityID: facilityId.value || null,
+      IdentityNumber: identity.value,
+      FirstName: firstName.value,
+      LastName: lastName.value
+    })
+    const id = data.DriverID
+    if (route.query.next) {
+      router.push(`${route.query.next}/${id}`)
+    } else {
+      touched.value = { identity: false, firstName: false, lastName: false }
+      facilityId.value = ''
+      identity.value = ''
+      firstName.value = ''
+      lastName.value = ''
+    }
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
   }
 }
 </script>

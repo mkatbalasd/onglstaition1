@@ -3,9 +3,11 @@ import { ref, onMounted } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
 import { getDriverCards } from '@/api/driverCards'
+import { useNotificationStore } from '@/stores/notifications'
 
 const cards = ref([])
 const loading = ref(true)
+const notificationStore = useNotificationStore()
 
 const columns = [
   { key: 'ID', label: '#' },
@@ -17,6 +19,8 @@ onMounted(async () => {
   try {
     const data = await getDriverCards()
     if (data) cards.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   } finally {
     loading.value = false
   }

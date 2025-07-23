@@ -18,31 +18,41 @@ import { useRoute, useRouter } from 'vue-router'
 import { getFacilities } from '@/api/facilities'
 import { getDrivers } from '@/api/drivers'
 import { getDriverCardByDriver } from '@/api/driverCards'
+import { useNotificationStore } from '@/stores/notifications'
 
 const route = useRoute()
 const router = useRouter()
 const facilityId = route.params.facilityId
 const identity = ref('')
 const facilityName = ref('')
+const notificationStore = useNotificationStore()
 
 onMounted(async () => {
-  const facilities = await getFacilities()
-  const facility = (facilities || []).find(f => String(f.FacilityID) === facilityId)
-  facilityName.value = facility ? facility.Name : ''
+  try {
+    const facilities = await getFacilities()
+    const facility = (facilities || []).find(f => String(f.FacilityID) === facilityId)
+    facilityName.value = facility ? facility.Name : ''
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  }
 })
 
 async function next() {
-  const drivers = await getDrivers(`?facilityId=${facilityId}`) || []
-  const driver = drivers.find(d => d.IdentityNumber === identity.value)
-  if (driver) {
-    const card = await getDriverCardByDriver(driver.DriverID)
-    if (card) {
-      router.push(`/driver-cards/${card.ID}/edit`)
-      return
+  try {
+    const drivers = await getDrivers(`?facilityId=${facilityId}`) || []
+    const driver = drivers.find(d => d.IdentityNumber === identity.value)
+    if (driver) {
+      const card = await getDriverCardByDriver(driver.DriverID)
+      if (card) {
+        router.push(`/driver-cards/${card.ID}/edit`)
+        return
+      }
+      router.push(`/driver-cards/new/${facilityId}/driver/${driver.DriverID}`)
+    } else {
+      router.push({ path: '/drivers/new', query: { facilityId, identity: identity.value, next: `/driver-cards/new/${facilityId}/driver` } })
     }
-    router.push(`/driver-cards/new/${facilityId}/driver/${driver.DriverID}`)
-  } else {
-    router.push({ path: '/drivers/new', query: { facilityId, identity: identity.value, next: `/driver-cards/new/${facilityId}/driver` } })
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   }
 }
 </script>

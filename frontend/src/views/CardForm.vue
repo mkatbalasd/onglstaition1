@@ -45,8 +45,10 @@ import Skeleton from '@/components/Skeleton.vue'
 import { getFacilities } from '@/api/facilities'
 import { getVehicles } from '@/api/vehicles'
 import api from '@/services/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
 const STORAGE_KEY = 'draftCard'
+const notificationStore = useNotificationStore()
 
 const props = defineProps({
   modelValue: Boolean,
@@ -114,15 +116,20 @@ watch(
 
 onMounted(async () => {
   loading.value = true
-  const [fac, veh] = await Promise.all([
-    getFacilities(),
-    getVehicles()
-  ])
-  const { data: supData } = await api.get('/suppliers').catch(() => ({ data: [] }))
-  facilities.value = fac || []
-  vehicles.value = veh || []
-  suppliers.value = supData
-  loading.value = false
+  try {
+    const [fac, veh] = await Promise.all([
+      getFacilities(),
+      getVehicles()
+    ])
+    const { data: supData } = await api.get('/suppliers')
+    facilities.value = fac || []
+    vehicles.value = veh || []
+    suppliers.value = supData
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  } finally {
+    loading.value = false
+  }
 
   if (!props.card) {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -149,14 +156,18 @@ async function submit() {
     RenewalDate: renewalDate.value.date,
     Supplier: supplier.value || null
   }
-  if (props.card) {
-    await api.put(`/cards/${props.card.ID}`, payload)
-  } else {
-    await api.post('/cards', payload)
+  try {
+    if (props.card) {
+      await api.put(`/cards/${props.card.ID}`, payload)
+    } else {
+      await api.post('/cards', payload)
+    }
+    localStorage.removeItem(STORAGE_KEY)
+    emit('saved')
+    close()
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
   }
-  localStorage.removeItem(STORAGE_KEY)
-  emit('saved')
-  close()
 }
 </script>
 

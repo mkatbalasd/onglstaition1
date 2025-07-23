@@ -49,17 +49,24 @@ const CardForm = defineAsyncComponent(() => import('./CardForm.vue'))
 import { useDataStore } from '@/stores/data'
 import api from '@/services/axios'
 import { storeToRefs } from 'pinia'
+import { useNotificationStore } from '@/stores/notifications'
 
 const store = useDataStore()
 const { cards } = storeToRefs(store)
 const loading = ref(true)
 const showForm = ref(false)
 const current = ref(null)
+const notificationStore = useNotificationStore()
 
 async function loadCards() {
   loading.value = true
-  await store.fetchCards()
-  loading.value = false
+  try {
+    await store.fetchCards()
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  } finally {
+    loading.value = false
+  }
 }
 
 function openNew() {
@@ -74,8 +81,12 @@ function openEdit(card) {
 
 async function remove(card) {
   if (confirm('حذف؟')) {
-    await api.delete(`/cards/${card.ID}`)
-    loadCards()
+    try {
+      await api.delete(`/cards/${card.ID}`)
+      loadCards()
+    } catch (err) {
+      notificationStore.pushError('❌ حدث خطأ أثناء الحذف')
+    }
   }
 }
 

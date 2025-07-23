@@ -3,11 +3,13 @@ import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
 import { getFacilities } from '@/api/facilities'
+import { useNotificationStore } from '@/stores/notifications'
 const FacilityForm = defineAsyncComponent(() => import('@/components/FacilityForm.vue'))
 
 const facilities = ref([])
 const loading = ref(true)
 const showForm = ref(false)
+const notificationStore = useNotificationStore()
 
 const columns = [
   { key: 'FacilityID', label: '#' },
@@ -17,8 +19,12 @@ const columns = [
 ]
 
 async function load() {
-  const data = await getFacilities()
-  if (data) facilities.value = data
+  try {
+    const data = await getFacilities()
+    if (data) facilities.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  }
 }
 
 onMounted(async () => {

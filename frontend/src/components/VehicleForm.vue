@@ -29,8 +29,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useNotificationStore } from '@/stores/notifications'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
 import { createVehicle } from '@/api/vehicles'
+const notificationStore = useNotificationStore()
 
 const props = defineProps({
   modelValue: Boolean
@@ -46,15 +48,19 @@ function close() {
 }
 
 async function submit() {
-  await createVehicle({
-    FacilityID: facilityId.value || null,
-    PlateNumber: plate.value,
-    SerialNumber: serial.value
-  })
-  facilityId.value = ''
-  plate.value = ''
-  serial.value = ''
-  emit('saved')
-  close()
+  try {
+    await createVehicle({
+      FacilityID: facilityId.value || null,
+      PlateNumber: plate.value,
+      SerialNumber: serial.value
+    })
+    facilityId.value = ''
+    plate.value = ''
+    serial.value = ''
+    emit('saved')
+    close()
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+  }
 }
 </script>

@@ -3,7 +3,9 @@ import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
 import { getVehicles } from '@/api/vehicles'
+import { useNotificationStore } from '@/stores/notifications'
 const VehicleForm = defineAsyncComponent(() => import('@/components/VehicleForm.vue'))
+const notificationStore = useNotificationStore()
 
 const vehicles = ref([])
 const loading = ref(true)
@@ -16,8 +18,12 @@ const columns = [
 ]
 
 async function load() {
-  const data = await getVehicles()
-  if (data) vehicles.value = data
+  try {
+    const data = await getVehicles()
+    if (data) vehicles.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  }
 }
 
 onMounted(async () => {
