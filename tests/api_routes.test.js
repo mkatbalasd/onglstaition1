@@ -41,7 +41,12 @@ describe('GET /nagl/api/drivers', () => {
 describe('POST /nagl/api/drivers', () => {
   it('creates a driver', async () => {
     pool.query.mockResolvedValueOnce({ insertId: 42 });
-    const payload = { FacilityID: 1, FirstName: 'Foo', LastName: 'Bar' };
+    const payload = {
+      FacilityID: 1,
+      FirstName: 'Foo',
+      LastName: 'Bar',
+      IdentityNumber: '1234'
+    };
     const res = await request(app)
       .post('/nagl/api/drivers')
       .send(payload)
@@ -52,7 +57,7 @@ describe('POST /nagl/api/drivers', () => {
       DriverID: 42,
       FirstName: 'Foo',
       LastName: 'Bar',
-      IdentityNumber: null
+      IdentityNumber: '1234'
     });
   });
 });

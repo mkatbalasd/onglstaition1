@@ -17,13 +17,13 @@ router.get(
 router.post(
   '/api/drivers',
   asyncHandler(async (req, res) => {
-    const { FacilityID, FirstName, LastName } = req.body;
+    const { FacilityID, FirstName, LastName, IdentityNumber } = req.body;
     const result = await pool.query(
-      'INSERT INTO OPC_Driver (FacilityID, FirstName, LastName) VALUES (?, ?, ?)',
-      [FacilityID || null, FirstName, LastName]
+      'INSERT INTO OPC_Driver (FacilityID, IdentityNumber, FirstName, LastName) VALUES (?, ?, ?, ?)',
+      [FacilityID || null, IdentityNumber || null, FirstName, LastName]
     );
     const DriverID = result.insertId;
-    res.json({ DriverID, FirstName, LastName, IdentityNumber: req.body.IdentityNumber || null });
+    res.json({ DriverID, FirstName, LastName, IdentityNumber: IdentityNumber || null });
   })
 );
 
