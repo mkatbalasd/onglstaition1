@@ -3,7 +3,23 @@
     <Dialog as="div" class="fixed inset-0 z-10 overflow-y-auto" @close="close">
       <div class="flex items-center justify-center min-h-screen p-4">
         <DialogPanel class="bg-white dark:bg-gray-900 rounded shadow p-6 w-full max-w-lg">
-          <DialogTitle class="text-lg font-medium mb-4">{{ card ? 'Edit Driver Card' : 'New Driver Card' }}</DialogTitle>
+          <div class="flex items-center justify-between mb-4">
+            <button
+              v-if="hasPrev"
+              @click="prev"
+              class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <ChevronLeft class="w-5 h-5" />
+            </button>
+            <DialogTitle class="text-lg font-medium">{{ card ? 'Edit Driver Card' : 'New Driver Card' }}</DialogTitle>
+            <button
+              v-if="hasNext"
+              @click="next"
+              class="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              <ChevronRight class="w-5 h-5" />
+            </button>
+          </div>
           <Skeleton v-if="loading" variant="form" :fields="6" />
           <form v-else @submit.prevent="submit" class="space-y-4">
             <div>
@@ -47,6 +63,8 @@
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { useDriverCardFormStore } from '@/stores/driverCardForm'
 import DatePicker from 'vue3-hijri-gregorian-datepicker'
 import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
@@ -68,6 +86,19 @@ const driverId = ref('')
 const issueDate = ref({ date: '', type: 'hijri' })
 const expirationDate = ref({ date: '', type: 'hijri' })
 const supplier = ref('')
+
+const formStore = useDriverCardFormStore()
+
+const hasPrev = computed(() => formStore.index > 0)
+const hasNext = computed(() => formStore.index < formStore.cards.length - 1)
+
+function prev() {
+  if (hasPrev.value) formStore.index--
+}
+
+function next() {
+  if (hasNext.value) formStore.index++
+}
 
 const facilities = ref([])
 const drivers = ref([])
