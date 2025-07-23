@@ -18,14 +18,6 @@ const routes = [
     component: () => import('./views/DriverCardsDriver.vue')
   },
   {
-    path: '/driver-cards/new/:facilityId/driver/:driverId',
-    component: () => import('./views/DriverCardFormPage.vue')
-  },
-  {
-    path: '/driver-cards/:id/edit',
-    component: () => import('./views/DriverCardFormPage.vue')
-  },
-  {
     path: '/driver-cards/print/:token',
     component: () => import('./views/DriverCardsPrint.vue')
   },

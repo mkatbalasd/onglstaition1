@@ -56,12 +56,17 @@
       <button @click="nextPage" :disabled="page === pageCount" class="px-2 py-1 border rounded disabled:opacity-50">Next</button>
     </div>
 
-    <DriverCardForm v-model="showForm" :card="current" @saved="loadCards" />
+    <DriverCardForm
+      v-model="showForm"
+      :card="current"
+      @saved="markSaved"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, computed, watch, defineAsyncComponent } from 'vue'
+import { useDriverCardFormStore } from '@/stores/driverCardForm'
 const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCardForm.vue'))
 import Skeleton from '@/components/Skeleton.vue'
 import { getDriverCards } from '@/api/driverCards'
@@ -69,7 +74,8 @@ import { getDriverCards } from '@/api/driverCards'
 const cards = ref([])
 const loading = ref(true)
 const showForm = ref(false)
-const current = ref(null)
+const formStore = useDriverCardFormStore()
+const current = computed(() => formStore.currentCard)
 const columns = [
   '#',
   'Card Number',
@@ -100,17 +106,24 @@ async function loadCards() {
   loading.value = true
   const data = await getDriverCards()
   if (data) cards.value = data
+  formStore.cards = cards.value
   loading.value = false
 }
 
 function openNew() {
-  current.value = null
+  formStore.index = -1
   showForm.value = true
 }
 
 function openEdit(card) {
-  current.value = card
+  const idx = filteredCards.value.findIndex(c => c.ID === card.ID)
+  formStore.index = idx
   showForm.value = true
+}
+
+function markSaved() {
+  formStore.saved = true
+  showForm.value = false
 }
 
 const filteredCards = computed(() =>
@@ -142,6 +155,13 @@ function prevPage() {
 }
 
 watch(filteredCards, () => { page.value = 1 })
+watch(filteredCards, cardsList => { formStore.cards = cardsList })
+watch(showForm, val => {
+  if (!val && formStore.saved) {
+    loadCards()
+    formStore.saved = false
+  }
+})
 
 onMounted(loadCards)
 </script>
