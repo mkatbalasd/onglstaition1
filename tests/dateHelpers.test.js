@@ -11,3 +11,15 @@ test('getExpiration keeps existing expiration when provided', async () => {
   const result = getExpiration(issue, '2024-12-31');
   expect(result).toBe('2024-12-31');
 });
+
+test('toGregorian converts hijri date to gregorian', async () => {
+  const { toGregorian } = await import('../frontend/src/composables/dateHelpers.js');
+  const result = toGregorian('1445-01-01');
+  expect(result).toBe('2023-07-19');
+});
+
+test('addYear handles hijri dates', async () => {
+  const { addYear } = await import('../frontend/src/composables/dateHelpers.js');
+  const result = addYear('1445-01-01');
+  expect(result).toBe('2024-07-19');
+});
