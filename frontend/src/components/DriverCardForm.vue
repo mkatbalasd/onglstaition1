@@ -203,15 +203,20 @@ watch(() => props.card, (val) => {
 
 onMounted(async () => {
   loading.value = true
-  const [fac, drv] = await Promise.all([
-    getFacilities(),
-    getDrivers()
-  ])
-  const { data: supData } = await api.get('/suppliers')
-  facilities.value = fac || []
-  drivers.value = drv || []
-  suppliers.value = supData
-  loading.value = false
+  try {
+    const [fac, drv] = await Promise.all([
+      getFacilities(),
+      getDrivers()
+    ])
+    const { data: supData } = await api.get('/suppliers')
+    facilities.value = fac || []
+    drivers.value = drv || []
+    suppliers.value = supData
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  } finally {
+    loading.value = false
+  }
 
   if (!props.card) {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -250,17 +255,21 @@ async function submit() {
     Supplier: supplier.value || null
   }
   let result
-  if (props.card) {
-    result = await updateDriverCard(props.card.ID, payload)
-  } else {
-    result = await createDriverCard(payload)
-  }
-  if (result) {
-    localStorage.removeItem(STORAGE_KEY)
-    emit('saved')
-    notificationStore.pushSuccess('✅ تم الحفظ')
-    close()
-  } else {
+  try {
+    if (props.card) {
+      result = await updateDriverCard(props.card.ID, payload)
+    } else {
+      result = await createDriverCard(payload)
+    }
+    if (result) {
+      localStorage.removeItem(STORAGE_KEY)
+      emit('saved')
+      notificationStore.pushSuccess('✅ تم الحفظ')
+      close()
+    } else {
+      notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+    }
+  } catch (err) {
     notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
   }
 }

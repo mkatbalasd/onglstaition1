@@ -81,6 +81,7 @@ import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions, Tr
 import { getFacilities } from '@/api/facilities'
 import { getDrivers } from '@/api/drivers'
 import { getDriverCard, createDriverCard, updateDriverCard } from '@/api/driverCards'
+import { useNotificationStore } from '@/stores/notifications'
 
 const route = useRoute()
 const router = useRouter()
@@ -89,6 +90,7 @@ const cardId = route.params.id
 const loading = ref(true)
 const facilities = ref([])
 const drivers = ref([])
+const notificationStore = useNotificationStore()
 
 const cardType = ref('')
 const facilityId = ref('')
@@ -117,6 +119,8 @@ onMounted(async () => {
         supplier.value = c.Supplier || ''
       }
     }
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   } finally {
     loading.value = false
   }
@@ -124,8 +128,12 @@ onMounted(async () => {
 
 watch(facilityId, async (val) => {
   if (!val) return
-  const data = await getDrivers(`?facilityId=${val}`)
-  if (data) drivers.value = data
+  try {
+    const data = await getDrivers(`?facilityId=${val}`)
+    if (data) drivers.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  }
 })
 
 const selectedFacility = computed(() => facilities.value.find(f => f.FacilityID === facilityId.value))
@@ -141,13 +149,17 @@ async function submit() {
     Supplier: supplier.value || null
   }
 
-  if (cardId) {
-    await updateDriverCard(cardId, payload)
-  } else {
-    await createDriverCard(payload)
-  }
+  try {
+    if (cardId) {
+      await updateDriverCard(cardId, payload)
+    } else {
+      await createDriverCard(payload)
+    }
 
-  router.push('/driver-cards')
+    router.push('/driver-cards')
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+  }
 }
 </script>
 

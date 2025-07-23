@@ -3,7 +3,9 @@ import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
 import { getDrivers } from '@/api/drivers'
+import { useNotificationStore } from '@/stores/notifications'
 const DriverForm = defineAsyncComponent(() => import('@/components/DriverForm.vue'))
+const notificationStore = useNotificationStore()
 
 const drivers = ref([])
 const loading = ref(true)
@@ -17,8 +19,12 @@ const columns = [
 ]
 
 async function load() {
-  const data = await getDrivers()
-  if (data) drivers.value = data
+  try {
+    const data = await getDrivers()
+    if (data) drivers.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  }
 }
 
 onMounted(async () => {

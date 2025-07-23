@@ -36,9 +36,11 @@ import 'vue3-hijri-gregorian-datepicker/dist/style.css'
 import HeadlessSelect from '@/components/HeadlessSelect.vue'
 import { createFacility } from '@/api/facilities'
 import api from '@/services/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
 const route = useRoute()
 const router = useRouter()
+const notificationStore = useNotificationStore()
 
 const name = ref('')
 const identity = ref(route.query.identity || '')
@@ -70,8 +72,12 @@ const licenseOptions = computed(() =>
 )
 
 onMounted(async () => {
-  const { data } = await api.get('/license-types')
-  licenseTypes.value = data
+  try {
+    const { data } = await api.get('/license-types')
+    licenseTypes.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  }
 })
 
 async function submit() {
@@ -80,22 +86,26 @@ async function submit() {
   validate()
   if (!isValid.value) return
 
-  const data = await createFacility({
-    Name: name.value,
-    IdentityNumber: identity.value,
-    LicenseType: licenseType.value,
-    LicenseIssueDate: issueDate.value.date,
-    LicenseExpirationDate: expirationDate.value.date
-  })
-  const id = data.FacilityID
-  if (route.query.next) {
-    router.push(`${route.query.next}/${id}/driver`)
-  } else {
-    name.value = ''
-    identity.value = ''
-    licenseType.value = ''
-    issueDate.value = { date: '', type: 'hijri' }
-    expirationDate.value = { date: '', type: 'hijri' }
+  try {
+    const data = await createFacility({
+      Name: name.value,
+      IdentityNumber: identity.value,
+      LicenseType: licenseType.value,
+      LicenseIssueDate: issueDate.value.date,
+      LicenseExpirationDate: expirationDate.value.date
+    })
+    const id = data.FacilityID
+    if (route.query.next) {
+      router.push(`${route.query.next}/${id}/driver`)
+    } else {
+      name.value = ''
+      identity.value = ''
+      licenseType.value = ''
+      issueDate.value = { date: '', type: 'hijri' }
+      expirationDate.value = { date: '', type: 'hijri' }
+    }
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
   }
 }
 </script>

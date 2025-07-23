@@ -35,6 +35,8 @@
 import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
 import { createDriver } from '@/api/drivers'
+const notificationStore = useNotificationStore()
+import { useNotificationStore } from '@/stores/notifications'
 
 const props = defineProps({
   modelValue: Boolean
@@ -51,17 +53,21 @@ function close() {
 }
 
 async function submit() {
-  await createDriver({
-    FacilityID: facilityId.value || null,
-    IdentityNumber: identity.value,
-    FirstName: firstName.value,
-    LastName: lastName.value
-  })
-  facilityId.value = ''
-  identity.value = ''
-  firstName.value = ''
-  lastName.value = ''
-  emit('saved')
-  close()
+  try {
+    await createDriver({
+      FacilityID: facilityId.value || null,
+      IdentityNumber: identity.value,
+      FirstName: firstName.value,
+      LastName: lastName.value
+    })
+    facilityId.value = ''
+    identity.value = ''
+    firstName.value = ''
+    lastName.value = ''
+    emit('saved')
+    close()
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+  }
 }
 </script>

@@ -59,9 +59,11 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { getDriverCards } from '@/api/driverCards'
+import { useNotificationStore } from '@/stores/notifications'
 
 const rows = ref([])
 const loading = ref(true)
+const notificationStore = useNotificationStore()
 
 const facility = ref('')
 const identity = ref('')
@@ -101,9 +103,14 @@ watch(filteredRows, () => { page.value = 1 })
 
 async function loadCards() {
   loading.value = true
-  const data = await getDriverCards()
-  if (data) rows.value = data
-  loading.value = false
+  try {
+    const data = await getDriverCards()
+    if (data) rows.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(loadCards)

@@ -24,19 +24,25 @@
 <script setup>
 import { ref } from 'vue'
 import { createVehicle } from '@/api/vehicles'
+import { useNotificationStore } from '@/stores/notifications'
 
 const facilityId = ref('')
 const plate = ref('')
 const serial = ref('')
+const notificationStore = useNotificationStore()
 
 async function submit() {
-  await createVehicle({
-    FacilityID: facilityId.value || null,
-    PlateNumber: plate.value,
-    SerialNumber: serial.value
-  })
-  facilityId.value = ''
-  plate.value = ''
-  serial.value = ''
+  try {
+    await createVehicle({
+      FacilityID: facilityId.value || null,
+      PlateNumber: plate.value,
+      SerialNumber: serial.value
+    })
+    facilityId.value = ''
+    plate.value = ''
+    serial.value = ''
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+  }
 }
 </script>

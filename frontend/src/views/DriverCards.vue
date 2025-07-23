@@ -88,6 +88,10 @@ import { useDriverCardFormStore } from '@/stores/driverCardForm'
 const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCardForm.vue'))
 import Skeleton from '@/components/Skeleton.vue'
 import { getDriverCards } from '@/api/driverCards'
+import { useNotificationStore } from '@/stores/notifications'
+
+const notificationStore = useNotificationStore()
+import { useNotificationStore } from '@/stores/notifications'
 
 const cards = ref([])
 const loading = ref(true)
@@ -122,30 +126,35 @@ const pageCount = ref(1)
 
 async function loadCards() {
   loading.value = true
-  const data = await getDriverCards({
-    name: filters.name || undefined,
-    identity: filters.identity || undefined,
-    facility: filters.facility || undefined,
-    supplier: filters.supplier || undefined,
-    issueFrom: filters.issueFrom || undefined,
-    issueTo: filters.issueTo || undefined,
-    expFrom: filters.expFrom || undefined,
-    expTo: filters.expTo || undefined,
-    page: page.value
-  })
-  if (data) {
-    if (Array.isArray(data)) {
-      cards.value = data
-      pageCount.value = 1
-    } else {
-      cards.value = data.items || data.rows || []
-      pageCount.value = data.pageCount || 1
+  try {
+    const data = await getDriverCards({
+      name: filters.name || undefined,
+      identity: filters.identity || undefined,
+      facility: filters.facility || undefined,
+      supplier: filters.supplier || undefined,
+      issueFrom: filters.issueFrom || undefined,
+      issueTo: filters.issueTo || undefined,
+      expFrom: filters.expFrom || undefined,
+      expTo: filters.expTo || undefined,
+      page: page.value
+    })
+    if (data) {
+      if (Array.isArray(data)) {
+        cards.value = data
+        pageCount.value = 1
+      } else {
+        cards.value = data.items || data.rows || []
+        pageCount.value = data.pageCount || 1
+      }
+      formStore.cards = cards.value
+      formStore.page = page.value
+      formStore.pageCount = pageCount.value
     }
-    formStore.cards = cards.value
-    formStore.page = page.value
-    formStore.pageCount = pageCount.value
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
+  } finally {
+    loading.value = false
   }
-  loading.value = false
 }
 
 function openNew() {

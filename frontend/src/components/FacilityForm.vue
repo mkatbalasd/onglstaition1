@@ -30,7 +30,9 @@
 <script setup>
 import { ref } from 'vue'
 import { createFacility } from '@/api/facilities'
+import { useNotificationStore } from '@/stores/notifications'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
+const notificationStore = useNotificationStore()
 
 const props = defineProps({
   modelValue: Boolean
@@ -46,15 +48,19 @@ function close() {
 }
 
 async function submit() {
-  await createFacility({
-    Name: name.value,
-    IdentityNumber: identity.value,
-    LicenseType: licenseType.value
-  })
-  name.value = ''
-  identity.value = ''
-  licenseType.value = ''
-  emit('saved')
-  close()
+  try {
+    await createFacility({
+      Name: name.value,
+      IdentityNumber: identity.value,
+      LicenseType: licenseType.value
+    })
+    name.value = ''
+    identity.value = ''
+    licenseType.value = ''
+    emit('saved')
+    close()
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء الحفظ')
+  }
 }
 </script>

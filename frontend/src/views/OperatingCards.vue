@@ -29,14 +29,18 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/services/axios'
+import { useNotificationStore } from '@/stores/notifications'
 
 const cards = ref([])
 const loading = ref(true)
+const notificationStore = useNotificationStore()
 
 onMounted(async () => {
   try {
     const { data } = await api.get('/cards')
     cards.value = data
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   } finally {
     loading.value = false
   }

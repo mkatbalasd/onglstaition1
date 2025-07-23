@@ -15,17 +15,23 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getFacilities } from '@/api/facilities'
+import { useNotificationStore } from '@/stores/notifications'
 
 const identity = ref('')
 const router = useRouter()
+const notificationStore = useNotificationStore()
 
 async function next() {
-  const facilities = await getFacilities()
-  const facility = facilities.find(f => f.IdentityNumber === identity.value)
-  if (facility) {
-    router.push(`/driver-cards/new/${facility.FacilityID}/driver`)
-  } else {
-    router.push({ path: '/facilities/new', query: { identity: identity.value, next: '/driver-cards/new' } })
+  try {
+    const facilities = await getFacilities()
+    const facility = facilities.find(f => f.IdentityNumber === identity.value)
+    if (facility) {
+      router.push(`/driver-cards/new/${facility.FacilityID}/driver`)
+    } else {
+      router.push({ path: '/facilities/new', query: { identity: identity.value, next: '/driver-cards/new' } })
+    }
+  } catch (err) {
+    notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   }
 }
 </script>
