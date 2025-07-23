@@ -1,4 +1,4 @@
-<a href="/nagl/driver-cards/new" class="btn btn-primary mb-2 btn-icon"><i class="bi bi-plus"></i> إضافة بطاقة سائق</a>
+<a href="/nagl/driver-cards/new" class="inline-block mb-2 px-3 py-1 bg-blue-600 text-white rounded"><i class="bi bi-plus"></i> إضافة بطاقة سائق</a>
 <div class="table-responsive">
 <table class="table table-bordered table-striped table-hover data-table results-table">
   <thead>
@@ -24,9 +24,9 @@
         <td class="hide-mobile"><pre class="codebox"><%= c.ExpirationDate %></pre></td>
         <td class="hide-mobile"><pre class="codebox"><%= c.SupplierName || '' %></pre></td>
         <td>
-          <a href="/nagl/driver-cards/<%= c.ID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
+          <a href="/nagl/driver-cards/<%= c.ID %>/edit" class="px-2 py-1 border text-blue-600 rounded text-sm">تعديل</a>
           <form method="POST" action="/nagl/driver-cards/<%= c.ID %>/delete" style="display:inline">
-            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('حذف؟')">حذف</button>
+            <button type="submit" class="px-2 py-1 border text-red-600 rounded text-sm" onclick="return confirm('حذف؟')">حذف</button>
           </form>
         </td>
       </tr>

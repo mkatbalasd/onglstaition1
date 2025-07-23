@@ -2,12 +2,12 @@
 <form method="POST" action="/nagl/driver-cards/new/<%= facilityId %>/driver">
   <div class="mb-3">
     <label class="form-label">المنشأة</label>
-    <input type="text" class="form-control" value="<%= facilityName %>" readonly>
+    <input type="text" class="border rounded p-2 w-full" value="<%= facilityName %>" readonly>
   </div>
   <div class="mb-3">
     <label class="form-label">رقم هوية السائق</label>
-    <input type="text" name="IdentityNumber" class="form-control" required>
+    <input type="text" name="IdentityNumber" class="border rounded p-2 w-full" required>
   </div>
-  <button type="submit" class="btn btn-primary">متابعة</button>
+  <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded">متابعة</button>
 </form>
 </div>

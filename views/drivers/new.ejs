@@ -6,7 +6,7 @@
   <% } else { %>
   <div class="mb-3">
     <label class="form-label">المنشأة</label>
-    <select name="FacilityID" class="form-select select2">
+    <select name="FacilityID" class="border rounded p-2 w-full">
       <% facilities.forEach(f => { %>
         <option value="<%= f.FacilityID %>"><%= f.Name %></option>
       <% }) %>
@@ -15,16 +15,16 @@
   <% } %>
   <div class="mb-3">
     <label class="form-label">رقم هوية السائق</label>
-    <input type="text" name="IdentityNumber" class="form-control" value="<%= identity %>" readonly>
+    <input type="text" name="IdentityNumber" class="border rounded p-2 w-full" value="<%= identity %>" readonly>
   </div>
   <div class="mb-3">
     <label class="form-label">الاسم الأول</label>
-    <input type="text" name="FirstName" class="form-control" required>
+    <input type="text" name="FirstName" class="border rounded p-2 w-full" required>
   </div>
   <div class="mb-3">
     <label class="form-label">اسم العائلة</label>
-    <input type="text" name="LastName" class="form-control" required>
+    <input type="text" name="LastName" class="border rounded p-2 w-full" required>
   </div>
-  <button type="submit" class="btn btn-success">متابعة</button>
+  <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded">متابعة</button>
 </form>
 </div>
