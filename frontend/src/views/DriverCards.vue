@@ -50,11 +50,29 @@
       </table>
     </div>
 
-    <div class="flex justify-center items-center space-x-2 rtl:space-x-reverse" v-if="pageCount > 1">
-      <button @click="prevPage" :disabled="page === 1" class="px-2 py-1 border rounded disabled:opacity-50">Prev</button>
-      <span>{{ page }} / {{ pageCount }}</span>
-      <button @click="nextPage" :disabled="page === pageCount" class="px-2 py-1 border rounded disabled:opacity-50">Next</button>
-    </div>
+    <nav
+      v-if="pageCount > 1"
+      class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6"
+      aria-label="Pagination"
+    >
+      <div class="flex flex-1 justify-between sm:justify-end">
+        <button
+          @click="prevPage"
+          :disabled="page === 1"
+          class="relative inline-flex items-center rounded-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0 disabled:opacity-50"
+        >
+          Prev
+        </button>
+        <span class="mx-2 text-sm text-gray-700">{{ page }} / {{ pageCount }}</span>
+        <button
+          @click="nextPage"
+          :disabled="page === pageCount"
+          class="relative inline-flex items-center rounded-md px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    </nav>
 
     <DriverCardForm
       v-model="showForm"
@@ -100,13 +118,33 @@ const filters = reactive({
 })
 
 const page = ref(1)
-const pageSize = 10
+const pageCount = ref(1)
 
 async function loadCards() {
   loading.value = true
-  const data = await getDriverCards()
-  if (data) cards.value = data
-  formStore.cards = cards.value
+  const data = await getDriverCards({
+    name: filters.name || undefined,
+    identity: filters.identity || undefined,
+    facility: filters.facility || undefined,
+    supplier: filters.supplier || undefined,
+    issueFrom: filters.issueFrom || undefined,
+    issueTo: filters.issueTo || undefined,
+    expFrom: filters.expFrom || undefined,
+    expTo: filters.expTo || undefined,
+    page: page.value
+  })
+  if (data) {
+    if (Array.isArray(data)) {
+      cards.value = data
+      pageCount.value = 1
+    } else {
+      cards.value = data.items || data.rows || []
+      pageCount.value = data.pageCount || 1
+    }
+    formStore.cards = cards.value
+    formStore.page = page.value
+    formStore.pageCount = pageCount.value
+  }
   loading.value = false
 }
 
@@ -116,7 +154,7 @@ function openNew() {
 }
 
 function openEdit(card) {
-  const idx = filteredCards.value.findIndex(c => c.ID === card.ID)
+  const idx = cards.value.findIndex(c => c.ID === card.ID)
   formStore.index = idx
   showForm.value = true
 }
@@ -126,25 +164,7 @@ function markSaved() {
   showForm.value = false
 }
 
-const filteredCards = computed(() =>
-  cards.value.filter(c => {
-    if (filters.name && !String(c.FirstName).toLowerCase().includes(filters.name.toLowerCase())) return false
-    if (filters.identity && !String(c.DriverIdentity || '').toLowerCase().includes(filters.identity.toLowerCase())) return false
-    if (filters.facility && !String(c.Name).toLowerCase().includes(filters.facility.toLowerCase())) return false
-    if (filters.supplier && !String(c.SupplierName || '').toLowerCase().includes(filters.supplier.toLowerCase())) return false
-    if (filters.issueFrom && c.IssueDate < filters.issueFrom) return false
-    if (filters.issueTo && c.IssueDate > filters.issueTo) return false
-    if (filters.expFrom && c.ExpirationDate < filters.expFrom) return false
-    if (filters.expTo && c.ExpirationDate > filters.expTo) return false
-    return true
-  })
-)
-
-const pageCount = computed(() => Math.ceil(filteredCards.value.length / pageSize))
-const pagedCards = computed(() => {
-  const start = (page.value - 1) * pageSize
-  return filteredCards.value.slice(start, start + pageSize)
-})
+const pagedCards = computed(() => cards.value)
 
 function nextPage() {
   if (page.value < pageCount.value) page.value++
@@ -154,8 +174,17 @@ function prevPage() {
   if (page.value > 1) page.value--
 }
 
-watch(filteredCards, () => { page.value = 1 })
-watch(filteredCards, cardsList => { formStore.cards = cardsList })
+watch(
+  filters,
+  () => {
+    page.value = 1
+    loadCards()
+  },
+  { deep: true }
+)
+
+watch(page, loadCards)
+
 watch(showForm, val => {
   if (!val && formStore.saved) {
     loadCards()
