@@ -1,5 +1,5 @@
 <div class="card card-form">
-<form method="POST" action="/nagl/drivers">
+<form id="driverForm" method="POST" action="/nagl/drivers">
   <input type="hidden" name="next" value="<%= next %>">
   <% if (facilityId) { %>
   <input type="hidden" name="FacilityID" value="<%= facilityId %>">
@@ -16,15 +16,37 @@
   <div class="mb-3">
     <label class="form-label">رقم هوية السائق</label>
     <input type="text" name="IdentityNumber" class="border rounded p-2 w-full" value="<%= identity %>" readonly>
+    <span class="error-message"></span>
   </div>
   <div class="mb-3">
     <label class="form-label">الاسم الأول</label>
-    <input type="text" name="FirstName" class="border rounded p-2 w-full" required>
+    <input type="text" name="FirstName" class="border rounded p-2 w-full">
+    <span class="error-message"></span>
   </div>
   <div class="mb-3">
     <label class="form-label">اسم العائلة</label>
-    <input type="text" name="LastName" class="border rounded p-2 w-full" required>
+    <input type="text" name="LastName" class="border rounded p-2 w-full">
+    <span class="error-message"></span>
   </div>
   <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded">متابعة</button>
 </form>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('driverForm');
+  form.addEventListener('submit', e => {
+    let valid = true;
+    const fields = ['IdentityNumber', 'FirstName', 'LastName'];
+    fields.forEach(name => {
+      const input = form.elements[name];
+      const error = input.parentElement.querySelector('.error-message');
+      if (error) error.textContent = '';
+      if (!input.value.trim()) {
+        if (error) error.textContent = 'هذا الحقل مطلوب';
+        valid = false;
+      }
+    });
+    if (!valid) e.preventDefault();
+  });
+});
+</script>

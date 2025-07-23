@@ -112,6 +112,11 @@ form .input-group > .form-select {
   margin: 0;
 }
 
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
 
 @media (max-width: 768px) {
   .hide-mobile {

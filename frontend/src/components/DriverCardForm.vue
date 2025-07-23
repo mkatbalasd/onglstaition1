@@ -8,21 +8,32 @@
           <form v-else @submit.prevent="submit" class="space-y-4">
             <div>
               <label class="block text-sm font-medium mb-1">Card Type</label>
-              <input v-model="cardType" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" required />
+              <input v-model="cardType" type="text" class="w-full rounded border-gray-300 dark:bg-gray-800 dark:border-gray-700" />
+              <p v-if="errors.cardType" class="text-red-600 text-sm">{{ errors.cardType }}</p>
             </div>
-            <HeadlessSelect v-model="facilityId" :options="facilityOptions" label="Facility" />
-            <HeadlessSelect v-model="driverId" :options="driverOptions" label="Driver" />
+            <div>
+              <HeadlessSelect v-model="facilityId" :options="facilityOptions" label="Facility" />
+              <p v-if="errors.facilityId" class="text-red-600 text-sm">{{ errors.facilityId }}</p>
+            </div>
+            <div>
+              <HeadlessSelect v-model="driverId" :options="driverOptions" label="Driver" />
+              <p v-if="errors.driverId" class="text-red-600 text-sm">{{ errors.driverId }}</p>
+            </div>
             <div class="grid gap-4 md:grid-cols-2">
               <div>
                 <label class="block text-sm font-medium mb-1">Issue Date</label>
                 <DatePicker v-model="issueDate" :initial-type="'hijri'" language="ar" />
+                <p v-if="errors.issueDate" class="text-red-600 text-sm">{{ errors.issueDate }}</p>
               </div>
               <div>
                 <label class="block text-sm font-medium mb-1">Expiration Date</label>
                 <DatePicker v-model="expirationDate" :initial-type="'hijri'" language="ar" />
+                <p v-if="errors.expirationDate" class="text-red-600 text-sm">{{ errors.expirationDate }}</p>
               </div>
             </div>
-            <HeadlessSelect v-model="supplier" :options="supplierOptions" label="Supplier" />
+            <div>
+              <HeadlessSelect v-model="supplier" :options="supplierOptions" label="Supplier" />
+            </div>
             <div class="text-end">
               <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
             </div>
@@ -58,6 +69,7 @@ const facilities = ref([])
 const drivers = ref([])
 const suppliers = ref([])
 const loading = ref(true)
+const errors = ref({})
 
 const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.FacilityID, label: `${f.Name} - ${f.IdentityNumber}` })))
 const driverOptions = computed(() => drivers.value.map(d => ({ value: d.DriverID, label: `${d.FirstName} ${d.LastName} - ${d.IdentityNumber}` })))
@@ -99,6 +111,14 @@ onMounted(async () => {
 })
 
 async function submit() {
+  errors.value = {}
+  if (!cardType.value) errors.value.cardType = 'Card type required'
+  if (!facilityId.value) errors.value.facilityId = 'Facility required'
+  if (!driverId.value) errors.value.driverId = 'Driver required'
+  if (!issueDate.value.date) errors.value.issueDate = 'Issue date required'
+  if (!expirationDate.value.date) errors.value.expirationDate = 'Expiration date required'
+  if (Object.keys(errors.value).length) return
+
   const payload = {
     CardType: cardType.value,
     FacilityID: facilityId.value,
