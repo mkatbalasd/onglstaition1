@@ -53,7 +53,8 @@ router.get(
   '/api/driver-cards',
   asyncHandler(async (req, res) => {
     const rows = await pool.query(
-      'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, f.Name, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
+      'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, drv.IdentityNumber AS DriverIdentity, ' +
+        'f.Name, f.IdentityNumber AS FacilityIdentity, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
         'FROM OPC_DriverCard d ' +
         'LEFT JOIN OPC_Driver drv ON d.DriverID = drv.DriverID ' +
         'LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ' +
@@ -69,7 +70,8 @@ router.get(
   asyncHandler(async (req, res) => {
     const { id } = req.params;
     const rows = await pool.query(
-      'SELECT d.ID, d.CardNumber, d.token, d.CardType, d.FacilityID, d.DriverID, d.IssueDate, d.ExpirationDate, d.Supplier, drv.FirstName, f.Name, s.name AS SupplierName ' +
+      'SELECT d.ID, d.CardNumber, d.token, d.CardType, d.FacilityID, d.DriverID, d.IssueDate, d.ExpirationDate, d.Supplier, ' +
+        'drv.FirstName, drv.IdentityNumber AS DriverIdentity, f.Name, f.IdentityNumber AS FacilityIdentity, s.name AS SupplierName ' +
         'FROM OPC_DriverCard d ' +
         'LEFT JOIN OPC_Driver drv ON d.DriverID = drv.DriverID ' +
         'LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ' +
