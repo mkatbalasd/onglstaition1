@@ -4,19 +4,19 @@
 
   <div class="mb-3">
     <label class="form-label">نوع البطاقة</label>
-    <input type="text" name="CardType" class="form-control" value="<%= card ? card.CardType : '' %>" required>
+    <input type="text" name="CardType" class="border rounded p-2 w-full" value="<%= card ? card.CardType : '' %>" required>
   </div>
 
   <div class="mb-3">
     <label class="form-label">المنشأة</label>
-    <div class="input-group">
-      <select name="FacilityID" class="form-select select2" required <%= lockFacility ? 'disabled' : '' %>>
+    <div class="flex gap-2">
+      <select name="FacilityID" class="border rounded p-2 w-full" required <%= lockFacility ? 'disabled' : '' %>>
         <% facilities.forEach(f => { %>
           <option value="<%= f.FacilityID %>" <%= (card && card.FacilityID === f.FacilityID) || (facility && facility.FacilityID === f.FacilityID) ? 'selected' : '' %>><%= f.Name %> - <%= f.IdentityNumber %> - <%= f.LicenseType || '' %></option>
         <% }) %>
       </select>
       <% if (!lockFacility) { %>
-      <a href="/nagl/facilities/new" target="_blank" id="addFacilityBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
+      <a href="/nagl/facilities/new" target="_blank" id="addFacilityBtn" class="px-3 py-1 border rounded text-gray-700"><i class="bi bi-plus"></i></a>
       <% } %>
       <% if (lockFacility) { %><input type="hidden" name="FacilityID" value="<%= facility.FacilityID %>"><% } %>
     </div>
@@ -24,14 +24,14 @@
 
   <div class="mb-3">
     <label class="form-label">السائق</label>
-    <div class="input-group">
-      <select name="DriverID" class="form-select select2" required <%= lockDriver ? 'disabled' : '' %>>
+    <div class="flex gap-2">
+      <select name="DriverID" class="border rounded p-2 w-full" required <%= lockDriver ? 'disabled' : '' %>>
         <% drivers.forEach(d => { %>
           <option value="<%= d.DriverID %>" <%= (card && card.DriverID === d.DriverID) || (driver && driver.DriverID === d.DriverID) ? 'selected' : '' %>><%= d.FirstName %> <%= d.LastName %> - <%= d.IdentityNumber || '' %></option>
         <% }) %>
       </select>
       <% if (!lockDriver) { %>
-      <a href="#" target="_blank" id="addDriverBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
+      <a href="#" target="_blank" id="addDriverBtn" class="px-3 py-1 border rounded text-gray-700"><i class="bi bi-plus"></i></a>
       <% } %>
       <% if (lockDriver) { %><input type="hidden" name="DriverID" value="<%= driver.DriverID %>"><% } %>
     </div>
@@ -41,21 +41,21 @@
 
   <div class="mb-3">
     <label class="form-label">تاريخ الإصدار</label>
-    <input type="text" name="IssueDate" class="form-control hijri-date" value="<%= card ? card.IssueDate : '' %>">
+    <input type="text" name="IssueDate" class="border rounded p-2 w-full hijri-date" value="<%= card ? card.IssueDate : '' %>">
   </div>
   <div class="mb-3">
     <label class="form-label">تاريخ الانتهاء</label>
-    <input type="text" name="ExpirationDate" class="form-control hijri-date" value="<%= card ? card.ExpirationDate : '' %>">
+    <input type="text" name="ExpirationDate" class="border rounded p-2 w-full hijri-date" value="<%= card ? card.ExpirationDate : '' %>">
   </div>
   <div class="mb-3">
     <label class="form-label">المورد</label>
-    <select name="Supplier" class="form-select select2">
+    <select name="Supplier" class="border rounded p-2 w-full">
       <% suppliers.forEach(s => { %>
         <option value="<%= s.id %>" <%= card && card.Supplier === s.id ? 'selected' : '' %>><%= s.name %></option>
       <% }) %>
     </select>
   </div>
 
-  <button type="submit" class="btn btn-success">حفظ</button>
+  <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded">حفظ</button>
 </form>
 </div>
