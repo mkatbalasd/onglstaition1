@@ -2,6 +2,7 @@
 import { ref, onMounted, defineAsyncComponent } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
+import { getFacilities } from '@/api/facilities'
 const FacilityForm = defineAsyncComponent(() => import('@/components/FacilityForm.vue'))
 
 const facilities = ref([])
@@ -16,8 +17,8 @@ const columns = [
 ]
 
 async function load() {
-  const res = await fetch('/nagl/api/facilities')
-  facilities.value = await res.json()
+  const data = await getFacilities()
+  if (data) facilities.value = data
 }
 
 onMounted(async () => {

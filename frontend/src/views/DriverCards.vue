@@ -46,6 +46,7 @@
 
 <script setup>
 import { ref, onMounted, defineAsyncComponent } from 'vue'
+import { getDriverCards } from '@/api/driverCards'
 const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCardForm.vue'))
 
 const cards = ref([])
@@ -55,8 +56,8 @@ const current = ref(null)
 
 async function loadCards() {
   loading.value = true
-  const res = await fetch('/nagl/api/driver-cards')
-  cards.value = await res.json()
+  const data = await getDriverCards()
+  if (data) cards.value = data
   loading.value = false
 }
 

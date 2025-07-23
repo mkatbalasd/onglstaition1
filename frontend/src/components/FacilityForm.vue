@@ -29,6 +29,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { createFacility } from '@/api/facilities'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
 
 const props = defineProps({
@@ -45,14 +46,10 @@ function close() {
 }
 
 async function submit() {
-  await fetch('/nagl/api/facilities', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      Name: name.value,
-      IdentityNumber: identity.value,
-      LicenseType: licenseType.value
-    })
+  await createFacility({
+    Name: name.value,
+    IdentityNumber: identity.value,
+    LicenseType: licenseType.value
   })
   name.value = ''
   identity.value = ''

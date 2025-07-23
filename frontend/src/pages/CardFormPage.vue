@@ -11,6 +11,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CardForm from '@/views/CardForm.vue'
+import api from '@/services/axios'
 
 const open = ref(true)
 const card = ref(null)
@@ -19,10 +20,8 @@ const router = useRouter()
 
 onMounted(async () => {
   if (route.params.id) {
-    const res = await fetch(`/nagl/api/cards/${route.params.id}`)
-    if (res.ok) {
-      card.value = await res.json()
-    }
+    const { data } = await api.get(`/cards/${route.params.id}`)
+    card.value = data
   }
 })
 

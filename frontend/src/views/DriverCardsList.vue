@@ -58,6 +58,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
+import { getDriverCards } from '@/api/driverCards'
 
 const rows = ref([])
 const loading = ref(true)
@@ -100,8 +101,8 @@ watch(filteredRows, () => { page.value = 1 })
 
 async function loadCards() {
   loading.value = true
-  const res = await fetch('/nagl/api/driver-cards')
-  rows.value = await res.json()
+  const data = await getDriverCards()
+  if (data) rows.value = data
   loading.value = false
 }
 

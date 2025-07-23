@@ -78,6 +78,9 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions, TransitionRoot } from '@headlessui/vue'
+import { getFacilities } from '@/api/facilities'
+import { getDrivers } from '@/api/drivers'
+import { getDriverCard, createDriverCard, updateDriverCard } from '@/api/driverCards'
 
 const route = useRoute()
 const router = useRouter()
@@ -96,17 +99,16 @@ const supplier = ref('')
 
 onMounted(async () => {
   try {
-    const [facRes, drvRes] = await Promise.all([
-      fetch('/nagl/api/facilities'),
-      fetch('/nagl/api/drivers')
+    const [fac, drv] = await Promise.all([
+      getFacilities(),
+      getDrivers()
     ])
-    facilities.value = await facRes.json()
-    drivers.value = await drvRes.json()
+    facilities.value = fac || []
+    drivers.value = drv || []
 
     if (cardId) {
-      const res = await fetch(`/nagl/api/driver-cards/${cardId}`)
-      if (res.ok) {
-        const c = await res.json()
+      const c = await getDriverCard(cardId)
+      if (c) {
         cardType.value = c.CardType || ''
         facilityId.value = c.FacilityID || ''
         driverId.value = c.DriverID || ''
@@ -122,8 +124,8 @@ onMounted(async () => {
 
 watch(facilityId, async (val) => {
   if (!val) return
-  const res = await fetch(`/nagl/api/drivers?facilityId=${val}`)
-  drivers.value = await res.json()
+  const data = await getDrivers(`?facilityId=${val}`)
+  if (data) drivers.value = data
 })
 
 const selectedFacility = computed(() => facilities.value.find(f => f.FacilityID === facilityId.value))
@@ -140,17 +142,9 @@ async function submit() {
   }
 
   if (cardId) {
-    await fetch(`/nagl/api/driver-cards/${cardId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
+    await updateDriverCard(cardId, payload)
   } else {
-    await fetch('/nagl/api/driver-cards', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
+    await createDriverCard(payload)
   }
 
   router.push('/driver-cards')

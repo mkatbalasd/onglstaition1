@@ -34,6 +34,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionRoot } from '@headlessui/vue'
+import { createDriver } from '@/api/drivers'
 
 const props = defineProps({
   modelValue: Boolean
@@ -50,15 +51,11 @@ function close() {
 }
 
 async function submit() {
-  await fetch('/nagl/api/drivers', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      FacilityID: facilityId.value || null,
-      IdentityNumber: identity.value,
-      FirstName: firstName.value,
-      LastName: lastName.value
-    })
+  await createDriver({
+    FacilityID: facilityId.value || null,
+    IdentityNumber: identity.value,
+    FirstName: firstName.value,
+    LastName: lastName.value
   })
   facilityId.value = ''
   identity.value = ''
