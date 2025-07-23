@@ -1,4 +1,5 @@
 import { ref, onMounted, watch } from 'vue'
+import { getExpiration } from './dateHelpers.js'
 
 export function useFormHelpers() {
   const issueDate = ref({ date: '', type: 'hijri' })
@@ -8,15 +9,12 @@ export function useFormHelpers() {
 
   const facilityId = ref('')
 
-  function addYear(date) {
-    const d = new Date(date)
-    d.setFullYear(d.getFullYear() + 1)
-    return d.toISOString().slice(0, 10)
-  }
-
   function setExpiration() {
     if (issueDate.value.date) {
-      expirationDate.value = { ...expirationDate.value, date: addYear(issueDate.value.date) }
+      expirationDate.value = {
+        ...expirationDate.value,
+        date: getExpiration(issueDate.value.date, expirationDate.value.date)
+      }
     }
   }
 
