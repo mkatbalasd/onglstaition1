@@ -46,7 +46,7 @@ and provide your database credentials and desired port:
 DB_HOST=localhost
 DB_USER=myuser
 DB_PASSWORD=mypassword
-DB_NAME=mydatabase
+DB_NAME=lmbolwmy_leave
 PORT=3002
 VITE_BASE_PATH=/nagl/app/
 ```
