@@ -35,7 +35,7 @@
               <HeadlessSelect v-model="supplier" :options="supplierOptions" label="Supplier" />
             </div>
             <div class="text-end">
-              <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+              <button type="submit" :disabled="!isValid" class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50">Save</button>
             </div>
           </form>
         </DialogPanel>
@@ -70,6 +70,47 @@ const drivers = ref([])
 const suppliers = ref([])
 const loading = ref(true)
 const errors = ref({})
+const touched = ref({
+  cardType: false,
+  facilityId: false,
+  driverId: false,
+  issueDate: false,
+  expirationDate: false
+})
+
+function validate() {
+  errors.value.cardType = touched.value.cardType && !cardType.value ? 'Card type required' : ''
+  errors.value.facilityId = touched.value.facilityId && !facilityId.value ? 'Facility required' : ''
+  errors.value.driverId = touched.value.driverId && !driverId.value ? 'Driver required' : ''
+  errors.value.issueDate = touched.value.issueDate && !issueDate.value.date ? 'Issue date required' : ''
+  errors.value.expirationDate = touched.value.expirationDate && !expirationDate.value.date ? 'Expiration date required' : ''
+}
+
+watch(cardType, (v, o) => {
+  if (o !== undefined) touched.value.cardType = true
+  validate()
+})
+watch(facilityId, (v, o) => {
+  if (o !== undefined) touched.value.facilityId = true
+  validate()
+})
+watch(driverId, (v, o) => {
+  if (o !== undefined) touched.value.driverId = true
+  validate()
+})
+watch(() => issueDate.value.date, (v, o) => {
+  if (o !== undefined) touched.value.issueDate = true
+  validate()
+})
+watch(() => expirationDate.value.date, (v, o) => {
+  if (o !== undefined) touched.value.expirationDate = true
+  validate()
+})
+
+const isValid = computed(() =>
+  cardType.value && facilityId.value && driverId.value && issueDate.value.date && expirationDate.value.date &&
+  Object.values(errors.value).every(e => !e)
+)
 
 const facilityOptions = computed(() => facilities.value.map(f => ({ value: f.FacilityID, label: `${f.Name} - ${f.IdentityNumber}` })))
 const driverOptions = computed(() => drivers.value.map(d => ({ value: d.DriverID, label: `${d.FirstName} ${d.LastName} - ${d.IdentityNumber}` })))
@@ -95,6 +136,14 @@ watch(() => props.card, (val) => {
     expirationDate.value = { ...expirationDate.value, date: '' }
     supplier.value = ''
   }
+  touched.value = {
+    cardType: false,
+    facilityId: false,
+    driverId: false,
+    issueDate: false,
+    expirationDate: false
+  }
+  validate()
 }, { immediate: true })
 
 onMounted(async () => {
@@ -111,13 +160,13 @@ onMounted(async () => {
 })
 
 async function submit() {
-  errors.value = {}
-  if (!cardType.value) errors.value.cardType = 'Card type required'
-  if (!facilityId.value) errors.value.facilityId = 'Facility required'
-  if (!driverId.value) errors.value.driverId = 'Driver required'
-  if (!issueDate.value.date) errors.value.issueDate = 'Issue date required'
-  if (!expirationDate.value.date) errors.value.expirationDate = 'Expiration date required'
-  if (Object.keys(errors.value).length) return
+  touched.value.cardType = true
+  touched.value.facilityId = true
+  touched.value.driverId = true
+  touched.value.issueDate = true
+  touched.value.expirationDate = true
+  validate()
+  if (!isValid.value) return
 
   const payload = {
     CardType: cardType.value,
