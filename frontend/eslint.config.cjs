@@ -18,7 +18,9 @@ module.exports = [
         localStorage: 'readonly',
         process: 'readonly',
         module: 'writable',
-        require: 'readonly'
+        require: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly'
       }
     },
     ...js.configs.recommended
@@ -38,7 +40,9 @@ module.exports = [
         localStorage: 'readonly',
         process: 'readonly',
         module: 'writable',
-        require: 'readonly'
+        require: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly'
       }
     },
     plugins: {

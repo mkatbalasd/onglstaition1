@@ -17,8 +17,11 @@
     </div>
 
     <Skeleton v-if="loading" :columns="columns.length" v-show="!showForm" />
-    <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg" v-show="!showForm">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right">
+    <div v-else class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2" v-show="!showForm">
+      <table
+        v-if="pagedCards.length"
+        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right"
+      >
         <thead class="bg-gray-50 dark:bg-gray-800">
           <tr>
             <th class="px-2 py-1 sm:px-3 sm:py-2">#</th>
@@ -48,6 +51,7 @@
           </tr>
         </tbody>
       </table>
+      <EmptyState v-else />
     </div>
 
     <nav
@@ -89,9 +93,9 @@ const DriverCardForm = defineAsyncComponent(() => import('@/components/DriverCar
 import Skeleton from '@/components/Skeleton.vue'
 import { getDriverCards } from '@/api/driverCards'
 import { useNotificationStore } from '@/stores/notifications'
+import EmptyState from '@/components/EmptyState.vue'
 
 const notificationStore = useNotificationStore()
-import { useNotificationStore } from '@/stores/notifications'
 
 const cards = ref([])
 const loading = ref(true)

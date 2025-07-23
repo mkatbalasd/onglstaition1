@@ -1,5 +1,8 @@
 <template>
-  <div v-if="variant === 'table'" class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+  <div
+    v-if="variant === 'table'"
+    class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2"
+  >
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right">
       <thead class="bg-gray-50 dark:bg-gray-800">
         <tr>

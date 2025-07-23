@@ -13,8 +13,11 @@
         <input v-model="dateFrom" type="date" class="border rounded px-2 py-1 w-full" />
         <input v-model="dateTo" type="date" class="border rounded px-2 py-1 w-full" />
       </div>
-      <div class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right">
+      <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+        <table
+          v-if="pagedRows.length"
+          class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right"
+        >
           <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
               <th class="px-3 py-2">#</th>
@@ -45,6 +48,7 @@
             </tr>
           </tbody>
         </table>
+        <EmptyState v-else />
       </div>
       <div class="flex justify-center items-center space-x-2 rtl:space-x-reverse" v-if="pageCount > 1">
         <button @click="prevPage" :disabled="page === 1" class="px-2 py-1 border rounded disabled:opacity-50">Prev</button>
@@ -60,6 +64,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 import { getDriverCards } from '@/api/driverCards'
 import { useNotificationStore } from '@/stores/notifications'
+import EmptyState from '@/components/EmptyState.vue'
 
 const rows = ref([])
 const loading = ref(true)
