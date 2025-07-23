@@ -5,8 +5,11 @@
       <div class="h-4 bg-gray-200 rounded"></div>
       <div class="h-4 bg-gray-200 rounded w-5/6"></div>
     </div>
-    <div v-else class="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg">
-      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right">
+    <div v-else class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+      <table
+        v-if="cards.length"
+        class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-right"
+      >
         <thead class="bg-gray-50 dark:bg-gray-800">
           <tr>
             <th class="px-3 py-2">#</th>
@@ -22,6 +25,7 @@
           </tr>
         </tbody>
       </table>
+      <EmptyState v-else />
     </div>
   </div>
 </template>
@@ -30,6 +34,7 @@
 import { ref, onMounted } from 'vue'
 import api from '@/services/axios'
 import { useNotificationStore } from '@/stores/notifications'
+import EmptyState from '@/components/EmptyState.vue'
 
 const cards = ref([])
 const loading = ref(true)
