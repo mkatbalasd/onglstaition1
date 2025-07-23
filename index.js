@@ -64,6 +64,25 @@ router.get(
   })
 );
 
+router.get(
+  '/api/driver-cards/:id',
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const rows = await pool.query(
+      'SELECT d.ID, d.CardNumber, d.token, d.CardType, d.FacilityID, d.DriverID, d.IssueDate, d.ExpirationDate, d.Supplier, drv.FirstName, f.Name, s.name AS SupplierName ' +
+        'FROM OPC_DriverCard d ' +
+        'LEFT JOIN OPC_Driver drv ON d.DriverID = drv.DriverID ' +
+        'LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ' +
+        'LEFT JOIN Supplier s ON d.Supplier = s.id ' +
+        'WHERE d.ID = ?',
+      [id]
+    );
+    const card = rows[0];
+    if (!card) return res.status(404).json({ error: 'Not Found' });
+    res.json(card);
+  })
+);
+
 router.post(
   '/api/driver-cards',
   asyncHandler(async (req, res) => {
