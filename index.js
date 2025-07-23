@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
+const helmet = require('helmet');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const { pool, generateCardNumber } = require('./db');
 const { asyncHandler, errorHandler } = require('./middleware/errorHandler');
 
@@ -21,6 +24,10 @@ app.use('/nagl', express.static('public'));
 app.use(basePath, express.static(path.join(__dirname, 'frontend/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(helmet());
+app.use(cors());
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
+app.use(limiter);
 
 // Mount route modules
 router.use('/', require('./routes/home'));
