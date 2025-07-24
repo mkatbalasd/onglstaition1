@@ -7,7 +7,7 @@ async function checkUniqueIdentity(req, res, next) {
       return res.status(400).json({ error: 'identityNumber is required' });
     }
     const [rows] = await pool.query(
-      'SELECT COUNT(*) as count FROM driver WHERE identityNumber = ?',
+      'SELECT COUNT(*) as count FROM OPC_Driver WHERE IdentityNumber = ?',
       [identityNumber]
     );
     if (rows[0].count > 0) {

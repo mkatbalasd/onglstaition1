@@ -1,27 +1,27 @@
 const pool = require('../db');
 
 async function getAll() {
-  const [rows] = await pool.query('SELECT * FROM color');
+  const [rows] = await pool.query('SELECT * FROM OPC_Color');
   return rows;
 }
 
 async function getById(id) {
-  const [rows] = await pool.query('SELECT * FROM color WHERE id = ?', [id]);
+  const [rows] = await pool.query('SELECT * FROM OPC_Color WHERE ColorID = ?', [id]);
   return rows[0];
 }
 
 async function create(data) {
-  const [result] = await pool.query('INSERT INTO color SET ?', [data]);
+  const [result] = await pool.query('INSERT INTO OPC_Color SET ?', [data]);
   return getById(result.insertId);
 }
 
 async function update(id, data) {
-  await pool.query('UPDATE color SET ? WHERE id = ?', [data, id]);
+  await pool.query('UPDATE OPC_Color SET ? WHERE ColorID = ?', [data, id]);
   return getById(id);
 }
 
 async function remove(id) {
-  await pool.query('DELETE FROM color WHERE id = ?', [id]);
+  await pool.query('DELETE FROM OPC_Color WHERE ColorID = ?', [id]);
 }
 
 module.exports = { getAll, getById, create, update, remove };
