@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg p-2">
+  <div class="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg p-3">
     <table
       v-if="items.length"
       class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-xs sm:text-sm ltr:text-left rtl:text-right"
@@ -9,7 +9,7 @@
           <th
             v-for="col in columns"
             :key="col.key"
-            class="px-2 py-1 sm:px-3 sm:py-2 ltr:text-left rtl:text-right"
+            class="px-3 py-2 sm:px-4 sm:py-3 ltr:text-left rtl:text-right"
           >
             {{ col.label }}
           </th>
@@ -24,7 +24,7 @@
           <td
             v-for="col in columns"
             :key="col.key"
-            class="px-2 py-1 sm:px-3 sm:py-2 ltr:text-left rtl:text-right"
+            class="px-3 py-2 sm:px-4 sm:py-3 ltr:text-left rtl:text-right"
           >
             {{ item[col.key] }}
           </td>
