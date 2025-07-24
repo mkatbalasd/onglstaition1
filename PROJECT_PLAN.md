@@ -17,8 +17,10 @@
 
 ### 1. Environment Setup and Repository Initialization
 - [ ] Initialize git repository and project structure.
-- [ ] Configure Node.js/Express environment.
-- [ ] Setup MySQL database.
+- [ ] Setup directories (`backend/`, `frontend/`, `database/`).
+- [ ] Initialize Node.js project (`npm init`).
+- [ ] Build basic Express server.
+- [ ] Setup MySQL database and connection.
 - [ ] Define environment variables and configuration files.
 
 ### 2. Backend API (CRUD routes per table, card-number generation logic)
@@ -30,6 +32,8 @@
 
 ### 3. Frontend Scaffolding with Vue Router, Pinia, Axios service layer
 - [ ] Scaffold Vue 3 project with Vue Router.
+- [ ] Install TailwindCSS and configure.
+- [ ] Install Headless UI.
 - [ ] Configure Pinia for state management.
 - [ ] Implement Axios-based service layer for API communication.
 
@@ -37,25 +41,36 @@
 - [ ] Integrate Tailwind CSS into Vue project.
 - [ ] Configure RTL (right-to-left) support.
 - [ ] Use Headless UI components for accessibility.
+- [ ] Develop navbar component with RTL support.
+- [ ] Build data tables with sorting and pagination.
+- [ ] Create modal dialogs using Headless UI.
 
 ### 5. Feature Implementations
 - [ ] Driver management and profile pages.
-- [ ] Driver card creation and renewal workflows.
+- [ ] Implement driver card workflow (facility check → driver check → card creation).
 - [ ] Vehicle management pages.
 - [ ] Facilities management pages.
 - [ ] General card management interface.
+- [ ] Advanced search, filtering, and pagination.
 
 ### 6. Global Settings and Supporting Tables
 - [ ] Manage brands, models, and colors.
 - [ ] Manage license types and suppliers.
+- [ ] Create global settings pages for:
+  - [ ] Brands
+  - [ ] Models
+  - [ ] Colors
+  - [ ] License types
+  - [ ] Suppliers
 - [ ] Create utilities for global settings management.
 
 ### 7. Testing and Deployment
 - [ ] Write unit and integration tests.
 - [ ] Perform end-to-end testing.
+- [ ] Add project documentation.
 - [ ] Configure CI/CD pipeline for deployment.
+- [ ] Prepare deployment steps.
 
 ## Task Tracking
 
 Update each task checkbox to `[x]` once completed to keep the plan current.
-
