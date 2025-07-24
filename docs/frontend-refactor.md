@@ -16,7 +16,7 @@ This document summarizes the structure of the Vue 3 frontend and how to work wit
 - Service layer built on **Axios** for API requests (`src/services/axios.js`).
 - Styling with **Tailwind CSS**, including dark mode and RTL support.
 - Modal forms implemented with **Headless UI** dialogs.
-- Pagination logic in list views (e.g. `DriverCards.vue`).
+- Pagination logic in list views (e.g. `DriverCardsPage.vue`).
 - Drafts saved to **localStorage** so forms persist between sessions.
 - Toast **notifications** for success and error messages.
 

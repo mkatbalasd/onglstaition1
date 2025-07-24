@@ -7,56 +7,24 @@ const routes = [
   },
   {
     path: '/driver-cards',
-    component: () => import('./views/DriverCards.vue')
-  },
-  {
-    path: '/driver-cards/new',
-    component: () => import('./views/DriverCardsNew.vue')
-  },
-  {
-    path: '/driver-cards/new/:facilityId/driver',
-    component: () => import('./views/DriverCardsDriver.vue')
-  },
-  {
-    path: '/driver-cards/print/:token',
-    component: () => import('./views/DriverCardsPrint.vue')
+    component: () => import('./views/DriverCardsPage.vue')
   },
   {
     path: '/cards',
-    component: () => import('./views/Cards.vue')
-  },
-  {
-    path: '/cards/new',
-    component: () => import('./views/CardFormPage.vue')
-  },
-  {
-    path: '/cards/:id/edit',
-    component: () => import('./views/CardFormPage.vue')
+    component: () => import('./views/CardsPage.vue')
   },
   {
     path: '/facilities',
-    component: () => import('./views/Facilities.vue')
-  },
-  {
-    path: "/facilities/new",
-    component: () => import("./views/FacilitiesNew.vue")
+    component: () => import('./views/FacilitiesPage.vue')
   },
   {
     path: '/drivers',
-    component: () => import('./views/Drivers.vue')
-  },
-  {
-    path: "/drivers/new",
-    component: () => import("./views/DriversNew.vue")
+    component: () => import('./views/DriversPage.vue')
   },
   {
     path: '/vehicles',
-    component: () => import('./views/Vehicles.vue')
-  },
-  {
-    path: "/vehicles/new",
-    component: () => import("./views/VehiclesNew.vue")
-  },
+    component: () => import('./views/VehiclesPage.vue')
+  }
 ]
 
 const router = createRouter({

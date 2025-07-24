@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Skeleton from '@/components/Skeleton.vue'
-import api from '@/services/axios'
+import { getCards } from '@/api/cards'
 import { useNotificationStore } from '@/stores/notifications'
 
 const cards = ref([])
@@ -17,8 +17,8 @@ const columns = [
 
 onMounted(async () => {
   try {
-    const { data } = await api.get('/cards')
-    cards.value = data
+    const data = await getCards()
+    if (data) cards.value = data
   } catch (err) {
     notificationStore.pushError('❌ حدث خطأ أثناء التحميل')
   } finally {
