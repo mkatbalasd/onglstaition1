@@ -60,3 +60,6 @@ VITE_BASE_PATH=/nagl/app/
 
 `VITE_BASE_PATH` controls the subdirectory where the compiled assets are
 served. It defaults to `/nagl/app/` which matches the Express configuration.
+
+For an overview of the folder structure and available features see
+[`docs/frontend-refactor.md`](../docs/frontend-refactor.md).
