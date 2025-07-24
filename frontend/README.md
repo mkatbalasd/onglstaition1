@@ -20,6 +20,13 @@ Start the dev server with hot reload:
 npm run dev
 ```
 
+If your backend runs on a different base path you can override the API URL
+for the dev server using the `VITE_API_BASE` environment variable:
+
+```sh
+VITE_API_BASE=/nagl/api npm run dev
+```
+
 ### Build for production
 
 Create an optimized build:
