@@ -6,10 +6,11 @@ async function generateCardNumber(prefix) {
   while (!unique) {
     const random = Math.floor(100000 + Math.random() * 900000); // six digits
     cardNumber = `${prefix}${random}`;
-    const [rows] = await pool.query(
-      'SELECT COUNT(*) as count FROM OPC_Card WHERE CardNumber = ?',
-      [cardNumber]
-    );
+
+    // Ensure the generated number is not already present in OPC_Card
+    const query =
+      'SELECT COUNT(*) AS count FROM OPC_Card WHERE CardNumber = ?';
+    const [rows] = await pool.query(query, [cardNumber]);
     if (rows[0].count === 0) {
       unique = true;
     }
