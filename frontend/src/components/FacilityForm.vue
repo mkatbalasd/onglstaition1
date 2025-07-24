@@ -1,8 +1,8 @@
 <template>
   <TransitionRoot appear :show="modelValue" as="template">
     <Dialog as="div" class="fixed inset-0 z-10 overflow-y-auto" @close="close">
-      <div class="flex items-center justify-center min-h-screen p-4">
-        <DialogPanel class="bg-white dark:bg-gray-900 rounded shadow p-6 w-full max-w-md">
+      <div class="flex items-center justify-center min-h-screen p-4 sm:p-6">
+        <DialogPanel class="bg-white dark:bg-gray-900 rounded shadow p-6 w-full max-w-md sm:max-w-lg mx-2">
           <DialogTitle class="text-lg font-medium mb-4">New Facility</DialogTitle>
           <form @submit.prevent="submit" class="space-y-4">
             <div>
