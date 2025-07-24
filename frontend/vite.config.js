@@ -16,4 +16,9 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      '/nagl/api': 'http://localhost:3002'
+    }
+  }
 })
