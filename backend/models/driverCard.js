@@ -1,27 +1,27 @@
 const pool = require('../db');
 
 async function getAll() {
-  const [rows] = await pool.query('SELECT * FROM driverCard');
+  const [rows] = await pool.query('SELECT * FROM OPC_DriverCard');
   return rows;
 }
 
 async function getById(id) {
-  const [rows] = await pool.query('SELECT * FROM driverCard WHERE id = ?', [id]);
+  const [rows] = await pool.query('SELECT * FROM OPC_DriverCard WHERE DriverCardID = ?', [id]);
   return rows[0];
 }
 
 async function create(data) {
-  const [result] = await pool.query('INSERT INTO driverCard SET ?', [data]);
+  const [result] = await pool.query('INSERT INTO OPC_DriverCard SET ?', [data]);
   return getById(result.insertId);
 }
 
 async function update(id, data) {
-  await pool.query('UPDATE driverCard SET ? WHERE id = ?', [data, id]);
+  await pool.query('UPDATE OPC_DriverCard SET ? WHERE DriverCardID = ?', [data, id]);
   return getById(id);
 }
 
 async function remove(id) {
-  await pool.query('DELETE FROM driverCard WHERE id = ?', [id]);
+  await pool.query('DELETE FROM OPC_DriverCard WHERE DriverCardID = ?', [id]);
 }
 
 module.exports = { getAll, getById, create, update, remove };

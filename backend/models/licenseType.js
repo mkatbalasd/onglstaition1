@@ -1,27 +1,27 @@
 const pool = require('../db');
 
 async function getAll() {
-  const [rows] = await pool.query('SELECT * FROM licenseType');
+  const [rows] = await pool.query('SELECT * FROM OPC_LicenseType');
   return rows;
 }
 
 async function getById(id) {
-  const [rows] = await pool.query('SELECT * FROM licenseType WHERE id = ?', [id]);
+  const [rows] = await pool.query('SELECT * FROM OPC_LicenseType WHERE LicenseTypeID = ?', [id]);
   return rows[0];
 }
 
 async function create(data) {
-  const [result] = await pool.query('INSERT INTO licenseType SET ?', [data]);
+  const [result] = await pool.query('INSERT INTO OPC_LicenseType SET ?', [data]);
   return getById(result.insertId);
 }
 
 async function update(id, data) {
-  await pool.query('UPDATE licenseType SET ? WHERE id = ?', [data, id]);
+  await pool.query('UPDATE OPC_LicenseType SET ? WHERE LicenseTypeID = ?', [data, id]);
   return getById(id);
 }
 
 async function remove(id) {
-  await pool.query('DELETE FROM licenseType WHERE id = ?', [id]);
+  await pool.query('DELETE FROM OPC_LicenseType WHERE LicenseTypeID = ?', [id]);
 }
 
 module.exports = { getAll, getById, create, update, remove };
