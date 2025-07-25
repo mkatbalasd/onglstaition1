@@ -22,11 +22,11 @@ npm install
 npm run dev
 ```
 
-The dev server proxies API requests under `/nagl/api` to the backend. Create
+The dev server proxies API requests under `/api` to the backend. Create
 `.env.development` with the following value so Axios points to the same path:
 
 ```bash
-VITE_API_BASE=/nagl/api
+VITE_API_BASE=/api
 ```
 
 Start the backend separately (e.g. `npm run dev` inside the `backend` directory)
@@ -38,12 +38,11 @@ and ensure it listens on `http://localhost:3002`.
 npm run build
 ```
 
-### Build for Deployment at `/nagl/`
+### Build for Deployment
 
-To deploy the frontend under the `/nagl/` path, build with the API base set to `/nagl/api`:
+By default the built files expect the API to be served under `/api`. If your backend
+is hosted elsewhere, set `VITE_API_BASE` accordingly during the build:
 
 ```bash
-VITE_API_BASE=/nagl/api npm run build
+VITE_API_BASE=/api npm run build
 ```
-
-Ensure the backend is accessible at `/nagl/api` on your server (via server configuration or a proxy).
