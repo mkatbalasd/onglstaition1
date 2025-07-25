@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
+  { path: '/', component: () => import('../views/Dashboard.vue') },
   { path: '/drivers', component: () => import('../views/Drivers.vue') },
   { path: '/driver-cards', component: () => import('../views/DriverCards.vue') },
   { path: '/vehicles', component: () => import('../views/Vehicles.vue') },
