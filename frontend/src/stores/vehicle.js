@@ -10,13 +10,23 @@ export const useVehicleStore = defineStore('vehicle', {
     page: 1,
     limit: 10,
     total: 0,
+    brandFilter: '',
+    modelFilter: '',
+    colorFilter: '',
+    facilityFilter: '',
   }),
   actions: {
     async fetch(page = this.page) {
       this.loading = true
       this.error = null
       try {
-        const { data } = await vehicleApi.getAll()
+        const { data } = await vehicleApi.getAll({
+          page,
+          brand: this.brandFilter || undefined,
+          model: this.modelFilter || undefined,
+          color: this.colorFilter || undefined,
+          facility: this.facilityFilter || undefined,
+        })
         this.allItems = data
         this.total = data.length
         this.page = page
@@ -74,6 +84,22 @@ export const useVehicleStore = defineStore('vehicle', {
     setLimit(limit) {
       this.limit = limit
       this.fetch(this.page)
+    },
+    setBrandFilter(val) {
+      this.brandFilter = val
+      this.setPage(1)
+    },
+    setModelFilter(val) {
+      this.modelFilter = val
+      this.setPage(1)
+    },
+    setColorFilter(val) {
+      this.colorFilter = val
+      this.setPage(1)
+    },
+    setFacilityFilter(val) {
+      this.facilityFilter = val
+      this.setPage(1)
     },
   },
 })

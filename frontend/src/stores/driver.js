@@ -10,13 +10,19 @@ export const useDriverStore = defineStore('driver', {
     page: 1,
     limit: 10,
     total: 0,
+    search: '',
+    facilityFilter: '',
   }),
   actions: {
     async fetch(page = this.page) {
       this.loading = true
       this.error = null
       try {
-        const { data } = await driverApi.getAll()
+        const { data } = await driverApi.getAll({
+          page,
+          search: this.search || undefined,
+          facility: this.facilityFilter || undefined,
+        })
         this.allItems = data
         this.total = data.length
         this.page = page
@@ -74,6 +80,14 @@ export const useDriverStore = defineStore('driver', {
     setLimit(limit) {
       this.limit = limit
       this.fetch(this.page)
+    },
+    setSearch(val) {
+      this.search = val
+      this.setPage(1)
+    },
+    setFacilityFilter(val) {
+      this.facilityFilter = val
+      this.setPage(1)
     },
   },
 })
