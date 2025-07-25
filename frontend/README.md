@@ -27,3 +27,13 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Build for Deployment at `/nagl/`
+
+To deploy the frontend under the `/nagl/` path, build with the API base set to `/nagl/api`:
+
+```bash
+VITE_API_BASE=/nagl/api npm run build
+```
+
+Ensure the backend is accessible at `/nagl/api` on your server (via server configuration or a proxy).
