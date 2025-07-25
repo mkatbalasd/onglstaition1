@@ -4,6 +4,7 @@ import vehicleApi from '@/api/vehicles'
 export const useVehicleStore = defineStore('vehicle', {
   state: () => ({
     items: [],
+    allItems: [],
     loading: false,
     error: null,
     page: 1,
@@ -16,6 +17,7 @@ export const useVehicleStore = defineStore('vehicle', {
       this.error = null
       try {
         const { data } = await vehicleApi.getAll()
+        this.allItems = data
         this.total = data.length
         this.page = page
         const start = (page - 1) * this.limit
