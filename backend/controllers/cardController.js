@@ -1,4 +1,5 @@
 const cardModel = require('../models/card');
+const generateCardNumber = require('../utils/generateCardNumber');
 
 async function getAll(req, res) {
   try {
@@ -46,4 +47,14 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { getAll, getById, create, update, remove };
+async function generateNumber(req, res) {
+  try {
+    const prefix = req.body?.prefix || '';
+    const cardNumber = await generateCardNumber(prefix);
+    res.json({ cardNumber });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+module.exports = { getAll, getById, create, update, remove, generateNumber };
