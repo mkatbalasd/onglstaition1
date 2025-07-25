@@ -137,12 +137,14 @@
     <main class="p-4 flex-grow">
       <RouterView />
     </main>
+    <Toast />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import Toast from '@/components/Toast.vue'
 
 const open = ref(false)
 </script>

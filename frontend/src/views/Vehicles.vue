@@ -80,14 +80,14 @@ import { useBrandStore } from '@/stores/brand'
 import { useModelStore } from '@/stores/model'
 import { useColorStore } from '@/stores/color'
 import { useFacilityStore } from '@/stores/facility'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const vehicleStore = useVehicleStore()
 const brandStore = useBrandStore()
 const modelStore = useModelStore()
 const colorStore = useColorStore()
 const facilityStore = useFacilityStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 vehicleStore.fetch()
 brandStore.fetch()
@@ -188,9 +188,9 @@ function openForm(vehicle = null) {
 async function deleteVehicle(id) {
   try {
     await vehicleStore.remove(id)
-    toast.success('Vehicle deleted')
+    notify.success('Vehicle deleted')
   } catch (err) {
-    toast.error('Failed to delete vehicle')
+    notify.error('Failed to delete vehicle')
   }
 }
 </script>

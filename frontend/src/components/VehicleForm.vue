@@ -46,7 +46,7 @@ import { useBrandStore } from '@/stores/brand'
 import { useModelStore } from '@/stores/model'
 import { useColorStore } from '@/stores/color'
 import { useFacilityStore } from '@/stores/facility'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -64,7 +64,7 @@ const brandStore = useBrandStore()
 const modelStore = useModelStore()
 const colorStore = useColorStore()
 const facilityStore = useFacilityStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 const brands = computed(() => brandStore.items)
 const models = computed(() => modelStore.items)
@@ -107,11 +107,11 @@ async function handleSubmit() {
     } else {
       await vehicleStore.create({ ...form.value })
     }
-    toast.success('Vehicle saved successfully')
+    notify.success('Vehicle saved successfully')
     visible.value = false
     await vehicleStore.fetch(vehicleStore.page)
   } catch (err) {
-    toast.error('Failed to save vehicle')
+    notify.error('Failed to save vehicle')
   }
 }
 </script>

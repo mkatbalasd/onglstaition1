@@ -48,7 +48,7 @@ import { useVehicleStore } from '@/stores/vehicle'
 import { useDriverStore } from '@/stores/driver'
 import { useFacilityStore } from '@/stores/facility'
 import { useSupplierStore } from '@/stores/supplier'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -66,7 +66,7 @@ const vehicleStore = useVehicleStore()
 const driverStore = useDriverStore()
 const facilityStore = useFacilityStore()
 const supplierStore = useSupplierStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 const vehicles = computed(() => vehicleStore.allItems || vehicleStore.items)
 const drivers = computed(() => driverStore.items)
@@ -138,10 +138,10 @@ async function handleSubmit() {
       await cardStore.create({ ...form.value })
     }
     localStorage.removeItem('draftCard')
-    toast.success('Card saved')
+    notify.success('Card saved')
     visible.value = false
   } catch (err) {
-    toast.error('Failed to save')
+    notify.error('Failed to save')
   }
 }
 </script>
