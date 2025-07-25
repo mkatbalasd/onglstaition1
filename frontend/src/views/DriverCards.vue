@@ -57,13 +57,13 @@ import { useDriverCardStore } from '@/stores/driverCard'
 import { useDriverStore } from '@/stores/driver'
 import { useFacilityStore } from '@/stores/facility'
 import { useSupplierStore } from '@/stores/supplier'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const driverCardStore = useDriverCardStore()
 const driverStore = useDriverStore()
 const facilityStore = useFacilityStore()
 const supplierStore = useSupplierStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 driverCardStore.fetch()
 driverStore.fetch()
@@ -113,9 +113,9 @@ function openForm(card = null) {
 async function deleteCard(id) {
   try {
     await driverCardStore.remove(id)
-    toast.success('Card deleted')
+    notify.success('Card deleted')
   } catch {
-    toast.error('Failed to delete')
+    notify.error('Failed to delete')
   }
 }
 </script>

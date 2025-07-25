@@ -48,7 +48,7 @@ import driverCardApi from '@/api/driverCards'
 import cardApi from '@/api/cards'
 import { useSupplierStore } from '@/stores/supplier'
 import { useDriverCardStore } from '@/stores/driverCard'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -63,7 +63,7 @@ const visible = computed({
 
 const supplierStore = useSupplierStore()
 const driverCardStore = useDriverCardStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 const form = ref({
   FacilityID: '',
@@ -159,10 +159,10 @@ async function handleSubmit() {
       await driverCardStore.create({ ...form.value })
     }
     localStorage.removeItem('draftDriverCard')
-    toast.success('Driver card saved')
+    notify.success('Driver card saved')
     visible.value = false
   } catch (err) {
-    toast.error('Failed to save')
+    notify.error('Failed to save')
   }
 }
 </script>

@@ -34,7 +34,7 @@ import { ref, computed, onMounted } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import Modal from '@/components/Modal.vue'
 import FormInput from '@/components/FormInput.vue'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const props = defineProps({
   store: { type: Object, required: true },
@@ -43,7 +43,7 @@ const props = defineProps({
   itemLabel: { type: String, required: true },
 })
 
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 onMounted(() => {
   if (props.store.items.length === 0) props.store.fetch()
@@ -80,19 +80,19 @@ async function saveItem() {
     } else {
       await props.store.create({ ...form.value })
     }
-    toast.success(`${props.itemLabel} saved`)
+    notify.success(`${props.itemLabel} saved`)
     showForm.value = false
   } catch {
-    toast.error(`Failed to save ${props.itemLabel.toLowerCase()}`)
+    notify.error(`Failed to save ${props.itemLabel.toLowerCase()}`)
   }
 }
 
 async function deleteItem(id) {
   try {
     await props.store.remove(id)
-    toast.success(`${props.itemLabel} deleted`)
+    notify.success(`${props.itemLabel} deleted`)
   } catch {
-    toast.error(`Failed to delete ${props.itemLabel.toLowerCase()}`)
+    notify.error(`Failed to delete ${props.itemLabel.toLowerCase()}`)
   }
 }
 </script>

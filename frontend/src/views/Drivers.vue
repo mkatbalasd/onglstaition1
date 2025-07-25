@@ -58,11 +58,11 @@ import FormSelect from '@/components/FormSelect.vue'
 import DriverForm from '@/components/DriverForm.vue'
 import { useDriverStore } from '@/stores/driver'
 import { useFacilityStore } from '@/stores/facility'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const driverStore = useDriverStore()
 const facilityStore = useFacilityStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 driverStore.fetch()
 facilityStore.fetch()
@@ -113,9 +113,9 @@ function openForm(driver = null) {
 async function deleteDriver(id) {
   try {
     await driverStore.remove(id)
-    toast.success('Driver deleted')
+    notify.success('Driver deleted')
   } catch (err) {
-    toast.error('Failed to delete driver')
+    notify.error('Failed to delete driver')
   }
 }
 </script>

@@ -30,7 +30,7 @@ import FormInput from '@/components/FormInput.vue'
 import FormSelect from '@/components/FormSelect.vue'
 import { useDriverStore } from '@/stores/driver'
 import { useFacilityStore } from '@/stores/facility'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -45,7 +45,7 @@ const visible = computed({
 
 const driverStore = useDriverStore()
 const facilityStore = useFacilityStore()
-const toast = useToastStore()
+const notify = useNotificationStore()
 
 const facilities = computed(() => facilityStore.items)
 
@@ -90,7 +90,7 @@ async function handleSubmit() {
     } else {
       await driverStore.create({ ...form.value })
     }
-    toast.success('Driver saved successfully')
+    notify.success('Driver saved successfully')
     visible.value = false
     await driverStore.fetch(driverStore.page)
   } catch (err) {
@@ -98,7 +98,7 @@ async function handleSubmit() {
     if (message.includes('IdentityNumber')) {
       errors.value.IdentityNumber = message
     } else {
-      toast.error(message)
+      notify.error(message)
     }
   }
 }

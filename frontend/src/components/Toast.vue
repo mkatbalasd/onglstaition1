@@ -1,19 +1,23 @@
 <template>
-  <transition name="fade">
-    <div v-if="visible" :class="['fixed top-5 right-5 z-50 px-4 py-2 rounded shadow text-white', typeClass]">
-      {{ message }}
-    </div>
-  </transition>
+  <div class="fixed top-5 right-5 z-50 space-y-2">
+    <transition-group name="fade">
+      <div
+        v-for="n in notifications"
+        :key="n.id"
+        :class="['px-4 py-2 rounded shadow text-white', n.type === 'error' ? 'bg-red-600' : 'bg-green-600']"
+      >
+        {{ n.message }}
+      </div>
+    </transition-group>
+  </div>
 </template>
 
 <script setup>
 import { computed } from 'vue'
-import { useToastStore } from '@/stores/toast'
+import { useNotificationStore } from '@/stores/notification'
 
-const store = useToastStore()
-const visible = computed(() => store.visible)
-const message = computed(() => store.message)
-const typeClass = computed(() => (store.type === 'error' ? 'bg-red-600' : 'bg-green-600'))
+const store = useNotificationStore()
+const notifications = computed(() => store.notifications)
 </script>
 
 <style scoped>
