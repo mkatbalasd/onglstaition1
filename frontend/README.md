@@ -22,6 +22,16 @@ npm install
 npm run dev
 ```
 
+The dev server proxies API requests under `/nagl/api` to the backend. Create
+`.env.development` with the following value so Axios points to the same path:
+
+```bash
+VITE_API_BASE=/nagl/api
+```
+
+Start the backend separately (e.g. `npm run dev` inside the `backend` directory)
+and ensure it listens on `http://localhost:3002`.
+
 ### Compile and Minify for Production
 
 ```sh
