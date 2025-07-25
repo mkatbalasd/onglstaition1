@@ -28,18 +28,30 @@
       </tr>
     </DataTable>
 
-    <div class="flex justify-between items-center mt-4">
-      <button class="px-3 py-1" :disabled="page === 1" @click="page--">Prev</button>
-      <span>Page {{ page }} of {{ totalPages }}</span>
-      <button class="px-3 py-1" :disabled="page >= totalPages" @click="page++">Next</button>
-    </div>
+    <nav class="flex items-center justify-between mt-4" aria-label="Pagination">
+      <button
+        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 disabled:opacity-50"
+        :disabled="page === 1"
+        @click="prevPage"
+      >
+        Previous
+      </button>
+      <span class="px-4 py-2 text-sm text-gray-700">Page {{ page }} of {{ totalPages }}</span>
+      <button
+        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 disabled:opacity-50"
+        :disabled="page >= totalPages"
+        @click="nextPage"
+      >
+        Next
+      </button>
+    </nav>
 
     <DriverForm v-model="showForm" :driver="selectedDriver" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { computed, watch, ref } from 'vue'
 import DataTable from '@/components/DataTable.vue'
 import FormInput from '@/components/FormInput.vue'
 import FormSelect from '@/components/FormSelect.vue'
@@ -55,47 +67,42 @@ const toast = useToastStore()
 driverStore.fetch()
 facilityStore.fetch()
 
-const search = ref('')
-const facilityFilter = ref('')
+const search = computed({
+  get: () => driverStore.search,
+  set: val => driverStore.setSearch(val),
+})
+
+const facilityFilter = computed({
+  get: () => driverStore.facilityFilter,
+  set: val => driverStore.setFacilityFilter(val),
+})
 const showForm = ref(false)
 const selectedDriver = ref(null)
-const page = ref(1)
-const limit = ref(driverStore.limit)
-
-watch([search, facilityFilter], () => {
-  page.value = 1
+const page = computed({
+  get: () => driverStore.page,
+  set: val => driverStore.setPage(val),
 })
+const limit = computed(() => driverStore.limit)
 
 const facilities = computed(() => facilityStore.items)
 
-const filteredDrivers = computed(() => {
-  let data = driverStore.allItems
-  if (facilityFilter.value) {
-    const id = Number(facilityFilter.value)
-    data = data.filter(d => d.FacilityID === id)
-  }
-  if (search.value) {
-    const s = search.value.toLowerCase()
-    data = data.filter(
-      d =>
-        d.FirstName.toLowerCase().includes(s) ||
-        d.LastName.toLowerCase().includes(s) ||
-        String(d.IdentityNumber).includes(search.value)
-    )
-  }
-  return data
-})
+watch(page, () => driverStore.fetch(page.value))
 
-const totalPages = computed(() => Math.ceil(filteredDrivers.value.length / limit.value) || 1)
+const totalPages = computed(() => Math.ceil(driverStore.total / limit.value) || 1)
 
-const paginatedDrivers = computed(() => {
-  const start = (page.value - 1) * limit.value
-  return filteredDrivers.value.slice(start, start + limit.value)
-})
+const paginatedDrivers = computed(() => driverStore.items)
 
 function facilityName(id) {
   const f = facilityStore.items.find(f => f.FacilityID === id)
   return f ? f.Name : ''
+}
+
+function prevPage() {
+  if (page.value > 1) page.value--
+}
+
+function nextPage() {
+  if (page.value < totalPages.value) page.value++
 }
 
 function openForm(driver = null) {

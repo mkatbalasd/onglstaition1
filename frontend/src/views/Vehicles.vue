@@ -48,11 +48,23 @@
       </tr>
     </DataTable>
 
-    <div class="flex justify-between items-center mt-4">
-      <button class="px-3 py-1" :disabled="page === 1" @click="page--">Prev</button>
-      <span>Page {{ page }} of {{ totalPages }}</span>
-      <button class="px-3 py-1" :disabled="page >= totalPages" @click="page++">Next</button>
-    </div>
+    <nav class="flex items-center justify-between mt-4" aria-label="Pagination">
+      <button
+        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 disabled:opacity-50"
+        :disabled="page === 1"
+        @click="prevPage"
+      >
+        Previous
+      </button>
+      <span class="px-4 py-2 text-sm text-gray-700">Page {{ page }} of {{ totalPages }}</span>
+      <button
+        class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 disabled:opacity-50"
+        :disabled="page >= totalPages"
+        @click="nextPage"
+      >
+        Next
+      </button>
+    </nav>
 
     <VehicleForm v-model="showForm" :vehicle="selectedVehicle" />
   </div>
@@ -83,19 +95,32 @@ modelStore.fetch()
 colorStore.fetch()
 facilityStore.fetch()
 
-const brandFilter = ref('')
-const modelFilter = ref('')
-const colorFilter = ref('')
-const facilityFilter = ref('')
+const brandFilter = computed({
+  get: () => vehicleStore.brandFilter,
+  set: val => vehicleStore.setBrandFilter(val),
+})
+const modelFilter = computed({
+  get: () => vehicleStore.modelFilter,
+  set: val => vehicleStore.setModelFilter(val),
+})
+const colorFilter = computed({
+  get: () => vehicleStore.colorFilter,
+  set: val => vehicleStore.setColorFilter(val),
+})
+const facilityFilter = computed({
+  get: () => vehicleStore.facilityFilter,
+  set: val => vehicleStore.setFacilityFilter(val),
+})
 
 const showForm = ref(false)
 const selectedVehicle = ref(null)
-const page = ref(1)
-const limit = ref(vehicleStore.limit)
-
-watch([brandFilter, modelFilter, colorFilter, facilityFilter], () => {
-  page.value = 1
+const page = computed({
+  get: () => vehicleStore.page,
+  set: val => vehicleStore.setPage(val),
 })
+const limit = computed(() => vehicleStore.limit)
+
+watch(page, () => vehicleStore.fetch(page.value))
 
 const brands = computed(() => brandStore.items)
 const models = computed(() => modelStore.items)
@@ -123,12 +148,9 @@ const filteredVehicles = computed(() => {
   return data
 })
 
-const totalPages = computed(() => Math.ceil(filteredVehicles.value.length / limit.value) || 1)
+const totalPages = computed(() => Math.ceil(vehicleStore.total / limit.value) || 1)
 
-const paginatedVehicles = computed(() => {
-  const start = (page.value - 1) * limit.value
-  return filteredVehicles.value.slice(start, start + limit.value)
-})
+const paginatedVehicles = computed(() => vehicleStore.items)
 
 function brandName(id) {
   const b = brandStore.items.find(b => b.BrandID === id)
@@ -148,6 +170,14 @@ function colorName(id) {
 function facilityName(id) {
   const f = facilityStore.items.find(f => f.FacilityID === id)
   return f ? f.Name : ''
+}
+
+function prevPage() {
+  if (page.value > 1) page.value--
+}
+
+function nextPage() {
+  if (page.value < totalPages.value) page.value++
 }
 
 function openForm(vehicle = null) {
