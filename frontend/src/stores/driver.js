@@ -4,6 +4,7 @@ import driverApi from '@/api/drivers'
 export const useDriverStore = defineStore('driver', {
   state: () => ({
     items: [],
+    allItems: [],
     loading: false,
     error: null,
     page: 1,
@@ -16,6 +17,7 @@ export const useDriverStore = defineStore('driver', {
       this.error = null
       try {
         const { data } = await driverApi.getAll()
+        this.allItems = data
         this.total = data.length
         this.page = page
         const start = (page - 1) * this.limit
