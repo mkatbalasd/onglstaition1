@@ -1,10 +1,10 @@
 <script setup>
-import MainLayout from './layouts/MainLayout.vue'
+import AdminLayout from './layouts/AdminLayout.vue'
 import Toast from './components/Toast.vue'
 </script>
 
 <template>
-  <MainLayout />
+  <AdminLayout />
   <Toast />
 </template>
 

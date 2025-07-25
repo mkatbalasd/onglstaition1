@@ -6,7 +6,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/nagl/',
+  base: '/',
   plugins: [
     vue(),
     vueDevTools(),
@@ -20,8 +20,8 @@ export default defineConfig({
   // frontend can make calls without worrying about CORS or absolute URLs.
   server: {
     proxy: {
-      '/nagl/api': {
-        target: 'http://localhost:3002',
+      '/api': {
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

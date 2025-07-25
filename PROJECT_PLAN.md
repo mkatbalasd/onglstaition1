@@ -31,19 +31,19 @@
 - [ ] Implement card-number generation logic.
 
 ### 3. Frontend Scaffolding with Vue Router, Pinia, Axios service layer
-- [ ] Scaffold Vue 3 project with Vue Router.
-- [ ] Install TailwindCSS and configure.
-- [ ] Install Headless UI.
-- [ ] Configure Pinia for state management.
-- [ ] Implement Axios-based service layer for API communication.
+- [x] Scaffold Vue 3 project with Vue Router.
+- [x] Install TailwindCSS and configure.
+- [x] Install Headless UI.
+- [x] Configure Pinia for state management.
+- [x] Implement Axios-based service layer for API communication.
 
 ### 4. UI/UX Design using TailwindCSS with RTL support
-- [ ] Integrate Tailwind CSS into Vue project.
-- [ ] Configure RTL (right-to-left) support.
-- [ ] Use Headless UI components for accessibility.
-- [ ] Develop navbar component with RTL support.
+- [x] Integrate Tailwind CSS into Vue project.
+- [x] Configure RTL (right-to-left) support.
+- [x] Use Headless UI components for accessibility.
+- [x] Develop navbar component with RTL support.
 - [ ] Build data tables with sorting and pagination.
-- [ ] Create modal dialogs using Headless UI.
+- [x] Create modal dialogs using Headless UI.
 
 ### 5. Feature Implementations
 - [ ] Driver management and profile pages.
