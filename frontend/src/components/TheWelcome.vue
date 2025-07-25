@@ -5,8 +5,10 @@ import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
+import api from '@/services/axios'
 
-const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
+const openReadmeInEditor = () =>
+  api.get('/__open-in-editor?file=README.md', { baseURL: '' })
 </script>
 
 <template>
