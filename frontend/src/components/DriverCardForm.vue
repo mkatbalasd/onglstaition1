@@ -83,7 +83,7 @@ const suppliers = computed(() => supplierStore.items)
 
 onMounted(() => {
   if (supplierStore.items.length === 0) supplierStore.fetch()
-  const draft = localStorage.getItem('driverCardDraft')
+  const draft = localStorage.getItem('draftDriverCard')
   if (draft && !props.card) {
     const data = JSON.parse(draft)
     Object.assign(form.value, data.form)
@@ -109,7 +109,7 @@ watch(
   [form, step],
   () => {
     if (!props.card) {
-      localStorage.setItem('driverCardDraft', JSON.stringify({ form: form.value, step: step.value }))
+      localStorage.setItem('draftDriverCard', JSON.stringify({ form: form.value, step: step.value }))
     }
   },
   { deep: true }
@@ -158,7 +158,7 @@ async function handleSubmit() {
     } else {
       await driverCardStore.create({ ...form.value })
     }
-    localStorage.removeItem('driverCardDraft')
+    localStorage.removeItem('draftDriverCard')
     toast.success('Driver card saved')
     visible.value = false
   } catch (err) {
