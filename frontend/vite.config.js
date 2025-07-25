@@ -16,10 +16,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  // During development forward API requests to the backend server so the
+  // frontend can make calls without worrying about CORS or absolute URLs.
   server: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
+      '/nagl/api': {
+        target: 'http://localhost:3002',
         changeOrigin: true,
       },
     },
