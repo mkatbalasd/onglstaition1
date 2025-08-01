@@ -17,7 +17,8 @@ router.get('/driver-cards', asyncHandler(async (req, res) => {
   res.render('drivercards/index', {
     cards,
     title: 'بطاقات السائقين',
-    header: 'إدارة بطاقات السائقين'
+    header: 'إدارة بطاقات السائقين',
+    printUrl: process.env.PRINT_DRIVER_URL
   });
 }));
 
