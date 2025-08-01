@@ -27,8 +27,10 @@ pool.getConnection = async function (...args) {
   }
 };
 
-pool.getConnection()
-  .then((conn) => conn.release())
-  .catch((err) => console.error('Error acquiring initial connection:', err));
+if (process.env.NODE_ENV !== 'test') {
+  pool.getConnection()
+    .then((conn) => conn.release())
+    .catch((err) => console.error('Error acquiring initial connection:', err));
+}
 
 module.exports = pool;
