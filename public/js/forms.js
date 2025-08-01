@@ -63,7 +63,13 @@ $(function () {
       const dSel = $('select[name="DriverID"]');
       if (dSel.length) {
         dSel.empty();
-        data.forEach(d => dSel.append(`<option value="${d.DriverID}">${d.FirstName} ${d.LastName} - ${d.IdentityNumber || ''}</option>`));
+        data.forEach(d =>
+          dSel.append(`<option value="${d.DriverID}">${d.FirstName} ${d.LastName} - ${d.IdentityNumber || ''}</option>`)
+        );
+        const hidden = $('#driverHidden');
+        if (hidden.length && hidden.val()) {
+          dSel.val(hidden.val());
+        }
         dSel.trigger('change');
       }
     });
@@ -71,7 +77,13 @@ $(function () {
       const vSel = $('select[name="VehicleID"]');
       if (vSel.length) {
         vSel.empty();
-        data.forEach(v => vSel.append(`<option value="${v.ID}">${v.PlateNumber || v.SerialNumber}</option>`));
+        data.forEach(v =>
+          vSel.append(`<option value="${v.ID}">${v.PlateNumber || v.SerialNumber}</option>`)
+        );
+        const hidden = $('#vehicleHidden');
+        if (hidden.length && hidden.val()) {
+          vSel.val(hidden.val());
+        }
         vSel.trigger('change');
       }
     });
