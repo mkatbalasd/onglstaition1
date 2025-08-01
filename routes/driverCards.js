@@ -179,9 +179,13 @@ router.post('/driver-cards/:id/delete', asyncHandler(async (req, res) => {
 // Print driver card
 router.get('/driver-cards/print', (req, res) => {
   const { token } = req.query;
+  const printUrl = process.env.PRINT_DRIVER_URL;
+  if (!printUrl) {
+    return res.status(500).send('Print service URL not configured');
+  }
   res.render('drivercards/print', {
     token,
-    printUrl: process.env.PRINT_DRIVER_URL,
+    printUrl,
   });
 });
 
