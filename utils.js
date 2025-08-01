@@ -15,6 +15,10 @@ async function generateCardNumber(table, facilityId) {
   while (exists) {
     const random = Math.floor(100000 + Math.random() * 900000);
     cardNumber = `${prefix}${random}`;
+    const allowedTables = ['OPC_DriverCard', 'OPC_Card'];
+    if (!allowedTables.includes(table)) {
+      throw new Error('Invalid table name');
+    }
     const rowsCheck = await pool.query(
       `SELECT 1 FROM ${table} WHERE CardNumber = ? LIMIT 1`,
       [cardNumber]
