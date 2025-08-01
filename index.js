@@ -1,10 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
+const helmet = require('helmet');
+const compression = require('compression');
 require('dotenv').config();
 const { loadLicenseTypes } = require('./licenseCache');
 
 const app = express();
+app.disable('x-powered-by');
+app.use(helmet());
+app.use(compression());
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layout');
