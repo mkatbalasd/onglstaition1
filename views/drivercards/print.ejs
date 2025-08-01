@@ -5,7 +5,7 @@
 <title>طباعة بطاقة السائق</title>
 <script>
   window.addEventListener('DOMContentLoaded', () => {
-    window.open('https://s.mnaseb.com/h/OPcard/driver.php?token=<%= token %>', '_blank');
+    window.open('<%= printUrl %>?token=<%= token %>', '_blank');
     window.location.href = '/nagl/driver-cards';
   });
 </script>
