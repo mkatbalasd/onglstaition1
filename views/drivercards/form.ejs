@@ -1,7 +1,14 @@
 <div class="card card-form">
 <form method="POST" action="<%= card ? '/nagl/driver-cards/' + card.ID : '/nagl/driver-cards' %>">
   <h5 class="mb-3">معلومات البطاقة</h5>
-
+  <div class="mb-3">
+    <label class="form-label">تاريخ الإصدار</label>
+    <input type="text" name="IssueDate" class="form-control hijri-date" value="<%= card ? card.IssueDate : '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">تاريخ الانتهاء</label>
+    <input type="text" name="ExpirationDate" class="form-control hijri-date" value="<%= card ? card.ExpirationDate : '' %>">
+  </div>
   <div class="mb-3">
     <label class="form-label">نوع البطاقة</label>
     <input type="text" name="CardType" class="form-control" value="<%= card ? card.CardType : '' %>" required>
@@ -37,16 +44,6 @@
     </div>
   </div>
 
-  <h5 class="mt-4 mb-3">التواريخ والمورد</h5>
-
-  <div class="mb-3">
-    <label class="form-label">تاريخ الإصدار</label>
-    <input type="text" name="IssueDate" class="form-control hijri-date" value="<%= card ? card.IssueDate : '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ الانتهاء</label>
-    <input type="text" name="ExpirationDate" class="form-control hijri-date" value="<%= card ? card.ExpirationDate : '' %>">
-  </div>
   <div class="mb-3">
     <label class="form-label">المورد</label>
     <select name="Supplier" class="form-select select2">
