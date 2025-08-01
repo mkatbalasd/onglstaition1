@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../db');
 const { generateCardNumber } = require('../utils');
 const asyncHandler = require('../asyncHandler');
+const { getLicenseTypes } = require('../licenseCache');
 
 // List driver cards
 router.get('/driver-cards', asyncHandler(async (req, res) => {
@@ -101,9 +102,7 @@ router.get('/driver-cards/new/:facilityId/driver/:driverId', asyncHandler(async 
     'SELECT DriverID, FirstName, LastName FROM OPC_Driver WHERE DriverID = ?',
     [driverId]
   );
-  const licenseTypes = await pool.query(
-    'SELECT LicenseTypeNameAR FROM OPC_LicenseType'
-  );
+  const licenseTypes = await getLicenseTypes();
   const facility = facilities[0];
   const driver = drivers[0];
   res.render('drivercards/form', {
@@ -140,7 +139,7 @@ router.get('/driver-cards/:id/edit', asyncHandler(async (req, res) => {
   const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
   const suppliers = await pool.query('SELECT id, name FROM Supplier');
   const drivers = await pool.query('SELECT DriverID, FirstName, LastName FROM OPC_Driver');
-  const licenseTypes = await pool.query('SELECT LicenseTypeNameAR FROM OPC_LicenseType');
+  const licenseTypes = await getLicenseTypes();
   const card = cardRows[0];
   if (!card) return res.redirect('/nagl/driver-cards');
   res.render('drivercards/form', {

@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const expressLayouts = require('express-ejs-layouts');
 require('dotenv').config();
+const { loadLicenseTypes } = require('./licenseCache');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -15,6 +16,11 @@ const driversRouter = require('./routes/drivers');
 const vehiclesRouter = require('./routes/vehicles');
 const driverCardsRouter = require('./routes/driverCards');
 const cardsRouter = require('./routes/cards');
+
+// Preload license types into memory
+loadLicenseTypes().catch((err) => {
+  console.error('Could not preload license types:', err);
+});
 
 app.get('/nagl', (req, res) => {
   res.render('home', {

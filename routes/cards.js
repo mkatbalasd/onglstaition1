@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../db');
 const { generateCardNumber } = require('../utils');
 const asyncHandler = require('../asyncHandler');
+const { getLicenseTypes } = require('../licenseCache');
 
 // List cards
 router.get('/cards', asyncHandler(async (req, res) => {
@@ -21,7 +22,7 @@ router.get('/cards/new', asyncHandler(async (req, res) => {
   const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
   const suppliers = await pool.query('SELECT id, name FROM Supplier');
   const vehicles = await pool.query('SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle');
-  const licenseTypes = await pool.query('SELECT LicenseTypeNameAR FROM OPC_LicenseType');
+  const licenseTypes = await getLicenseTypes();
   res.render('cards/new', {
     facilities,
     suppliers,
@@ -53,7 +54,7 @@ router.get('/cards/:id/edit', asyncHandler(async (req, res) => {
   const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
   const suppliers = await pool.query('SELECT id, name FROM Supplier');
   const vehicles = await pool.query('SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle');
-  const licenseTypes = await pool.query('SELECT LicenseTypeNameAR FROM OPC_LicenseType');
+  const licenseTypes = await getLicenseTypes();
   res.render('cards/new', {
     facilities,
     suppliers,
