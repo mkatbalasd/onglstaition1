@@ -1,0 +1,8 @@
+<div class="card card-form">
+  <h5 class="mb-3">تفاصيل السائق</h5>
+  <div class="mb-2"><strong>الرقم:</strong> <%= driver.DriverID %></div>
+  <div class="mb-2"><strong>الاسم:</strong> <%= driver.FirstName %> <%= driver.LastName %></div>
+  <div class="mb-2"><strong>رقم الهوية:</strong> <%= driver.IdentityNumber || '' %></div>
+  <div class="mb-3"><strong>المنشأة:</strong> <%= driver.FacilityName || '' %></div>
+  <a href="/nagl/drivers" class="btn btn-secondary">رجوع</a>
+</div>
