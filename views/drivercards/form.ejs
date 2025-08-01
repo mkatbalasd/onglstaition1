@@ -17,7 +17,7 @@
   <div class="mb-3">
     <label class="form-label">المنشأة</label>
     <div class="input-group">
-      <select name="FacilityID" class="form-select select2" required <%= lockFacility ? 'disabled' : '' %>>
+      <select name="FacilityID" class="custom-select select2" required <%= lockFacility ? 'disabled' : '' %>>
         <% facilities.forEach(f => { %>
           <option value="<%= f.FacilityID %>" <%= (card && card.FacilityID === f.FacilityID) || (facility && facility.FacilityID === f.FacilityID) ? 'selected' : '' %>><%= f.Name %> - <%= f.IdentityNumber %> - <%= f.LicenseType || '' %></option>
         <% }) %>
@@ -32,7 +32,7 @@
   <div class="mb-3">
     <label class="form-label">السائق</label>
     <div class="input-group">
-      <select name="DriverID" class="form-select select2" required <%= lockDriver ? 'disabled' : '' %>>
+      <select name="DriverID" class="custom-select select2" required <%= lockDriver ? 'disabled' : '' %>>
         <% drivers.forEach(d => { %>
           <option value="<%= d.DriverID %>" <%= (card && card.DriverID === d.DriverID) || (driver && driver.DriverID === d.DriverID) ? 'selected' : '' %>><%= d.FirstName %> <%= d.LastName %> - <%= d.IdentityNumber || '' %></option>
         <% }) %>
@@ -47,7 +47,7 @@
 
   <div class="mb-3">
     <label class="form-label">المورد</label>
-    <select name="Supplier" class="form-select select2">
+    <select name="Supplier" class="custom-select select2">
       <% suppliers.forEach(s => { %>
         <option value="<%= s.id %>" <%= card && card.Supplier === s.id ? 'selected' : '' %>><%= s.name %></option>
       <% }) %>
