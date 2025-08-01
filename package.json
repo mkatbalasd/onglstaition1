@@ -16,12 +16,17 @@
     "body-parser": "^1.20.2",
     "bootstrap-hijri-datepicker": "^1.0.2",
     "compression": "^1.8.1",
+    "datatables.net": "^2.3.2",
+    "datatables.net-bs4": "^2.3.2",
+    "datatables.net-responsive": "^3.0.5",
+    "datatables.net-responsive-bs4": "^3.0.5",
     "dotenv": "^17.2.0",
     "ejs": "^3.1.9",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",
     "helmet": "^8.1.0",
-    "mariadb": "^3.4.4"
+    "mariadb": "^3.4.4",
+    "select2": "^4.1.0-rc.0"
   },
   "devDependencies": {
     "chai": "^5.2.1",
