@@ -1,9 +1,8 @@
 body {
   direction: rtl;
   font-family: "Segoe UI", Tahoma, sans-serif;
-  --bg: #f0f4f8;
+  background-color: #f0f4f8;
   --primary: #0d6efd;
-  background: var(--bg);
   color: #333;
   padding-top: 72px; /* space for sticky navbar */
   min-height: 100vh;
