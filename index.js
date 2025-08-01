@@ -82,6 +82,21 @@ router.get('/drivers', async (req, res) => {
   });
 });
 
+router.get('/drivers/:id', async (req, res) => {
+  const { id } = req.params;
+  const rows = await pool.query(
+    'SELECT d.DriverID, d.FirstName, d.LastName, d.IdentityNumber, f.Name AS FacilityName FROM OPC_Driver d LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID WHERE d.DriverID = ?',
+    [id]
+  );
+  const driver = rows[0];
+  if (!driver) return res.redirect('/nagl/drivers');
+  res.render('drivers/show', {
+    driver,
+    title: 'تفاصيل السائق',
+    header: 'تفاصيل السائق'
+  });
+});
+
 router.get('/drivers/new', async (req, res) => {
   const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
   res.render('drivers/new', {
