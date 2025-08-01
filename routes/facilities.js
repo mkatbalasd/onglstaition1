@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const asyncHandler = require('../asyncHandler');
 
 // Facilities list
-router.get('/facilities', async (req, res) => {
+router.get('/facilities', asyncHandler(async (req, res) => {
   const facilities = await pool.query(
     'SELECT FacilityID, Name, IdentityNumber, LicenseType FROM OPC_Facility ORDER BY FacilityID DESC'
   );
@@ -12,7 +13,7 @@ router.get('/facilities', async (req, res) => {
     title: 'المنشآت',
     header: 'إدارة المنشآت'
   });
-});
+}));
 
 // New facility form
 router.get('/facilities/new', (req, res) => {
@@ -25,7 +26,7 @@ router.get('/facilities/new', (req, res) => {
 });
 
 // Create facility
-router.post('/facilities', async (req, res) => {
+router.post('/facilities', asyncHandler(async (req, res) => {
   const { IdentityNumber, Name, EnglishName, next } = req.body;
   const result = await pool.query(
     'INSERT INTO OPC_Facility (IdentityNumber, Name, EnglishName) VALUES (?, ?, ?)',
@@ -34,10 +35,10 @@ router.post('/facilities', async (req, res) => {
   const fid = result.insertId;
   const redirectTo = next ? `${next}/${fid}/driver` : '/nagl/facilities';
   res.redirect(redirectTo);
-});
+}));
 
 // API create facility
-router.post('/api/facilities', async (req, res) => {
+router.post('/api/facilities', asyncHandler(async (req, res) => {
   const {
     Name,
     EnglishName,
@@ -65,15 +66,15 @@ router.post('/api/facilities', async (req, res) => {
   );
   const FacilityID = result.insertId;
   res.json({ FacilityID, Name, IdentityNumber, LicenseType });
-});
+}));
 
 // API license types
-router.get('/api/license-types', async (req, res) => {
+router.get('/api/license-types', asyncHandler(async (req, res) => {
   const rows = await pool.query('SELECT LicenseTypeNameAR, LicenseTypeNameEN FROM OPC_LicenseType');
   res.json(rows);
-});
+}));
 
-router.post('/api/license-types', async (req, res) => {
+router.post('/api/license-types', asyncHandler(async (req, res) => {
   const { LicenseTypeNameAR, LicenseTypeNameEN } = req.body;
   const result = await pool.query(
     'INSERT INTO OPC_LicenseType (LicenseTypeNameAR, LicenseTypeNameEN) VALUES (?, ?)',
@@ -81,6 +82,6 @@ router.post('/api/license-types', async (req, res) => {
   );
   const LicenseTypeID = result.insertId;
   res.json({ LicenseTypeID, LicenseTypeNameAR, LicenseTypeNameEN });
-});
+}));
 
 module.exports = router;
