@@ -6,7 +6,7 @@
   <% } else { %>
   <div class="mb-3">
     <label class="form-label">المنشأة</label>
-    <select name="FacilityID" class="form-select select2">
+    <select name="FacilityID" class="custom-select select2">
       <% facilities.forEach(f => { %>
         <option value="<%= f.FacilityID %>"><%= f.Name %></option>
       <% }) %>
