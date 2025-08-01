@@ -29,6 +29,12 @@ app.use('/nagl', vehiclesRouter);
 app.use('/nagl', driverCardsRouter);
 app.use('/nagl', cardsRouter);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('Server Error');
+});
+
 const port = process.env.PORT || 3002;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

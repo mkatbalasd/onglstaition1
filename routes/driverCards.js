@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const { generateCardNumber } = require('../utils');
+const asyncHandler = require('../asyncHandler');
 
 // List driver cards
-router.get('/driver-cards', async (req, res) => {
+router.get('/driver-cards', asyncHandler(async (req, res) => {
   const cards = await pool.query(
     'SELECT d.ID, d.CardNumber, d.token, d.CardType, drv.FirstName, f.Name, d.IssueDate, d.ExpirationDate, s.name AS SupplierName ' +
       'FROM OPC_DriverCard d ' +
@@ -18,7 +19,7 @@ router.get('/driver-cards', async (req, res) => {
     title: 'بطاقات السائقين',
     header: 'إدارة بطاقات السائقين'
   });
-});
+}));
 
 // Start create driver card - facility identity
 router.get('/driver-cards/new', (req, res) => {
@@ -28,7 +29,7 @@ router.get('/driver-cards/new', (req, res) => {
   });
 });
 
-router.post('/driver-cards/new', async (req, res) => {
+router.post('/driver-cards/new', asyncHandler(async (req, res) => {
   const { IdentityNumber } = req.body;
   const rows = await pool.query(
     'SELECT FacilityID FROM OPC_Facility WHERE IdentityNumber = ?',
@@ -44,10 +45,10 @@ router.post('/driver-cards/new', async (req, res) => {
     title: 'إضافة منشأة',
     header: 'إضافة منشأة'
   });
-});
+}));
 
 // Show driver selection
-router.get('/driver-cards/new/:facilityId/driver', async (req, res) => {
+router.get('/driver-cards/new/:facilityId/driver', asyncHandler(async (req, res) => {
   const { facilityId } = req.params;
   const [facilityRow] = await pool.query(
     'SELECT Name FROM OPC_Facility WHERE FacilityID = ?',
@@ -59,9 +60,9 @@ router.get('/driver-cards/new/:facilityId/driver', async (req, res) => {
     title: 'إضافة بطاقة سائق',
     header: 'إدخال هوية السائق'
   });
-});
+}));
 
-router.post('/driver-cards/new/:facilityId/driver', async (req, res) => {
+router.post('/driver-cards/new/:facilityId/driver', asyncHandler(async (req, res) => {
   const { facilityId } = req.params;
   const { IdentityNumber } = req.body;
   const rows = await pool.query(
@@ -86,9 +87,9 @@ router.post('/driver-cards/new/:facilityId/driver', async (req, res) => {
     title: 'إضافة سائق',
     header: 'إضافة سائق'
   });
-});
+}));
 
-router.get('/driver-cards/new/:facilityId/driver/:driverId', async (req, res) => {
+router.get('/driver-cards/new/:facilityId/driver/:driverId', asyncHandler(async (req, res) => {
   const { facilityId, driverId } = req.params;
   const facilities = await pool.query(
     'SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility WHERE FacilityID = ?',
@@ -117,10 +118,10 @@ router.get('/driver-cards/new/:facilityId/driver/:driverId', async (req, res) =>
     title: 'إضافة بطاقة سائق',
     header: 'إضافة بطاقة سائق'
   });
-});
+}));
 
 // Create driver card
-router.post('/driver-cards', async (req, res) => {
+router.post('/driver-cards', asyncHandler(async (req, res) => {
   const { CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier } = req.body;
   const CardNumber = await generateCardNumber('OPC_DriverCard', FacilityID);
   const today = new Date().toISOString().slice(0, 10);
@@ -129,10 +130,10 @@ router.post('/driver-cards', async (req, res) => {
     [CardNumber, CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier, today, today]
   );
   res.redirect('/nagl/driver-cards');
-});
+}));
 
 // Edit driver card form
-router.get('/driver-cards/:id/edit', async (req, res) => {
+router.get('/driver-cards/:id/edit', asyncHandler(async (req, res) => {
   const { id } = req.params;
   const cardRows = await pool.query('SELECT * FROM OPC_DriverCard WHERE ID = ?', [id]);
   const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
@@ -154,10 +155,10 @@ router.get('/driver-cards/:id/edit', async (req, res) => {
     title: 'تعديل بطاقة سائق',
     header: 'تعديل بطاقة سائق'
   });
-});
+}));
 
 // Update driver card
-router.post('/driver-cards/:id', async (req, res) => {
+router.post('/driver-cards/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier } = req.body;
   const today = new Date().toISOString().slice(0, 10);
@@ -166,13 +167,13 @@ router.post('/driver-cards/:id', async (req, res) => {
     [CardType, FacilityID, DriverID, IssueDate, ExpirationDate, Supplier, today, id]
   );
   res.redirect('/nagl/driver-cards');
-});
+}));
 
 // Delete driver card
-router.post('/driver-cards/:id/delete', async (req, res) => {
+router.post('/driver-cards/:id/delete', asyncHandler(async (req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM OPC_DriverCard WHERE ID = ?', [id]);
   res.redirect('/nagl/driver-cards');
-});
+}));
 
 module.exports = router;
