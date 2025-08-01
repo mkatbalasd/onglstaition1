@@ -17,10 +17,12 @@ const vehiclesRouter = require('./routes/vehicles');
 const driverCardsRouter = require('./routes/driverCards');
 const cardsRouter = require('./routes/cards');
 
-// Preload license types into memory
-loadLicenseTypes().catch((err) => {
-  console.error('Could not preload license types:', err);
-});
+// Preload license types into memory unless running tests
+if (process.env.NODE_ENV !== 'test') {
+  loadLicenseTypes().catch((err) => {
+    console.error('Could not preload license types:', err);
+  });
+}
 
 app.get('/nagl', (req, res) => {
   res.render('home', {
@@ -45,6 +47,11 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 3002;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+module.exports = app;
