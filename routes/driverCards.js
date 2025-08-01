@@ -176,4 +176,13 @@ router.post('/driver-cards/:id/delete', asyncHandler(async (req, res) => {
   res.redirect('/nagl/driver-cards');
 }));
 
+// Print driver card
+router.get('/driver-cards/print', (req, res) => {
+  const { token } = req.query;
+  res.render('drivercards/print', {
+    token,
+    printUrl: process.env.PRINT_DRIVER_URL,
+  });
+});
+
 module.exports = router;
