@@ -18,9 +18,13 @@ router.get('/vehicles', asyncHandler(async (req, res) => {
 // New vehicle form
 router.get('/vehicles/new', asyncHandler(async (req, res) => {
   const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
+  const brands = await pool.query('SELECT ID, Name FROM OPC_VehicleBrand');
+  const colors = await pool.query('SELECT ID, Name FROM OPC_VehicleColor');
   const { facilityId = '', serialNumber = '', next = '' } = req.query;
   res.render('vehicles/new', {
     facilities,
+    brands,
+    colors,
     facilityId,
     serialNumber,
     next,
@@ -31,11 +35,19 @@ router.get('/vehicles/new', asyncHandler(async (req, res) => {
 
 // Create vehicle
 router.post('/vehicles', asyncHandler(async (req, res) => {
-  const { FacilityID, PlateNumber, SerialNumber, next } = req.body;
-  const result = await pool.query(
-    'INSERT INTO OPC_Vehicle (FacilityID, PlateNumber, SerialNumber) VALUES (?, ?, ?)',
-    [FacilityID || null, PlateNumber, SerialNumber]
-  );
+  const { FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufactureYear, next } = req.body;
+  const query =
+    'INSERT INTO OPC_Vehicle (FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufactureYear) ' +
+    'VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const result = await pool.query(query, [
+    FacilityID || null,
+    PlateNumber,
+    SerialNumber,
+    BrandID || null,
+    ModelID || null,
+    ColorID || null,
+    ManufactureYear || null
+  ]);
   const ID = result.insertId;
   res.redirect(next ? `${next}/${ID}` : '/nagl/vehicles');
 }));
@@ -47,6 +59,15 @@ router.get('/api/vehicles', asyncHandler(async (req, res) => {
     ? await pool.query('SELECT ID, PlateNumber, SerialNumber FROM OPC_Vehicle WHERE FacilityID = ?', [facilityId])
     : await pool.query('SELECT ID, PlateNumber, SerialNumber FROM OPC_Vehicle');
   res.json(vehicles);
+}));
+
+// Vehicle models by brand
+router.get('/api/vehicle-models', asyncHandler(async (req, res) => {
+  const { brandId } = req.query;
+  const models = brandId
+    ? await pool.query('SELECT ID, Name FROM OPC_VehicleModel WHERE BrandID = ?', [brandId])
+    : await pool.query('SELECT ID, Name FROM OPC_VehicleModel');
+  res.json(models);
 }));
 
 router.post('/api/vehicles', asyncHandler(async (req, res) => {

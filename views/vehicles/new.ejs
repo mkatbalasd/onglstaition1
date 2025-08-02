@@ -20,7 +20,48 @@
     <label class="form-label">الرقم التسلسلي</label>
     <input type="text" name="SerialNumber" class="form-control" value="<%= serialNumber %>">
   </div>
+  <div class="mb-3">
+    <label class="form-label">الماركة</label>
+    <select name="BrandID" id="brandSelect" class="custom-select select2">
+      <option value=""></option>
+      <% brands.forEach(b => { %>
+        <option value="<%= b.ID %>"><%= b.Name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">الطراز</label>
+    <select name="ModelID" id="modelSelect" class="custom-select select2"></select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">اللون</label>
+    <select name="ColorID" class="custom-select select2">
+      <option value=""></option>
+      <% colors.forEach(c => { %>
+        <option value="<%= c.ID %>"><%= c.Name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">سنة الصنع</label>
+    <input type="number" name="ManufactureYear" class="form-control">
+  </div>
   <input type="hidden" name="next" value="<%= next %>">
   <button type="submit" class="btn btn-success">حفظ</button>
 </form>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  $('#brandSelect').on('change', function () {
+    const brandId = $(this).val();
+    const modelSelect = $('#modelSelect');
+    modelSelect.empty().trigger('change');
+    if (!brandId) return;
+    $.getJSON('/nagl/api/vehicle-models', { brandId }, function (data) {
+      modelSelect.append('<option value=""></option>');
+      data.forEach(m => modelSelect.append(`<option value="${m.ID}">${m.Name}</option>`));
+      modelSelect.trigger('change');
+    });
+  }).trigger('change');
+});
+</script>
