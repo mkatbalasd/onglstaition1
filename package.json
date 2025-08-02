@@ -13,8 +13,10 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@laylazi/bootstrap-rtl": "^4.6.2-1",
     "body-parser": "^1.20.2",
     "bootstrap-hijri-datepicker": "^1.0.2",
+    "bootstrap-icons": "^1.13.1",
     "compression": "^1.8.1",
     "datatables.net": "^2.3.2",
     "datatables.net-bs4": "^2.3.2",
