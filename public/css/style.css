@@ -4,7 +4,6 @@ body {
   background-color: #f0f4f8;
   --primary: #0d6efd;
   color: #333;
-  padding-top: 72px; /* space for sticky navbar */
   min-height: 100vh;
 }
 
