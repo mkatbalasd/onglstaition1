@@ -17,17 +17,92 @@ router.get('/cards', asyncHandler(async (req, res) => {
   });
 }));
 
-// New card form
-router.get('/cards/new', asyncHandler(async (req, res) => {
-  const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
-  const suppliers = await pool.query('SELECT id, name FROM Supplier');
-  const vehicles = await pool.query('SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle');
-  const licenseTypes = await getLicenseTypes();
+// Start create card - facility identity
+router.get('/cards/new', (req, res) => {
   res.render('cards/new', {
+    title: 'إضافة كرت تشغيل',
+    header: 'إدخال هوية المنشأة'
+  });
+});
+
+router.post('/cards/new', asyncHandler(async (req, res) => {
+  const { IdentityNumber } = req.body;
+  const rows = await pool.query(
+    'SELECT FacilityID FROM OPC_Facility WHERE IdentityNumber = ?',
+    [IdentityNumber]
+  );
+  if (rows.length) {
+    const fid = rows[0].FacilityID;
+    return res.redirect(`/nagl/cards/new/${fid}/vehicle`);
+  }
+  res.render('facilities/new', {
+    identity: IdentityNumber,
+    next: '/nagl/cards/new',
+    title: 'إضافة منشأة',
+    header: 'إضافة منشأة'
+  });
+}));
+
+// Vehicle step
+router.get('/cards/new/:facilityId/vehicle', asyncHandler(async (req, res) => {
+  const { facilityId } = req.params;
+  const [facilityRow] = await pool.query(
+    'SELECT Name FROM OPC_Facility WHERE FacilityID = ?',
+    [facilityId]
+  );
+  res.render('cards/vehicle', {
+    facilityId,
+    facilityName: facilityRow ? facilityRow.Name : '',
+    title: 'إضافة كرت تشغيل',
+    header: 'إدخال رقم هيكل المركبة'
+  });
+}));
+
+router.post('/cards/new/:facilityId/vehicle', asyncHandler(async (req, res) => {
+  const { facilityId } = req.params;
+  const { SerialNumber } = req.body;
+  const rows = await pool.query(
+    'SELECT ID FROM OPC_Vehicle WHERE SerialNumber = ? AND FacilityID = ?',
+    [SerialNumber, facilityId]
+  );
+  if (rows.length) {
+    const vehicleId = rows[0].ID;
+    const [cardRow] = await pool.query(
+      'SELECT ID FROM OPC_Card WHERE VehicleID = ? ORDER BY ID DESC LIMIT 1',
+      [vehicleId]
+    );
+    if (cardRow) {
+      return res.redirect(`/nagl/cards/${cardRow.ID}/edit`);
+    }
+    return res.redirect(`/nagl/cards/new/${facilityId}/vehicle/${vehicleId}`);
+  }
+  res.redirect(`/nagl/vehicles/new?facilityId=${facilityId}`);
+}));
+
+router.get('/cards/new/:facilityId/vehicle/:vehicleId', asyncHandler(async (req, res) => {
+  const { facilityId, vehicleId } = req.params;
+  const facilities = await pool.query(
+    'SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility WHERE FacilityID = ?',
+    [facilityId]
+  );
+  const suppliers = await pool.query('SELECT id, name FROM Supplier');
+  const vehicles = await pool.query(
+    'SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle WHERE ID = ?',
+    [vehicleId]
+  );
+  const licenseTypes = await getLicenseTypes();
+  const facility = facilities[0];
+  const vehicle = vehicles[0];
+  res.render('cards/form', {
     facilities,
     suppliers,
     vehicles,
     licenseTypes,
+    facility,
+    vehicle,
+    lockFacility: true,
+    lockVehicle: true,
+    card: null,
     title: 'إضافة كرت تشغيل',
     header: 'إضافة كرت تشغيل'
   });
@@ -55,11 +130,15 @@ router.get('/cards/:id/edit', asyncHandler(async (req, res) => {
   const suppliers = await pool.query('SELECT id, name FROM Supplier');
   const vehicles = await pool.query('SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle');
   const licenseTypes = await getLicenseTypes();
-  res.render('cards/new', {
+  res.render('cards/form', {
     facilities,
     suppliers,
     vehicles,
     licenseTypes,
+    facility: null,
+    vehicle: null,
+    lockFacility: false,
+    lockVehicle: false,
     card,
     title: 'تعديل كرت تشغيل',
     header: 'تعديل كرت تشغيل'

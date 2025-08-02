@@ -1,48 +1,9 @@
 <div class="card card-form">
-<form method="POST" action="<%= card ? '/nagl/cards/' + card.ID : '/nagl/cards' %>">
+<form method="POST" action="/nagl/cards/new">
   <div class="mb-3">
-    <label class="form-label">المنشأة</label>
-    <div class="input-group">
-      <select name="FacilityID" class="custom-select select2" required>
-        <% facilities.forEach(f => { %>
-          <option value="<%= f.FacilityID %>" <%= card && card.FacilityID === f.FacilityID ? 'selected' : '' %>><%= f.Name %> - <%= f.IdentityNumber %> - <%= f.LicenseType || '' %></option>
-        <% }) %>
-      </select>
-      <a href="/nagl/facilities/new" target="_blank" id="addFacilityBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
-    </div>
+    <label class="form-label">رقم هوية المنشأة</label>
+    <input type="text" name="IdentityNumber" class="form-control" required>
   </div>
-  <div class="mb-3">
-    <label class="form-label">المركبة</label>
-    <div class="input-group">
-      <select name="VehicleID" class="custom-select select2" required>
-        <% vehicles.forEach(v => { %>
-          <option value="<%= v.ID %>" <%= card && card.VehicleID === v.ID ? 'selected' : '' %>><%= v.PlateNumber || v.SerialNumber %></option>
-        <% }) %>
-      </select>
-      <a href="#" target="_blank" id="addVehicleBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
-    </div>
-    <input type="hidden" id="vehicleHidden" value="<%= card ? card.VehicleID : '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ الإصدار</label>
-    <input type="text" name="IssueDate" class="form-control hijri-date" value="<%= card ? card.IssueDate : '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ الانتهاء</label>
-    <input type="text" name="ExpirationDate" class="form-control hijri-date" value="<%= card ? card.ExpirationDate : '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ التجديد</label>
-    <input type="text" name="RenewalDate" class="form-control hijri-date" value="<%= card ? card.RenewalDate || '' : '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">المورد</label>
-    <select name="Supplier" class="custom-select select2">
-      <% suppliers.forEach(s => { %>
-        <option value="<%= s.id %>" <%= card && card.Supplier === s.id ? 'selected' : '' %>><%= s.name %></option>
-      <% }) %>
-    </select>
-  </div>
-  <button type="submit" class="btn btn-success">حفظ</button>
+  <button type="submit" class="btn btn-primary">متابعة</button>
 </form>
 </div>
