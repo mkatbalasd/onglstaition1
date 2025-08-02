@@ -54,7 +54,8 @@ form .input-group > .form-select {
 }
 
 
-.table > thead {
+/* Preserve default light header color unless table-light is used */
+.table > thead:not(.table-light) {
   background-color: #e9ecef;
 }
 
@@ -73,7 +74,7 @@ form .input-group > .form-select {
   text-align: center;
 }
 
-.results-table thead {
+.results-table thead.table-light {
   background-color: #f7f7f7;
 }
 
