@@ -48,11 +48,6 @@ form .input-group > .form-select {
   padding: 1.5rem;
 }
 
-.form-control,
-.form-select {
-  padding: 0.6rem 0.75rem;
-}
-
 
 /* Preserve default light header color unless table-light is used */
 .table > thead:not(.table-light) {
@@ -123,4 +118,7 @@ form .input-group > .form-select {
   .hide-mobile {
     display: none;
   }
+  th {
+    width: 100%;
+}
 }
