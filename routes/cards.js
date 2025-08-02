@@ -76,7 +76,14 @@ router.post('/cards/new/:facilityId/vehicle', asyncHandler(async (req, res) => {
     }
     return res.redirect(`/nagl/cards/new/${facilityId}/vehicle/${vehicleId}`);
   }
-  res.redirect(`/nagl/vehicles/new?facilityId=${facilityId}`);
+  res.render('vehicles/new', {
+    facilities: [],
+    facilityId,
+    serialNumber: SerialNumber,
+    next: `/nagl/cards/new/${facilityId}/vehicle`,
+    title: 'إضافة مركبة',
+    header: 'إضافة مركبة'
+  });
 }));
 
 router.get('/cards/new/:facilityId/vehicle/:vehicleId', asyncHandler(async (req, res) => {
