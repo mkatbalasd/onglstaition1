@@ -18,9 +18,12 @@ router.get('/vehicles', asyncHandler(async (req, res) => {
 // New vehicle form
 router.get('/vehicles/new', asyncHandler(async (req, res) => {
   const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
+  const { facilityId = '', serialNumber = '', next = '' } = req.query;
   res.render('vehicles/new', {
     facilities,
-    facilityId: req.query.facilityId || '',
+    facilityId,
+    serialNumber,
+    next,
     title: 'إضافة مركبة',
     header: 'إضافة مركبة'
   });
