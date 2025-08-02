@@ -32,7 +32,7 @@ $(function () {
     pageLength: 10,
     lengthMenu: [10, 20, 50, 100],
     language: {
-      url: 'https://cdn.datatables.net/plug-ins/1.13.5/i18n/ar.json',
+      url: '/nagl/vendor/datatables/i18n/ar.json',
       searchPlaceholder: 'بحث...',
       search: ' '
     },
