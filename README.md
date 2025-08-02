@@ -46,6 +46,8 @@
 
 تستخدم النماذج التاريخ الهجري عبر مكتبة [bootstrap-hijri-datepicker](https://github.com/balbarak/bootstrap-hijri-datepicker.git).
 
+> **تنبيه**: تعتمد مكتبة `bootstrap-hijri-datepicker` على **Bootstrap 4** فقط، ولذلك يستخدم المشروع حالياً الإصدار **4.6.2** من Bootstrap الموفَّر عبر CDN. يُنصح بعدم الترقية إلى Bootstrap 5 حتى لا تتعطل وظائف التاريخ الهجري.
+
 للوصول إلى التطبيق من مسار فرعي عبر خادم ويب مثل **Nginx** يمكن استخدام الإعداد التالي:
 
 ```nginx
