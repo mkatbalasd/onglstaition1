@@ -31,12 +31,13 @@ router.get('/vehicles/new', asyncHandler(async (req, res) => {
 
 // Create vehicle
 router.post('/vehicles', asyncHandler(async (req, res) => {
-  const { FacilityID, PlateNumber, SerialNumber } = req.body;
-  await pool.query(
+  const { FacilityID, PlateNumber, SerialNumber, next } = req.body;
+  const result = await pool.query(
     'INSERT INTO OPC_Vehicle (FacilityID, PlateNumber, SerialNumber) VALUES (?, ?, ?)',
     [FacilityID || null, PlateNumber, SerialNumber]
   );
-  res.redirect('/nagl/vehicles');
+  const ID = result.insertId;
+  res.redirect(next ? `${next}/${ID}` : '/nagl/vehicles');
 }));
 
 // API vehicles
