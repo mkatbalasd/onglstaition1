@@ -35,9 +35,13 @@ router.post('/cards/new', asyncHandler(async (req, res) => {
     const fid = rows[0].FacilityID;
     return res.redirect(`/nagl/cards/new/${fid}/vehicle`);
   }
+  const licenseTypes = await pool.query(
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+  );
   res.render('facilities/new', {
     identity: IdentityNumber,
     next: '/nagl/cards/new',
+    licenseTypes,
     title: 'إضافة منشأة',
     header: 'إضافة منشأة'
   });
