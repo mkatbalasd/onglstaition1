@@ -8,7 +8,13 @@ const { getLicenseTypes } = require('../licenseCache');
 // List cards
 router.get('/cards', asyncHandler(async (req, res) => {
   const cards = await pool.query(
-    'SELECT c.ID, c.CardNumber, v.PlateNumber, f.Name, c.IssueDate, c.ExpirationDate, s.name AS SupplierName FROM OPC_Card c LEFT JOIN OPC_Vehicle v ON c.VehicleID = v.ID LEFT JOIN OPC_Facility f ON c.FacilityID = f.FacilityID LEFT JOIN Supplier s ON c.Supplier = s.id'
+    `SELECT c.ID, c.CardNumber, c.token, v.PlateNumber, f.Name,
+            c.IssueDate, c.ExpirationDate, s.name AS SupplierName
+     FROM OPC_Card c
+     LEFT JOIN OPC_Vehicle v ON c.VehicleID = v.ID
+     LEFT JOIN OPC_Facility f ON c.FacilityID = f.FacilityID
+     LEFT JOIN Supplier s ON c.Supplier = s.id
+     ORDER BY c.ID DESC`
   );
   res.render('cards/index', {
     cards,
@@ -36,7 +42,7 @@ router.post('/cards/new', asyncHandler(async (req, res) => {
     return res.redirect(`/nagl/cards/new/${fid}/vehicle`);
   }
   const licenseTypes = await pool.query(
-    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeID DESC'
   );
   res.render('facilities/new', {
     identity: IdentityNumber,
@@ -80,8 +86,8 @@ router.post('/cards/new/:facilityId/vehicle', asyncHandler(async (req, res) => {
     }
     return res.redirect(`/nagl/cards/new/${facilityId}/vehicle/${vehicleId}`);
   }
-  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand');
-  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color');
+  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand ORDER BY BrandID DESC');
+  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color ORDER BY ColorID DESC');
   res.render('vehicles/new', {
     facilities: [],
     brands,
@@ -100,7 +106,7 @@ router.get('/cards/new/:facilityId/vehicle/:vehicleId', asyncHandler(async (req,
     'SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility WHERE FacilityID = ?',
     [facilityId]
   );
-  const suppliers = await pool.query('SELECT id, name FROM Supplier');
+  const suppliers = await pool.query('SELECT id, name FROM Supplier ORDER BY id DESC');
   const vehicles = await pool.query(
     'SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle WHERE ID = ?',
     [vehicleId]
@@ -141,9 +147,9 @@ router.get('/cards/:id/edit', asyncHandler(async (req, res) => {
   const cardRows = await pool.query('SELECT * FROM OPC_Card WHERE ID = ?', [id]);
   const card = cardRows[0];
   if (!card) return res.redirect('/nagl/cards');
-  const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
-  const suppliers = await pool.query('SELECT id, name FROM Supplier');
-  const vehicles = await pool.query('SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle');
+  const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility ORDER BY FacilityID DESC');
+  const suppliers = await pool.query('SELECT id, name FROM Supplier ORDER BY id DESC');
+  const vehicles = await pool.query('SELECT ID, PlateNumber, SerialNumber, FacilityID FROM OPC_Vehicle ORDER BY ID DESC');
   const licenseTypes = await getLicenseTypes();
   res.render('cards/form', {
     facilities,

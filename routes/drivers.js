@@ -33,7 +33,7 @@ router.get('/drivers/:id', asyncHandler(async (req, res) => {
 
 // New driver form
 router.get('/drivers/new', asyncHandler(async (req, res) => {
-  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
+  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility ORDER BY FacilityID DESC');
   res.render('drivers/new', {
     facilities,
     facilityId: req.query.facilityId || '',
@@ -60,8 +60,8 @@ router.post('/drivers', asyncHandler(async (req, res) => {
 router.get('/api/drivers', asyncHandler(async (req, res) => {
   const { facilityId } = req.query;
   const drivers = facilityId
-    ? await pool.query('SELECT DriverID, FirstName, LastName, IdentityNumber FROM OPC_Driver WHERE FacilityID = ?', [facilityId])
-    : await pool.query('SELECT DriverID, FirstName, LastName, IdentityNumber FROM OPC_Driver');
+    ? await pool.query('SELECT DriverID, FirstName, LastName, IdentityNumber FROM OPC_Driver WHERE FacilityID = ? ORDER BY DriverID DESC', [facilityId])
+    : await pool.query('SELECT DriverID, FirstName, LastName, IdentityNumber FROM OPC_Driver ORDER BY DriverID DESC');
   res.json(drivers);
 }));
 

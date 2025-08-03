@@ -19,7 +19,11 @@
   <tbody>
     <% cards.forEach(c => { %>
       <tr>
-        <td><pre class="codebox"><%= c.CardNumber %></pre></td>
+        <td>
+          <a href="https://s.mnaseb.com/h/OPcard/op.php?token=<%= c.token %>" target="_blank" rel="noopener">
+            <pre class="codebox"><%= c.CardNumber %></pre>
+          </a>
+        </td>
         <td><pre class="codebox"><%= c.PlateNumber || '' %></pre></td>
         <td><pre class="codebox"><%= c.Name || '' %></pre></td>
         <td class="hide-mobile"><pre class="codebox"><%= c.IssueDate %></pre></td>
