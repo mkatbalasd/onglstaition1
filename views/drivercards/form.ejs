@@ -38,7 +38,7 @@
         <% }) %>
       </select>
       <% if (!lockDriver) { %>
-      <a href="#" target="_blank" id="addDriverBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
+      <a href="/nagl/drivers/new" target="_blank" id="addDriverBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
       <% } %>
       <% if (lockDriver) { %><input type="hidden" name="DriverID" value="<%= driver.DriverID %>"><% } %>
       <input type="hidden" id="driverHidden" value="<%= card ? card.DriverID : (driver ? driver.DriverID : '') %>">
@@ -47,11 +47,14 @@
 
   <div class="mb-3">
     <label class="form-label">المورد</label>
-    <select name="Supplier" class="custom-select select2">
-      <% suppliers.forEach(s => { %>
-        <option value="<%= s.id %>" <%= card && card.Supplier === s.id ? 'selected' : '' %>><%= s.name %></option>
-      <% }) %>
-    </select>
+    <div class="input-group">
+      <select name="Supplier" class="custom-select select2">
+        <% suppliers.forEach(s => { %>
+          <option value="<%= s.id %>" <%= card && card.Supplier === s.id ? 'selected' : '' %>><%= s.name %></option>
+        <% }) %>
+      </select>
+      <a href="/nagl/suppliers/new" target="_blank" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
+    </div>
   </div>
 
   <button type="submit" class="btn btn-success">حفظ</button>
