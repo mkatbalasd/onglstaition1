@@ -24,6 +24,7 @@ const cardsRouter = require('./routes/cards');
 const brandsRouter = require('./routes/brands');
 const modelsRouter = require('./routes/models');
 const colorsRouter = require('./routes/colors');
+const licenseTypesRouter = require('./routes/licenseTypes');
 
 // Preload license types into memory unless running tests
 if (process.env.NODE_ENV !== 'test') {
@@ -47,6 +48,7 @@ app.use('/nagl', cardsRouter);
 app.use('/nagl', brandsRouter);
 app.use('/nagl', modelsRouter);
 app.use('/nagl', colorsRouter);
+app.use('/nagl', licenseTypesRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

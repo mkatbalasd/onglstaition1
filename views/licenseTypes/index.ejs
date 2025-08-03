@@ -1,0 +1,29 @@
+<div class="d-flex mb-3">
+  <a href="/nagl/license-types/new" class="btn btn-success ms-auto">
+    <i class="bi bi-plus-circle me-1"></i> إضافة نوع ترخيص
+  </a>
+</div>
+<div class="table-responsive">
+<table class="table table-bordered table-striped data-table results-table">
+  <thead class="table-light">
+    <tr>
+      <th>الرقم</th>
+      <th>الاسم بالعربية</th>
+      <th>الاسم بالإنجليزية</th>
+      <th>إجراءات</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% licenseTypes.forEach(lt => { %>
+      <tr>
+        <td><pre class="codebox"><%= lt.LicenseTypeID %></pre></td>
+        <td><pre class="codebox"><%= lt.LicenseTypeNameAR %></pre></td>
+        <td><pre class="codebox"><%= lt.LicenseTypeNameEN || '' %></pre></td>
+        <td>
+          <a href="/nagl/license-types/<%= lt.LicenseTypeID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>

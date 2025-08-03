@@ -1,0 +1,13 @@
+<div class="card card-form">
+<form method="POST" action="/nagl/license-types/<%= licenseType.LicenseTypeID %>">
+  <div class="mb-3">
+    <label class="form-label">الاسم بالعربية</label>
+    <input type="text" name="LicenseTypeNameAR" class="form-control" value="<%= licenseType.LicenseTypeNameAR %>" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">الاسم بالإنجليزية</label>
+    <input type="text" name="LicenseTypeNameEN" class="form-control" value="<%= licenseType.LicenseTypeNameEN || '' %>">
+  </div>
+  <button type="submit" class="btn btn-success">تحديث</button>
+</form>
+</div>
