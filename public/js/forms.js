@@ -96,4 +96,10 @@ $(function () {
     minViewMode: 'years',
     autoclose: true
     });
+
+  $('form.delete-form').on('submit', function (e) {
+    if (!confirm('هل أنت متأكد من الحذف؟')) {
+      e.preventDefault();
+    }
+  });
 });
