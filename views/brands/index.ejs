@@ -19,9 +19,9 @@
         <td><pre class="codebox"><%= b.BrandName %></pre></td>
         <td>
           <a href="/nagl/brands/<%= b.BrandID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
-          <form method="POST" action="/nagl/brands/<%= b.BrandID %>/delete" style="display:inline">
-            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('حذف؟')">حذف</button>
-          </form>
+            <form method="POST" action="/nagl/brands/<%= b.BrandID %>/delete" class="delete-form" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-outline-danger">حذف</button>
+            </form>
         </td>
       </tr>
     <% }) %>

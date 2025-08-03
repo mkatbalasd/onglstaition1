@@ -31,9 +31,9 @@
         <td class="hide-mobile"><pre class="codebox"><%= c.SupplierName || '' %></pre></td>
         <td>
           <a href="/nagl/cards/<%= c.ID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
-          <form method="POST" action="/nagl/cards/<%= c.ID %>/delete" style="display:inline">
-            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('حذف؟')">حذف</button>
-          </form>
+            <form method="POST" action="/nagl/cards/<%= c.ID %>/delete" class="delete-form" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-outline-danger">حذف</button>
+            </form>
         </td>
       </tr>
     <% }) %>
