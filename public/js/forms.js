@@ -1,9 +1,11 @@
 $(function () {
-  $('.hijri-date').hijriDatePicker({
-    hijri: true,
-    showSwitcher: false,
-    format: 'iYYYY-iMM-iDD'
-  });
+  if ($.fn.hijriDatePicker) {
+    $('.hijri-date').hijriDatePicker({
+      hijri: true,
+      showSwitcher: false,
+      format: 'iYYYY-iMM-iDD'
+    });
+  }
 
   const issue = $('input[name="IssueDate"], input[name="LicenseIssueDate"]');
   const exp = $('input[name="ExpirationDate"], input[name="LicenseExpirationDate"]');
@@ -28,34 +30,38 @@ $(function () {
     });
   }
 
-  $('table.data-table').DataTable({
-    order: [],
-    responsive: true,
-    stripeClasses: [],
-    pageLength: 10,
-    lengthMenu: [10, 20, 50, 100],
-    language: {
-      url: '/nagl/vendor/datatables/i18n/ar.json',
-      searchPlaceholder: 'بحث...',
-      search: ' '
-    },
-    dom: "<'row'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6'lp>>" +
-         "<'row'<'col-sm-12'tr>>" +
-         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-    pagingType: 'simple_numbers'
-  });
-
-  $('.select2')
-    .select2({
-      dir: 'rtl',
-      width: '100%',
-      placeholder: 'اختر...',
-      allowClear: true
-    })
-    .on('select2:open', () => {
-      const searchField = document.querySelector('.select2-container--open .select2-search__field');
-      if (searchField) searchField.focus();
+  if ($.fn.DataTable) {
+    $('table.data-table').DataTable({
+      order: [],
+      responsive: true,
+      stripeClasses: [],
+      pageLength: 10,
+      lengthMenu: [10, 20, 50, 100],
+      language: {
+        url: '/nagl/vendor/datatables/i18n/ar.json',
+        searchPlaceholder: 'بحث...',
+        search: ' '
+      },
+      dom: "<'row'<'col-sm-12 col-md-6'f><'col-sm-12 col-md-6'lp>>" +
+           "<'row'<'col-sm-12'tr>>" +
+           "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+      pagingType: 'simple_numbers'
     });
+  }
+
+  if ($.fn.select2) {
+    $('.select2')
+      .select2({
+        dir: 'rtl',
+        width: '100%',
+        placeholder: 'اختر...',
+        allowClear: true
+      })
+      .on('select2:open', () => {
+        const searchField = document.querySelector('.select2-container--open .select2-search__field');
+        if (searchField) searchField.focus();
+      });
+  }
 
   $('select[name="FacilityID"]').on('change', function () {
     const fid = $(this).val();
@@ -91,13 +97,15 @@ $(function () {
       }
     });
   }).trigger('change');
-  $('.year-picker').datepicker({
-    format: 'yyyy',
-    minViewMode: 'years',
-    autoclose: true
+  if ($.fn.datepicker) {
+    $('.year-picker').datepicker({
+      format: 'yyyy',
+      minViewMode: 'years',
+      autoclose: true
     });
+  }
 
-  $('form.delete-form').on('submit', function (e) {
+  $(document).on('submit', 'form.delete-form', function (e) {
     if (!confirm('هل أنت متأكد من الحذف؟')) {
       e.preventDefault();
     }
