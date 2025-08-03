@@ -91,5 +91,9 @@ $(function () {
       }
     });
   }).trigger('change');
-
+  $('.year-picker').datepicker({
+    format: 'yyyy',
+    minViewMode: 'years',
+    autoclose: true
+    });
 });
