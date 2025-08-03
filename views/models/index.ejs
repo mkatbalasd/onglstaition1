@@ -1,0 +1,30 @@
+<div class="d-flex mb-3">
+  <a href="/nagl/models/new" class="btn btn-success ms-auto">
+    <i class="bi bi-plus-circle me-1"></i> إضافة موديل
+  </a>
+</div>
+<div class="table-responsive">
+<table class="table table-bordered table-striped data-table results-table">
+  <thead class="table-light">
+    <tr>
+      <th>الرقم</th>
+      <th>الاسم</th>
+      <th>إجراءات</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% models.forEach(m => { %>
+      <tr>
+        <td><pre class="codebox"><%= m.ModelID %></pre></td>
+        <td><pre class="codebox"><%= m.ModelName %></pre></td>
+        <td>
+          <a href="/nagl/models/<%= m.ModelID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
+          <form method="POST" action="/nagl/models/<%= m.ModelID %>/delete" style="display:inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('حذف؟')">حذف</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>
