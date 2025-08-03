@@ -97,7 +97,7 @@ $(function () {
     autoclose: true
     });
 
-  $('form.delete-form').on('submit', function (e) {
+  $(document).on('submit', 'form.delete-form', function (e) {
     if (!confirm('هل أنت متأكد من الحذف؟')) {
       e.preventDefault();
     }
