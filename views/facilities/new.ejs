@@ -18,6 +18,14 @@
     <input type="text" name="LicenseNumber" class="form-control">
   </div>
   <div class="mb-3">
+    <label class="form-label">تاريخ إصدار الترخيص</label>
+    <input type="text" name="LicenseIssueDate" class="form-control hijri-date">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">تاريخ انتهاء الترخيص</label>
+    <input type="text" name="LicenseExpirationDate" class="form-control hijri-date">
+  </div>
+  <div class="mb-3">
     <label class="form-label">نوع الترخيص</label>
     <select name="LicenseTypeID" id="LicenseTypeID" class="form-select">
       <% licenseTypes.forEach(lt => { %>
@@ -33,14 +41,6 @@
   <div class="mb-3">
     <label class="form-label">مدينة الترخيص بالإنجليزية</label>
     <input type="text" name="LicenseCityEn" class="form-control">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ إصدار الترخيص</label>
-    <input type="date" name="LicenseIssueDate" class="form-control">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ انتهاء الترخيص</label>
-    <input type="date" name="LicenseExpirationDate" class="form-control">
   </div>
   <button type="submit" class="btn btn-success">متابعة</button>
 </form>
