@@ -76,8 +76,12 @@ router.post('/cards/new/:facilityId/vehicle', asyncHandler(async (req, res) => {
     }
     return res.redirect(`/nagl/cards/new/${facilityId}/vehicle/${vehicleId}`);
   }
+  const brands = await pool.query('SELECT ID, Name FROM OPC_VehicleBrand');
+  const colors = await pool.query('SELECT ID, Name FROM OPC_VehicleColor');
   res.render('vehicles/new', {
     facilities: [],
+    brands,
+    colors,
     facilityId,
     serialNumber: SerialNumber,
     next: `/nagl/cards/new/${facilityId}/vehicle`,
