@@ -1,0 +1,30 @@
+<div class="d-flex mb-3">
+  <a href="/nagl/brands/new" class="btn btn-success ms-auto">
+    <i class="bi bi-plus-circle me-1"></i> إضافة ماركة
+  </a>
+</div>
+<div class="table-responsive">
+<table class="table table-bordered table-striped data-table results-table">
+  <thead class="table-light">
+    <tr>
+      <th>الرقم</th>
+      <th>الاسم</th>
+      <th>إجراءات</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% brands.forEach(b => { %>
+      <tr>
+        <td><pre class="codebox"><%= b.BrandID %></pre></td>
+        <td><pre class="codebox"><%= b.BrandName %></pre></td>
+        <td>
+          <a href="/nagl/brands/<%= b.BrandID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
+          <form method="POST" action="/nagl/brands/<%= b.BrandID %>/delete" style="display:inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('حذف؟')">حذف</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+</div>

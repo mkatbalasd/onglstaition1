@@ -1,0 +1,17 @@
+<div class="card card-form">
+<form method="POST" action="/nagl/models">
+  <div class="mb-3">
+    <label class="form-label">الماركة</label>
+    <select name="BrandID" class="custom-select select2">
+      <% brands.forEach(b => { %>
+        <option value="<%= b.BrandID %>"><%= b.BrandName %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">اسم الموديل</label>
+    <input type="text" name="ModelName" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-success">إضافة</button>
+</form>
+</div>
