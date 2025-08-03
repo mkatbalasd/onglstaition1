@@ -1,0 +1,57 @@
+<div class="card card-form">
+<form method="POST" action="/nagl/facilities/<%= facility.FacilityID %>">
+  <div class="mb-3">
+    <label class="form-label">رقم الهوية</label>
+    <input type="text" name="IdentityNumber" class="form-control" value="<%= facility.IdentityNumber %>" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">اسم المنشأة</label>
+    <input type="text" name="Name" class="form-control" value="<%= facility.Name %>" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">الاسم بالإنجليزية</label>
+    <input type="text" name="EnglishName" class="form-control" value="<%= facility.EnglishName || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">رقم الترخيص</label>
+    <input type="text" name="LicenseNumber" class="form-control" value="<%= facility.LicenseNumber || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">نوع الترخيص</label>
+    <select name="LicenseTypeID" id="LicenseTypeID" class="form-select">
+      <% licenseTypes.forEach(lt => { %>
+        <option value="<%= lt.LicenseTypeID %>" data-name="<%= lt.LicenseTypeNameAR %>" <%= facility.LicenseTypeID === lt.LicenseTypeID ? 'selected' : '' %>><%= lt.LicenseTypeNameAR %></option>
+      <% }) %>
+    </select>
+    <input type="hidden" name="LicenseType" id="LicenseType" value="<%= facility.LicenseType || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">مدينة الترخيص</label>
+    <input type="text" name="LicenseCity" class="form-control" value="<%= facility.LicenseCity || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">مدينة الترخيص بالإنجليزية</label>
+    <input type="text" name="LicenseCityEn" class="form-control" value="<%= facility.LicenseCityEn || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">تاريخ إصدار الترخيص</label>
+    <input type="date" name="LicenseIssueDate" class="form-control" value="<%= facility.LicenseIssueDate ? new Date(facility.LicenseIssueDate).toISOString().split('T')[0] : '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">تاريخ انتهاء الترخيص</label>
+    <input type="date" name="LicenseExpirationDate" class="form-control" value="<%= facility.LicenseExpirationDate ? new Date(facility.LicenseExpirationDate).toISOString().split('T')[0] : '' %>">
+  </div>
+  <button type="submit" class="btn btn-success">تحديث</button>
+</form>
+</div>
+<script>
+  const licenseSelect = document.getElementById('LicenseTypeID');
+  const licenseTypeInput = document.getElementById('LicenseType');
+  function updateLicenseType() {
+    const selected = licenseSelect.options[licenseSelect.selectedIndex];
+    licenseTypeInput.value = selected ? selected.getAttribute('data-name') : '';
+  }
+  licenseSelect.addEventListener('change', updateLicenseType);
+  updateLicenseType();
+</script>
+
