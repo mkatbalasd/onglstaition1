@@ -18,7 +18,7 @@ router.get('/facilities', asyncHandler(async (req, res) => {
 // New facility form
 router.get('/facilities/new', asyncHandler(async (req, res) => {
   const licenseTypes = await pool.query(
-    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeID DESC'
   );
   res.render('facilities/new', {
     identity: req.query.identity || '',
@@ -40,7 +40,7 @@ router.get('/facilities/:id/edit', asyncHandler(async (req, res) => {
     return res.status(404).send('Facility not found');
   }
   const licenseTypes = await pool.query(
-    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeID DESC'
   );
   res.render('facilities/edit', {
     facility: facilityRows[0],
@@ -152,7 +152,7 @@ router.post('/api/facilities', asyncHandler(async (req, res) => {
 
 // API license types
 router.get('/api/license-types', asyncHandler(async (req, res) => {
-  const rows = await pool.query('SELECT LicenseTypeNameAR, LicenseTypeNameEN FROM OPC_LicenseType');
+  const rows = await pool.query('SELECT LicenseTypeNameAR, LicenseTypeNameEN FROM OPC_LicenseType ORDER BY LicenseTypeID DESC');
   res.json(rows);
 }));
 

@@ -42,7 +42,7 @@ router.post('/driver-cards/new', asyncHandler(async (req, res) => {
     return res.redirect(`/nagl/driver-cards/new/${fid}/driver`);
   }
   const licenseTypes = await pool.query(
-    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeID DESC'
   );
   res.render('facilities/new', {
     identity: IdentityNumber,
@@ -101,7 +101,7 @@ router.get('/driver-cards/new/:facilityId/driver/:driverId', asyncHandler(async 
     'SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility WHERE FacilityID = ?',
     [facilityId]
   );
-  const suppliers = await pool.query('SELECT id, name FROM Supplier');
+  const suppliers = await pool.query('SELECT id, name FROM Supplier ORDER BY id DESC');
   const drivers = await pool.query(
     'SELECT DriverID, FirstName, LastName FROM OPC_Driver WHERE DriverID = ?',
     [driverId]
@@ -140,9 +140,9 @@ router.post('/driver-cards', asyncHandler(async (req, res) => {
 router.get('/driver-cards/:id/edit', asyncHandler(async (req, res) => {
   const { id } = req.params;
   const cardRows = await pool.query('SELECT * FROM OPC_DriverCard WHERE ID = ?', [id]);
-  const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility');
-  const suppliers = await pool.query('SELECT id, name FROM Supplier');
-  const drivers = await pool.query('SELECT DriverID, FirstName, LastName FROM OPC_Driver');
+  const facilities = await pool.query('SELECT FacilityID, Name, IdentityNumber, LicenseType, LicenseNumber FROM OPC_Facility ORDER BY FacilityID DESC');
+  const suppliers = await pool.query('SELECT id, name FROM Supplier ORDER BY id DESC');
+  const drivers = await pool.query('SELECT DriverID, FirstName, LastName FROM OPC_Driver ORDER BY DriverID DESC');
   const licenseTypes = await getLicenseTypes();
   const card = cardRows[0];
   if (!card) return res.redirect('/nagl/driver-cards');

@@ -17,10 +17,10 @@ router.get('/vehicles', asyncHandler(async (req, res) => {
 
 // New vehicle form
 router.get('/vehicles/new', asyncHandler(async (req, res) => {
-  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
-  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand');
-  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color');
-  const models = await pool.query('SELECT ModelID, ModelName FROM OPC_Model');
+  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility ORDER BY FacilityID DESC');
+  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand ORDER BY BrandID DESC');
+  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color ORDER BY ColorID DESC');
+  const models = await pool.query('SELECT ModelID, ModelName FROM OPC_Model ORDER BY ModelID DESC');
   const { facilityId = '', serialNumber = '', next = '' } = req.query;
   res.render('vehicles/new', {
     facilities,
@@ -45,10 +45,10 @@ router.get('/vehicles/:id/edit', asyncHandler(async (req, res) => {
   if (vehicleRows.length === 0) {
     return res.status(404).send('Vehicle not found');
   }
-  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
-  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand');
-  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color');
-  const models = await pool.query('SELECT ModelID, ModelName FROM OPC_Model');
+  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility ORDER BY FacilityID DESC');
+  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand ORDER BY BrandID DESC');
+  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color ORDER BY ColorID DESC');
+  const models = await pool.query('SELECT ModelID, ModelName FROM OPC_Model ORDER BY ModelID DESC');
   res.render('vehicles/edit', {
     vehicle: vehicleRows[0],
     facilities,
@@ -101,8 +101,8 @@ router.post('/vehicles/:id', asyncHandler(async (req, res) => {
 router.get('/api/vehicles', asyncHandler(async (req, res) => {
   const { facilityId } = req.query;
   const vehicles = facilityId
-    ? await pool.query('SELECT ID, PlateNumber, SerialNumber FROM OPC_Vehicle WHERE FacilityID = ?', [facilityId])
-    : await pool.query('SELECT ID, PlateNumber, SerialNumber FROM OPC_Vehicle');
+    ? await pool.query('SELECT ID, PlateNumber, SerialNumber FROM OPC_Vehicle WHERE FacilityID = ? ORDER BY ID DESC', [facilityId])
+    : await pool.query('SELECT ID, PlateNumber, SerialNumber FROM OPC_Vehicle ORDER BY ID DESC');
   res.json(vehicles);
 }));
 
@@ -110,8 +110,8 @@ router.get('/api/vehicles', asyncHandler(async (req, res) => {
 router.get('/api/vehicle-models', asyncHandler(async (req, res) => {
   const { brandId } = req.query;
   const models = brandId
-    ? await pool.query('SELECT ModelID, ModelName FROM OPC_Model WHERE BrandID = ?', [brandId])
-    : await pool.query('SELECT ModelID, ModelName FROM OPC_Model');
+    ? await pool.query('SELECT ModelID, ModelName FROM OPC_Model WHERE BrandID = ? ORDER BY ModelID DESC', [brandId])
+    : await pool.query('SELECT ModelID, ModelName FROM OPC_Model ORDER BY ModelID DESC');
   res.json(models);
 }));
 
