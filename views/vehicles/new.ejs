@@ -25,7 +25,7 @@
     <select name="BrandID" id="brandSelect" class="custom-select select2">
       <option value=""></option>
       <% brands.forEach(b => { %>
-        <option value="<%= b.ID %>"><%= b.Name %></option>
+        <option value="<%= b.BrandID %>"><%= b.BrandName %></option>
       <% }) %>
     </select>
   </div>
@@ -38,7 +38,7 @@
     <select name="ColorID" class="custom-select select2">
       <option value=""></option>
       <% colors.forEach(c => { %>
-        <option value="<%= c.ID %>"><%= c.Name %></option>
+        <option value="<%= c.ColorID %>"><%= c.ColorName %></option>
       <% }) %>
     </select>
   </div>
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!brandId) return;
     $.getJSON('/nagl/api/vehicle-models', { brandId }, function (data) {
       modelSelect.append('<option value=""></option>');
-      data.forEach(m => modelSelect.append(`<option value="${m.ID}">${m.Name}</option>`));
+      data.forEach(m => modelSelect.append(`<option value="${m.ModelID}">${m.ModelName}</option>`));
       modelSelect.trigger('change');
     });
   }).trigger('change');
