@@ -16,21 +16,48 @@ router.get('/facilities', asyncHandler(async (req, res) => {
 }));
 
 // New facility form
-router.get('/facilities/new', (req, res) => {
+router.get('/facilities/new', asyncHandler(async (req, res) => {
+  const licenseTypes = await pool.query(
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+  );
   res.render('facilities/new', {
     identity: req.query.identity || '',
     next: req.query.next || '',
+    licenseTypes,
     title: 'إضافة منشأة',
     header: 'إضافة منشأة'
   });
-});
+}));
 
 // Create facility
 router.post('/facilities', asyncHandler(async (req, res) => {
-  const { IdentityNumber, Name, EnglishName, next } = req.body;
+  const {
+    IdentityNumber,
+    Name,
+    EnglishName,
+    LicenseNumber,
+    LicenseTypeID,
+    LicenseType,
+    LicenseCity,
+    LicenseCityEn,
+    LicenseIssueDate,
+    LicenseExpirationDate,
+    next
+  } = req.body;
   const result = await pool.query(
-    'INSERT INTO OPC_Facility (IdentityNumber, Name, EnglishName) VALUES (?, ?, ?)',
-    [IdentityNumber, Name, EnglishName || null]
+    'INSERT INTO OPC_Facility (IdentityNumber, Name, EnglishName, LicenseNumber, LicenseTypeID, LicenseType, LicenseCity, LicenseCityEn, LicenseIssueDate, LicenseExpirationDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      IdentityNumber,
+      Name,
+      EnglishName || null,
+      LicenseNumber || null,
+      LicenseTypeID || null,
+      LicenseType || null,
+      LicenseCity || null,
+      LicenseCityEn || null,
+      LicenseIssueDate || null,
+      LicenseExpirationDate || null
+    ]
   );
   const fid = result.insertId;
   const redirectTo = next ? `${next}/${fid}/driver` : '/nagl/facilities';
