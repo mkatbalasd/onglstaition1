@@ -26,11 +26,14 @@
   </div>
   <div class="mb-3">
     <label class="form-label">نوع الترخيص</label>
-    <select name="LicenseTypeID" id="LicenseTypeID" class="form-select">
-      <% licenseTypes.forEach(lt => { %>
-        <option value="<%= lt.LicenseTypeID %>" data-name="<%= lt.LicenseTypeNameAR %>" <%= facility.LicenseTypeID === lt.LicenseTypeID ? 'selected' : '' %>><%= lt.LicenseTypeNameAR %></option>
-      <% }) %>
-    </select>
+    <div class="input-group">
+      <select name="LicenseTypeID" id="LicenseTypeID" class="form-select">
+        <% licenseTypes.forEach(lt => { %>
+          <option value="<%= lt.LicenseTypeID %>" data-name="<%= lt.LicenseTypeNameAR %>" <%= facility.LicenseTypeID === lt.LicenseTypeID ? 'selected' : '' %>><%= lt.LicenseTypeNameAR %></option>
+        <% }) %>
+      </select>
+      <a href="/nagl/license-types/new" target="_blank" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
+    </div>
     <input type="hidden" name="LicenseType" id="LicenseType" value="<%= facility.LicenseType || '' %>">
   </div>
   <div class="mb-3">
