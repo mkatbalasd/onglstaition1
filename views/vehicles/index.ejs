@@ -10,6 +10,7 @@
       <th>رقم اللوحة</th>
       <th>الرقم التسلسلي</th>
       <th>المنشأة</th>
+      <th>تعديل</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,7 @@
         <td><pre class="codebox"><%= v.PlateNumber || '' %></pre></td>
         <td><pre class="codebox"><%= v.SerialNumber || '' %></pre></td>
         <td><pre class="codebox"><%= v.Name || '' %></pre></td>
+        <td><a href="/nagl/vehicles/<%= v.ID %>/edit">تعديل</a></td>
       </tr>
       <% }) %>
     </tbody>

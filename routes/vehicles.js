@@ -33,6 +33,33 @@ router.get('/vehicles/new', asyncHandler(async (req, res) => {
   });
 }));
 
+// Edit vehicle form
+router.get('/vehicles/:id/edit', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const vehicleRows = await pool.query(
+    'SELECT ID, FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufacturingYear FROM OPC_Vehicle WHERE ID = ?',
+    [id]
+  );
+  if (vehicleRows.length === 0) {
+    return res.status(404).send('Vehicle not found');
+  }
+  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility');
+  const brands = await pool.query('SELECT BrandID, BrandName FROM OPC_Brand');
+  const colors = await pool.query('SELECT ColorID, ColorName FROM OPC_Color');
+  const models = vehicleRows[0].BrandID
+    ? await pool.query('SELECT ModelID, ModelName FROM OPC_Model WHERE BrandID = ?', [vehicleRows[0].BrandID])
+    : [];
+  res.render('vehicles/edit', {
+    vehicle: vehicleRows[0],
+    facilities,
+    brands,
+    colors,
+    models,
+    title: 'تعديل مركبة',
+    header: 'تعديل مركبة'
+  });
+}));
+
 // Create vehicle
 router.post('/vehicles', asyncHandler(async (req, res) => {
   const { FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufacturingYear, next } = req.body;
@@ -48,6 +75,26 @@ router.post('/vehicles', asyncHandler(async (req, res) => {
   ]);
   const ID = result.insertId;
   res.redirect(next ? `${next}/${ID}` : '/nagl/vehicles');
+}));
+
+// Update vehicle
+router.post('/vehicles/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufacturingYear } = req.body;
+  await pool.query(
+    'UPDATE OPC_Vehicle SET FacilityID = ?, PlateNumber = ?, SerialNumber = ?, BrandID = ?, ModelID = ?, ColorID = ?, ManufacturingYear = ? WHERE ID = ?',
+    [
+      FacilityID || null,
+      PlateNumber,
+      SerialNumber,
+      BrandID || null,
+      ModelID || null,
+      ColorID || null,
+      ManufacturingYear || null,
+      id
+    ]
+  );
+  res.redirect('/nagl/vehicles');
 }));
 
 // API vehicles
