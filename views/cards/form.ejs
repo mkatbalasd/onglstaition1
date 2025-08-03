@@ -53,7 +53,7 @@
           <option value="<%= s.id %>" <%= card && card.Supplier === s.id ? 'selected' : '' %>><%= s.name %></option>
         <% }) %>
       </select>
-      <a href="/nagl/suppliers/new" target="_blank" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
+      <a href="/nagl/suppliers/new" target="_blank" id="addSupplierBtn" class="btn btn-outline-secondary btn-icon"><i class="bi bi-plus"></i></a>
     </div>
   </div>
 
