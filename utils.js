@@ -6,7 +6,7 @@ async function generateCardNumber(table, facilityId) {
     [facilityId]
   );
   const facility = rows[0];
-  let prefix = '33.00';
+  let prefix = '54-00';
   if (facility && facility.LicenseNumber) {
     prefix = facility.LicenseNumber.slice(0, 5);
   }
