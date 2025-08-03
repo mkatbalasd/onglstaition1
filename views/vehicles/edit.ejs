@@ -1,0 +1,68 @@
+<div class="card card-form">
+<form method="POST" action="/nagl/vehicles/<%= vehicle.ID %>">
+  <div class="mb-3">
+    <label class="form-label">المنشأة</label>
+    <select name="FacilityID" class="custom-select select2">
+      <% facilities.forEach(f => { %>
+        <option value="<%= f.FacilityID %>" <%= vehicle.FacilityID == f.FacilityID ? 'selected' : '' %>><%= f.Name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">رقم اللوحة</label>
+    <input type="text" name="PlateNumber" class="form-control" value="<%= vehicle.PlateNumber || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">الرقم التسلسلي</label>
+    <input type="text" name="SerialNumber" class="form-control" value="<%= vehicle.SerialNumber || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">الماركة</label>
+    <select name="BrandID" id="brandSelect" class="custom-select select2">
+      <option value=""></option>
+      <% brands.forEach(b => { %>
+        <option value="<%= b.BrandID %>" <%= vehicle.BrandID == b.BrandID ? 'selected' : '' %>><%= b.BrandName %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">الطراز</label>
+    <select name="ModelID" id="modelSelect" class="custom-select select2">
+      <option value=""></option>
+      <% models.forEach(m => { %>
+        <option value="<%= m.ModelID %>" <%= vehicle.ModelID == m.ModelID ? 'selected' : '' %>><%= m.ModelName %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">اللون</label>
+    <select name="ColorID" class="custom-select select2">
+      <option value=""></option>
+      <% colors.forEach(c => { %>
+        <option value="<%= c.ColorID %>" <%= vehicle.ColorID == c.ColorID ? 'selected' : '' %>><%= c.ColorName %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">سنة الصنع</label>
+    <input type="number" name="ManufacturingYear" class="form-control" value="<%= vehicle.ManufacturingYear || '' %>">
+  </div>
+  <button type="submit" class="btn btn-success">تحديث</button>
+</form>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  $('#brandSelect').on('change', function () {
+    const brandId = $(this).val();
+    const modelSelect = $('#modelSelect');
+    modelSelect.empty().trigger('change');
+    if (!brandId) return;
+    $.getJSON('/nagl/api/vehicle-models', { brandId }, function (data) {
+      modelSelect.append('<option value=""></option>');
+      data.forEach(m => modelSelect.append(`<option value="${m.ModelID}">${m.ModelName}</option>`));
+      modelSelect.trigger('change');
+    });
+  });
+});
+</script>
+
