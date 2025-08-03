@@ -66,6 +66,16 @@ router.get('/drivers/:id/edit', asyncHandler(async (req, res) => {
 router.post('/drivers/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { FacilityID, IdentityNumber, FirstName, LastName } = req.body;
+  if (!IdentityNumber) {
+    return res.status(400).send('رقم الهوية مطلوب');
+  }
+  const exists = await pool.query(
+    'SELECT DriverID FROM OPC_Driver WHERE IdentityNumber = ? AND DriverID <> ?',
+    [IdentityNumber, id]
+  );
+  if (exists.length > 0) {
+    return res.status(400).send('رقم الهوية مستخدم');
+  }
   await pool.query(
     'UPDATE OPC_Driver SET FacilityID = ?, IdentityNumber = ?, FirstName = ?, LastName = ? WHERE DriverID = ?',
     [FacilityID || null, IdentityNumber, FirstName, LastName, id]
