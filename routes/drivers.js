@@ -32,6 +32,9 @@ router.get('/drivers/new', asyncHandler(async (req, res) => {
 // Create driver
 router.post('/drivers', asyncHandler(async (req, res) => {
   const { FacilityID, IdentityNumber, FirstName, LastName, next } = req.body;
+  if (!IdentityNumber) {
+    return res.status(400).send('رقم الهوية مطلوب');
+  }
   const result = await pool.query(
     'INSERT INTO OPC_Driver (FacilityID, IdentityNumber, FirstName, LastName) VALUES (?, ?, ?, ?)',
     [FacilityID, IdentityNumber, FirstName, LastName]
