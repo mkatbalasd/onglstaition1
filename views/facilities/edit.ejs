@@ -17,6 +17,14 @@
     <input type="text" name="LicenseNumber" class="form-control" value="<%= facility.LicenseNumber || '' %>">
   </div>
   <div class="mb-3">
+    <label class="form-label">تاريخ إصدار الترخيص</label>
+    <input type="text" name="LicenseIssueDate" class="form-control hijri-date" value="<%= facility.LicenseIssueDate || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">تاريخ انتهاء الترخيص</label>
+    <input type="text" name="LicenseExpirationDate" class="form-control hijri-date" value="<%= facility.LicenseExpirationDate || '' %>">
+  </div>
+  <div class="mb-3">
     <label class="form-label">نوع الترخيص</label>
     <select name="LicenseTypeID" id="LicenseTypeID" class="form-select">
       <% licenseTypes.forEach(lt => { %>
@@ -32,14 +40,6 @@
   <div class="mb-3">
     <label class="form-label">مدينة الترخيص بالإنجليزية</label>
     <input type="text" name="LicenseCityEn" class="form-control" value="<%= facility.LicenseCityEn || '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ إصدار الترخيص</label>
-    <input type="date" name="LicenseIssueDate" class="form-control" value="<%= facility.LicenseIssueDate ? new Date(facility.LicenseIssueDate).toISOString().split('T')[0] : '' %>">
-  </div>
-  <div class="mb-3">
-    <label class="form-label">تاريخ انتهاء الترخيص</label>
-    <input type="date" name="LicenseExpirationDate" class="form-control" value="<%= facility.LicenseExpirationDate ? new Date(facility.LicenseExpirationDate).toISOString().split('T')[0] : '' %>">
   </div>
   <button type="submit" class="btn btn-success">تحديث</button>
 </form>
