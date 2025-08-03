@@ -56,6 +56,42 @@ router.post('/drivers', asyncHandler(async (req, res) => {
   res.redirect(redirectTo);
 }));
 
+// Edit driver form
+router.get('/drivers/:id/edit', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const rows = await pool.query(
+    'SELECT DriverID, FacilityID, IdentityNumber, FirstName, LastName FROM OPC_Driver WHERE DriverID = ?',
+    [id]
+  );
+  const driver = rows[0];
+  if (!driver) return res.redirect('/nagl/drivers');
+  const facilities = await pool.query('SELECT FacilityID, Name FROM OPC_Facility ORDER BY FacilityID DESC');
+  res.render('drivers/edit', {
+    driver,
+    facilities,
+    title: 'تعديل سائق',
+    header: 'تعديل سائق'
+  });
+}));
+
+// Update driver
+router.post('/drivers/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { FacilityID, IdentityNumber, FirstName, LastName } = req.body;
+  await pool.query(
+    'UPDATE OPC_Driver SET FacilityID = ?, IdentityNumber = ?, FirstName = ?, LastName = ? WHERE DriverID = ?',
+    [FacilityID || null, IdentityNumber, FirstName, LastName, id]
+  );
+  res.redirect('/nagl/drivers');
+}));
+
+// Delete driver
+router.post('/drivers/:id/delete', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  await pool.query('DELETE FROM OPC_Driver WHERE DriverID = ?', [id]);
+  res.redirect('/nagl/drivers');
+}));
+
 // API drivers
 router.get('/api/drivers', asyncHandler(async (req, res) => {
   const { facilityId } = req.query;
