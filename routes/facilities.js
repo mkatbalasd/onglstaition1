@@ -81,7 +81,7 @@ router.post('/facilities', asyncHandler(async (req, res) => {
     ]
   );
   const fid = result.insertId;
-  const redirectTo = next ? `${next}/${fid}/driver` : '/nagl/facilities';
+  const redirectTo = next ? `${next}/${fid}/vehicle` : '/nagl/facilities';
   res.redirect(redirectTo);
 }));
 
