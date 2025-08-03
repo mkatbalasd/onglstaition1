@@ -12,6 +12,7 @@
       <th>رقم الهوية</th>
       <th>المنشأة</th>
       <th>تفاصيل</th>
+      <th>إجراءات</th>
     </tr>
   </thead>
   <tbody>
@@ -25,6 +26,12 @@
           <a href="/nagl/drivers/<%= d.DriverID %>" class="btn btn-sm btn-outline-secondary btn-icon">
             <i class="bi bi-eye"></i>
           </a>
+        </td>
+        <td>
+          <a href="/nagl/drivers/<%= d.DriverID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
+            <form method="POST" action="/nagl/drivers/<%= d.DriverID %>/delete" class="delete-form" style="display:inline">
+              <button type="submit" class="btn btn-sm btn-outline-danger">حذف</button>
+            </form>
         </td>
       </tr>
     <% }) %>
