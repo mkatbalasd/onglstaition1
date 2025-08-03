@@ -35,10 +35,8 @@ router.get('/vehicles/new', asyncHandler(async (req, res) => {
 
 // Create vehicle
 router.post('/vehicles', asyncHandler(async (req, res) => {
-  const { FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufactureYear, next } = req.body;
-  const query =
-    'INSERT INTO OPC_Vehicle (FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufactureYear) ' +
-    'VALUES (?, ?, ?, ?, ?, ?, ?)';
+  const { FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufacturingYear, next } = req.body;
+  const query = 'INSERT INTO OPC_Vehicle (FacilityID, PlateNumber, SerialNumber, BrandID, ModelID, ColorID, ManufacturingYear) VALUES (?, ?, ?, ?, ?, ?, ?)';
   const result = await pool.query(query, [
     FacilityID || null,
     PlateNumber,
@@ -46,7 +44,7 @@ router.post('/vehicles', asyncHandler(async (req, res) => {
     BrandID || null,
     ModelID || null,
     ColorID || null,
-    ManufactureYear || null
+    ManufacturingYear || null
   ]);
   const ID = result.insertId;
   res.redirect(next ? `${next}/${ID}` : '/nagl/vehicles');
