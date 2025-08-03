@@ -5,24 +5,27 @@ $(function () {
     format: 'iYYYY-iMM-iDD'
   });
 
-  const issue = $('input[name="IssueDate"]');
-  const exp = $('input[name="ExpirationDate"]');
+  const issue = $('input[name="IssueDate"], input[name="LicenseIssueDate"]');
+  const exp = $('input[name="ExpirationDate"], input[name="LicenseExpirationDate"]');
 
-  function setExpiration() {
-    const val = issue.val();
+  function setExpiration(i) {
+    const val = issue.eq(i).val();
     if (!val) return;
     const m = moment(val, 'iYYYY-iMM-iDD');
     if (!m.isValid()) return;
     const d = m.clone().add(1, 'iYear');
-    exp.val(d.format('iYYYY-iMM-iDD'));
+    exp.eq(i).val(d.format('iYYYY-iMM-iDD'));
   }
 
   if (issue.length && exp.length) {
-    if (!issue.val()) {
-      issue.val(moment().format('iYYYY-iMM-iDD'));
-    }
-    setExpiration();
-    issue.on('change input dp.change', setExpiration);
+    issue.each(function (i) {
+      const $iss = $(this);
+      if (!$iss.val()) {
+        $iss.val(moment().format('iYYYY-iMM-iDD'));
+      }
+      setExpiration(i);
+      $iss.on('change input dp.change', () => setExpiration(i));
+    });
   }
 
   $('table.data-table').DataTable({
