@@ -29,6 +29,27 @@ router.get('/facilities/new', asyncHandler(async (req, res) => {
   });
 }));
 
+// Edit facility form
+router.get('/facilities/:id/edit', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const facilityRows = await pool.query(
+    'SELECT FacilityID, IdentityNumber, Name, EnglishName, LicenseNumber, LicenseTypeID, LicenseType, LicenseCity, LicenseCityEn, LicenseIssueDate, LicenseExpirationDate FROM OPC_Facility WHERE FacilityID = ?',
+    [id]
+  );
+  if (facilityRows.length === 0) {
+    return res.status(404).send('Facility not found');
+  }
+  const licenseTypes = await pool.query(
+    'SELECT LicenseTypeID, LicenseTypeNameAR FROM OPC_LicenseType ORDER BY LicenseTypeNameAR'
+  );
+  res.render('facilities/edit', {
+    facility: facilityRows[0],
+    licenseTypes,
+    title: 'تعديل منشأة',
+    header: 'تعديل منشأة'
+  });
+}));
+
 // Create facility
 router.post('/facilities', asyncHandler(async (req, res) => {
   const {
@@ -62,6 +83,40 @@ router.post('/facilities', asyncHandler(async (req, res) => {
   const fid = result.insertId;
   const redirectTo = next ? `${next}/${fid}/driver` : '/nagl/facilities';
   res.redirect(redirectTo);
+}));
+
+// Update facility
+router.post('/facilities/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const {
+    IdentityNumber,
+    Name,
+    EnglishName,
+    LicenseNumber,
+    LicenseTypeID,
+    LicenseType,
+    LicenseCity,
+    LicenseCityEn,
+    LicenseIssueDate,
+    LicenseExpirationDate
+  } = req.body;
+  await pool.query(
+    'UPDATE OPC_Facility SET IdentityNumber = ?, Name = ?, EnglishName = ?, LicenseNumber = ?, LicenseTypeID = ?, LicenseType = ?, LicenseCity = ?, LicenseCityEn = ?, LicenseIssueDate = ?, LicenseExpirationDate = ? WHERE FacilityID = ?',
+    [
+      IdentityNumber,
+      Name,
+      EnglishName || null,
+      LicenseNumber || null,
+      LicenseTypeID || null,
+      LicenseType || null,
+      LicenseCity || null,
+      LicenseCityEn || null,
+      LicenseIssueDate || null,
+      LicenseExpirationDate || null,
+      id
+    ]
+  );
+  res.redirect('/nagl/facilities');
 }));
 
 // API create facility

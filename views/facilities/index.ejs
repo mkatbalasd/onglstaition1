@@ -10,6 +10,7 @@
       <th>الاسم</th>
       <th>رقم الهوية</th>
       <th>نوع الترخيص</th>
+      <th>تعديل</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,7 @@
         <td><pre class="codebox"><%= f.Name %></pre></td>
         <td><pre class="codebox"><%= f.IdentityNumber %></pre></td>
         <td><pre class="codebox"><%= f.LicenseType || '' %></pre></td>
+        <td><a href="/nagl/facilities/<%= f.FacilityID %>/edit">تعديل</a></td>
       </tr>
       <% }) %>
     </tbody>
