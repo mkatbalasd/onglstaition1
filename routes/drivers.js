@@ -15,21 +15,6 @@ router.get('/drivers', asyncHandler(async (req, res) => {
   });
 }));
 
-// Driver details
-router.get('/drivers/:id', asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const rows = await pool.query(
-    'SELECT d.DriverID, d.FirstName, d.LastName, d.IdentityNumber, f.Name AS FacilityName FROM OPC_Driver d LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID WHERE d.DriverID = ?',
-    [id]
-  );
-  const driver = rows[0];
-  if (!driver) return res.redirect('/nagl/drivers');
-  res.render('drivers/show', {
-    driver,
-    title: 'تفاصيل السائق',
-    header: 'تفاصيل السائق'
-  });
-}));
 
 // New driver form
 router.get('/drivers/new', asyncHandler(async (req, res) => {
@@ -90,6 +75,22 @@ router.post('/drivers/:id/delete', asyncHandler(async (req, res) => {
   const { id } = req.params;
   await pool.query('DELETE FROM OPC_Driver WHERE DriverID = ?', [id]);
   res.redirect('/nagl/drivers');
+}));
+
+// Driver details
+router.get('/drivers/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const rows = await pool.query(
+    'SELECT d.DriverID, d.FirstName, d.LastName, d.IdentityNumber, f.Name AS FacilityName FROM OPC_Driver d LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID WHERE d.DriverID = ?',
+    [id]
+  );
+  const driver = rows[0];
+  if (!driver) return res.redirect('/nagl/drivers');
+  res.render('drivers/show', {
+    driver,
+    title: 'تفاصيل السائق',
+    header: 'تفاصيل السائق'
+  });
 }));
 
 // API drivers
