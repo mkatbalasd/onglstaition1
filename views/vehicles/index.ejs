@@ -5,18 +5,20 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>رقم اللوحة</th>
-      <th>الرقم التسلسلي</th>
-      <th>المنشأة</th>
-      <th>تعديل</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% vehicles.forEach(v => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= v.PlateNumber || '' %></pre></td>
+        <th></th>
+        <th>رقم اللوحة</th>
+        <th>الرقم التسلسلي</th>
+        <th>المنشأة</th>
+        <th>تعديل</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% vehicles.forEach(v => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= v.PlateNumber || '' %></pre></td>
         <td><pre class="codebox"><%= v.SerialNumber || '' %></pre></td>
         <td><pre class="codebox"><%= v.Name || '' %></pre></td>
         <td><a href="/nagl/vehicles/<%= v.ID %>/edit">تعديل</a></td>

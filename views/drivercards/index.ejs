@@ -5,22 +5,24 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>رقم البطاقة</th>
-      <th>نوع البطاقة</th>
-      <th>السائق</th>
-      <th>المنشأة</th>
-      <th class="hide-mobile">تاريخ الإصدار</th>
-      <th class="hide-mobile">تاريخ الانتهاء</th>
-      <th class="hide-mobile">المندوب</th>
-      <th>إجراءات</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% cards.forEach(c => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><a href="<%= printUrl %>?token=<%= c.token %>" target="_blank"><%= c.CardNumber %></a></pre></td>
+        <th></th>
+        <th>رقم البطاقة</th>
+        <th>نوع البطاقة</th>
+        <th>السائق</th>
+        <th>المنشأة</th>
+        <th class="hide-mobile">تاريخ الإصدار</th>
+        <th class="hide-mobile">تاريخ الانتهاء</th>
+        <th class="hide-mobile">المندوب</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% cards.forEach(c => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><a href="<%= printUrl %>?token=<%= c.token %>" target="_blank"><%= c.CardNumber %></a></pre></td>
         <td><pre class="codebox"><%= c.CardType %></pre></td>
         <td><pre class="codebox"><%= c.FirstName || '' %></pre></td>
         <td><pre class="codebox"><%= c.Name || '' %></pre></td>

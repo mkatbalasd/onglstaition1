@@ -33,7 +33,12 @@ $(function () {
   if ($.fn.DataTable) {
     $('table.data-table').DataTable({
       order: [],
-      responsive: true,
+      responsive: {
+        details: { type: 'column', target: 'tr' }
+      },
+      columnDefs: [
+        { className: 'dtr-control', orderable: false, targets: 0 }
+      ],
       stripeClasses: [],
       pageLength: 10,
       lengthMenu: [10, 20, 50, 100],

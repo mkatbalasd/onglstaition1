@@ -5,18 +5,20 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>الرقم</th>
-      <th>الاسم بالعربية</th>
-      <th>الاسم بالإنجليزية</th>
-      <th>إجراءات</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% licenseTypes.forEach(lt => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= lt.LicenseTypeID %></pre></td>
+        <th></th>
+        <th>الرقم</th>
+        <th>الاسم بالعربية</th>
+        <th>الاسم بالإنجليزية</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% licenseTypes.forEach(lt => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= lt.LicenseTypeID %></pre></td>
         <td><pre class="codebox"><%= lt.LicenseTypeNameAR %></pre></td>
         <td><pre class="codebox"><%= lt.LicenseTypeNameEN || '' %></pre></td>
         <td>

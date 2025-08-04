@@ -21,20 +21,22 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>الرقم</th>
-      <th>الاسم</th>
-      <th>رقم الهوية</th>
-      <th>المنشأة</th>
-      <th>تفاصيل</th>
-      <th>إجراءات</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% drivers.forEach(d => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= d.DriverID %></pre></td>
+        <th></th>
+        <th>الرقم</th>
+        <th>الاسم</th>
+        <th>رقم الهوية</th>
+        <th>المنشأة</th>
+        <th>تفاصيل</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% drivers.forEach(d => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= d.DriverID %></pre></td>
         <td><pre class="codebox"><%= d.FirstName %> <%= d.LastName %></pre></td>
         <td><pre class="codebox"><%= d.IdentityNumber || '' %></pre></td>
         <td><pre class="codebox"><%= d.FacilityName || '' %></pre></td>

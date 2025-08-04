@@ -5,18 +5,20 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>الاسم</th>
-      <th>رقم الهوية</th>
-      <th>نوع الترخيص</th>
-      <th>تعديل</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% facilities.forEach(f => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= f.Name %></pre></td>
+        <th></th>
+        <th>الاسم</th>
+        <th>رقم الهوية</th>
+        <th>نوع الترخيص</th>
+        <th>تعديل</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% facilities.forEach(f => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= f.Name %></pre></td>
         <td><pre class="codebox"><%= f.IdentityNumber %></pre></td>
         <td><pre class="codebox"><%= f.LicenseType || '' %></pre></td>
         <td><a href="/nagl/facilities/<%= f.FacilityID %>/edit">تعديل</a></td>
