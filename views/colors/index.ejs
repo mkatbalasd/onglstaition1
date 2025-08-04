@@ -5,17 +5,19 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>الرقم</th>
-      <th>الاسم</th>
-      <th>إجراءات</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% colors.forEach(c => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= c.ColorID %></pre></td>
+        <th></th>
+        <th>الرقم</th>
+        <th>الاسم</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% colors.forEach(c => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= c.ColorID %></pre></td>
         <td><pre class="codebox"><%= c.ColorName %></pre></td>
         <td>
           <a href="/nagl/colors/<%= c.ColorID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>

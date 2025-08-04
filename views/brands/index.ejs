@@ -5,17 +5,19 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>الرقم</th>
-      <th>الاسم</th>
-      <th>إجراءات</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% brands.forEach(b => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= b.BrandID %></pre></td>
+        <th></th>
+        <th>الرقم</th>
+        <th>الاسم</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% brands.forEach(b => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= b.BrandID %></pre></td>
         <td><pre class="codebox"><%= b.BrandName %></pre></td>
         <td>
           <a href="/nagl/brands/<%= b.BrandID %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>

@@ -5,17 +5,19 @@
 </div>
 <div class="table-responsive">
 <table class="table table-bordered table-striped data-table results-table">
-  <thead class="table-light">
-    <tr>
-      <th>الرقم</th>
-      <th>الاسم</th>
-      <th>إجراءات</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% suppliers.forEach(s => { %>
+    <thead class="table-light">
       <tr>
-        <td><pre class="codebox"><%= s.id %></pre></td>
+        <th></th>
+        <th>الرقم</th>
+        <th>الاسم</th>
+        <th>إجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% suppliers.forEach(s => { %>
+        <tr>
+          <td></td>
+          <td><pre class="codebox"><%= s.id %></pre></td>
         <td><pre class="codebox"><%= s.name %></pre></td>
         <td>
           <a href="/nagl/suppliers/<%= s.id %>/edit" class="btn btn-sm btn-outline-primary">تعديل</a>
