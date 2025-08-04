@@ -8,8 +8,11 @@ router.get('/drivers', asyncHandler(async (req, res) => {
   const drivers = await pool.query(
     'SELECT d.DriverID, d.FirstName, d.LastName, d.IdentityNumber, f.Name AS FacilityName FROM OPC_Driver d LEFT JOIN OPC_Facility f ON d.FacilityID = f.FacilityID ORDER BY d.DriverID DESC'
   );
+  const { message, error } = req.query;
   res.render('drivers/index', {
     drivers,
+    message,
+    error,
     title: 'السائقون',
     header: 'إدارة السائقين'
   });
@@ -86,8 +89,18 @@ router.post('/drivers/:id', asyncHandler(async (req, res) => {
 // Delete driver
 router.post('/drivers/:id/delete', asyncHandler(async (req, res) => {
   const { id } = req.params;
-  await pool.query('DELETE FROM OPC_Driver WHERE DriverID = ?', [id]);
-  res.redirect('/nagl/drivers');
+  try {
+    const result = await pool.query('DELETE FROM OPC_Driver WHERE DriverID = ?', [id]);
+    if (result.affectedRows === 0) {
+      return res.redirect(`/nagl/drivers?error=${encodeURIComponent('السائق غير موجود')}`);
+    }
+    res.redirect(`/nagl/drivers?message=${encodeURIComponent('تم حذف السائق بنجاح')}`);
+  } catch (err) {
+    if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+      return res.redirect(`/nagl/drivers?error=${encodeURIComponent('لا يمكن حذف السائق لارتباطه بسجلات أخرى')}`);
+    }
+    throw err;
+  }
 }));
 
 // Driver details
